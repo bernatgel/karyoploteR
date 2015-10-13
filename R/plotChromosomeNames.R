@@ -1,12 +1,15 @@
 
 
-plotChromosomeNames <- function(coordChangeFunction, genome, plot.params, ...) {
+plotChromosomeNames <- function(karyoplot, ...) {
   
-  chr.labels <- seqlevels(genome)
   
-  y <- coordChangeFunction(chr=chr.labels)$y
+  chr.labels <- karyoplot$chromosomes
+  
+  y <- karyoplot$coord.change.function(chr=chr.labels)$y
 
-  x <- plot.params$xleftmargin/2
+  x <- karyoplot$plot.params$xleftmargin / 2
 
   text(x=x, y=y, labels=chr.labels)
+  
 }
+

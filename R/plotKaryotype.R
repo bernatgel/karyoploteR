@@ -29,14 +29,14 @@ library(rtracklayer)
 library(memoise)
 
 
-plotKaryotype <- function(genome="hg19", ideogram.plotter, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
+plotKaryotype <- function(genome="hg19", ideogram.plotter=plotIdeogram, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
   
   #check required parameters...
   
   if(is.null(plot.params)) {
     #TODO: Move to a function that returns the default parameters
-    plot.params <- list(xleftmargin=100, xrightmargin=20, ytopmargin=20, ybottommargin=20,
-                   yabovemargin=5, ybelowmargin=5, ydataheight=100, ideogramheight=50,
+    plot.params <- list(xleftmargin=10000000, xrightmargin=5000000, ytopmargin=100, ybottommargin=100,
+                   yabovemargin=5, ybelowmargin=5, ydataheight=200, ideogramheight=50,
                    dataymin=0, dataymax=100)
   }
   
@@ -54,6 +54,9 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter, labels.plotter=plotCh
   if(is.null(cytobands)) {
     if(is.character(genome)) {
       cytobands <- getCytobands(genome)
+      #Filter the cytobands using the current genome
+      cytobands <- keepSeqlevels(cytobands, value=seqlevels(gr.genome))
+      
     } else {
       message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
     }
@@ -61,6 +64,22 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter, labels.plotter=plotCh
 
   #Get the Coordinates Change Function to be used in this plot
   coordChangeFunction <- getCoordChangeFunction(gr.genome, plot.params)
+  
+  
+  #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
+    kp <- list()
+    class(kp) <- "KaryoPlot"
+    kp$plot.params <- plot.params
+    kp$coord.change.function <- coordChangeFunction
+    if(is.character(genome)) {
+      kp$genome.name <- genome
+    } else {
+      kp$genome.name <- "custom"
+    }
+    kp$chromosomes <- as.character(seqlevels(gr.genome))
+    kp$genome <- gr.genome
+    kp$cytobands <- cytobands
+  
   
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
@@ -72,69 +91,43 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter, labels.plotter=plotCh
     #create an empty plot
     #TODO: Should we remove any margin around the plot?
     par(mar=c(0,0,0,0)+0.1)
-    plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="")
+    plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
   
-    
+    #Get the limits of the plot from the graphical device
+    kp$plot <- list()
+      p <- par("usr")
+      kp$plot$xmin <- p[1]
+      kp$plot$xmax <- p[2]
+      kp$plot$ymin <- p[3]  
+      kp$plot$ymax <- p[4]  
+  
   #Plot the Chromosome Labels
     if(!is.null(labels.plotter)) {
-      labels.plotter(coordChangeFunction, gr.genome, plot.params, ...)
+      labels.plotter(kp, ...)
     }  
+ 
+  #And plot the ideogram
+  if(!is.null(ideogram.plotter)) {
+    ideogram.plotter(kp, ...)
+  }  
   
-  #Plot the ideograms
-  
-  cytobands <- keepSeqlevels(cytobands, value=seqlevels(gr.genome))
-  
-  ybottom <- coordChangeFunction(as.character(seqnames(cytobands)))$y + pp$ybelowmargin
-  ytop <- coordChangeFunction(as.character(seqnames(cytobands)))$y + pp$ybelowmargin + pp$ideogramheight
-    
-  xleft <- coordChangeFunction(x=start(cytobands))$x
-  xright <- coordChangeFunction(x=end(cytobands))$x
-
-  col <- do.call(c, colorTable[cytobands$gieStain])
-  
-  rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)
+  return(kp)
 }
 
 
-
-colorTable <- list(gneg="gray90",
-                 gpos25="gray75",
-                 gpos33="gray66",
-                 gpos50="gray50",
-                 gpos66="gray33",
-                 gpos75="gray25",
-                 pos100=
-                 stalk="blue", #repetitive areas
-                 acen="darkred", #centromeres
-                 gvar="black")
-
+kp <- plotKaryotype()
+kp$plot
+kp$coord.change.function(x=0)
   
-colors = {
-  'gpos100' : (0/255.0,0/255.0,0/255.0),
-  'gpos' : (0/255.0,0/255.0,0/255.0),
-  'gpos75' : (130/255.0,130/255.0,130/255.0),
-  'gpos66' : (160/255.0,160/255.0,160/255.0),
-  'gpos50' : (200/255.0,200/255.0,200/255.0),
-  'gpos33' : (210/255.0,210/255.0,210/255.0),
-  'gpos25' : (200/255.0,200/255.0,200/255.0),
-  'gvar' : (220/255.0,220/255.0,220/255.0),
-  'gneg' : (255/255.0,255/255.0,255/255.0),
-  'acen' : (217/255.0,47/255.0,39/255.0),
-  'stalk' : (100/255.0,127/255.0,164/255.0),
-}
 
   
   text(x=coordChangeFunction(chr="chr17", x=29000000)$x, y=coordChangeFunction(chr="chr17", y=100)$y, labels="NF1")
   
-  kpPlotRegions <- function(coordChangeFunction, regions, y=50, height=20, ...) {
-    xleft <- coordChangeFunction(x=start(regions))$x
-    xright <- coordChangeFunction(x=end(regions))$x
-    ytop <- coordChangeFunction(chr=as.character(seqnames(regions)), y=rep(y+height/2, length(regions)))$y
-    ybottom <- coordChangeFunction(chr=as.character(seqnames(regions)), y=rep(y-height/2, length(regions)))$y
-    rect(xleft=xleft, xright=xright, ytop=ytop, ybottom=ybottom, col="red")
-  }
+
+kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000)) 
   
   
+kpPlotRegions(coordChangeFunction, regions)
 
-
+kp$plot
 
