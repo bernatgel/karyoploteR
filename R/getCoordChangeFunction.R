@@ -32,8 +32,11 @@ genomic2plot <- function(chr=NULL, x=NULL, y=NULL, genome, plot.params) {
   
   pp <- plot.params
   
+  genome.width <- 1 - pp$xleftmargin - pp$xrightmargin
+  max.chr.len <- max(end(genome)) - min(start(genome))
+    
   if(!is.null(x)) {
-    x.plot <- pp$xleftmargin + x
+    x.plot <- pp$xleftmargin + (x/max.chr.len)*genome.width
   } else{
     x.plot <- NULL
   }

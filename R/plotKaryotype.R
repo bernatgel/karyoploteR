@@ -35,7 +35,7 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   
   if(is.null(plot.params)) {
     #TODO: Move to a function that returns the default parameters
-    plot.params <- list(xleftmargin=10000000, xrightmargin=5000000, ytopmargin=100, ybottommargin=100,
+    plot.params <- list(xleftmargin=0.1, xrightmargin=0.05, ytopmargin=100, ybottommargin=100,
                    yabovemargin=5, ybelowmargin=5, ydataheight=200, ideogramheight=50,
                    dataymin=0, dataymax=100)
   }
@@ -43,13 +43,17 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   #Prepare the genome and filter the chromosomes as required
   gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
   if(!is.null(chromosomes) & chromosomes != "all") {
-    if(is.character(genome) & chromosomes %in% c("canonical", "autosomal")) {
-      gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
+    if(is.character(genome)) {
+      if(chromosomes %in% c("canonical", "autosomal")) {
+        gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
+      } else {
+        gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
+      }
     } else {
-      gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
-    }
+      #Do not filter the chromosomes. If the genome is completely specified.
+    } 
   }
-  
+  print(gr.genome)
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
     if(is.character(genome)) {
@@ -84,7 +88,7 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
-    xlim <- c(0, pp$xleftmargin + coordChangeFunction(x=max(end(gr.genome)))$x + pp$xrightmargin)
+    xlim <- c(0, 1)
     chr.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin + pp$ydataheight
     ylim <- c(0, pp$ybottommargin + length(gr.genome)*chr.height + pp$ytopmargin)
     
@@ -114,8 +118,8 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   return(kp)
 }
 
-
-kp <- plotKaryotype("hg19")
+genome <- data.frame(c("A", "B"), c(0, 0), c(20000000, 15000000))
+kp <- plotKaryotype(genome="hg19")
 kp$plot
 kp$coord.change.function(x=0)
   
@@ -124,10 +128,17 @@ available.genomes()
 text(x=coordChangeFunction(chr="chr17", x=29000000)$x, y=coordChangeFunction(chr="chr17", y=100)$y, labels="NF1")
   
 
-kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000)) 
-  
-  
+kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA)) 
+kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA), y=10) 
+kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA), y=70)   
+
+abline(v=kp$coord.change.function(x=max(end(kp$genome)))$x)
+abline(v=kp$coord.change.function(x=min(start(kp$genome)))$x)
+abline(v=1)
+abline(v=0)
+
 kpPlotRegions(coordChangeFunction, regions)
 
 kp$plot
+
 
