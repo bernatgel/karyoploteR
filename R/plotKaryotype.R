@@ -29,7 +29,7 @@ library(rtracklayer)
 library(memoise)
 
 
-plotKaryotype <- function(genome="hg19", ideogram.plotter=plotIdeogram, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
+plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
   
   #check required parameters...
   
@@ -115,13 +115,13 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotIdeogram, labels.p
 }
 
 
-kp <- plotKaryotype()
+kp <- plotKaryotype("hg19")
 kp$plot
 kp$coord.change.function(x=0)
   
-
+available.genomes()
   
-  text(x=coordChangeFunction(chr="chr17", x=29000000)$x, y=coordChangeFunction(chr="chr17", y=100)$y, labels="NF1")
+text(x=coordChangeFunction(chr="chr17", x=29000000)$x, y=coordChangeFunction(chr="chr17", y=100)$y, labels="NF1")
   
 
 kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000)) 

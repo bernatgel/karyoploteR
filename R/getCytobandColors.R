@@ -1,6 +1,6 @@
 
 
-getIdeogramColors <- function(color.table) {
+getCytobandColors <- function(color.table) {
   
   if(is.null(color.table)) {
     color.table <- list(gneg="#FFFFFF",
