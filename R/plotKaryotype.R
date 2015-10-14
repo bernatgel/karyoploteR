@@ -23,12 +23,6 @@
 #' 
 
 
-
-library(regioneR)
-library(rtracklayer)
-library(memoise)
-
-
 plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
   
   #check required parameters...
@@ -117,28 +111,3 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   
   return(kp)
 }
-
-genome <- data.frame(c("A", "B"), c(0, 0), c(20000000, 15000000))
-kp <- plotKaryotype(genome="hg19")
-kp$plot
-kp$coord.change.function(x=0)
-  
-available.genomes()
-  
-text(x=coordChangeFunction(chr="chr17", x=29000000)$x, y=coordChangeFunction(chr="chr17", y=100)$y, labels="NF1")
-  
-
-kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA)) 
-kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA), y=10) 
-kpPlotRegions(kp, createRandomRegions(nregions=20, length.mean=10000000, length.sd=10000000, mask=NA), y=70)   
-
-abline(v=kp$coord.change.function(x=max(end(kp$genome)))$x)
-abline(v=kp$coord.change.function(x=min(start(kp$genome)))$x)
-abline(v=1)
-abline(v=0)
-
-kpPlotRegions(coordChangeFunction, regions)
-
-kp$plot
-
-
