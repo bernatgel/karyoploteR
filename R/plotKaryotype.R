@@ -23,15 +23,12 @@
 #' 
 
 
-plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
+plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
   
   #check required parameters...
   
   if(is.null(plot.params)) {
-    #TODO: Move to a function that returns the default parameters
-    plot.params <- list(xleftmargin=0.1, xrightmargin=0.05, ytopmargin=100, ybottommargin=100,
-                   yabovemargin=5, ybelowmargin=5, ydataheight=200, ideogramheight=50,
-                   dataymin=0, dataymax=1)
+    plot.params <- getDefaultPlotParams(plot.type)
   }
   
   #Prepare the genome and filter the chromosomes as required
@@ -60,7 +57,7 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
   }
 
   #Get the Coordinates Change Function to be used in this plot
-  coordChangeFunction <- getCoordChangeFunction(gr.genome, plot.params)
+  coordChangeFunction <- getCoordChangeFunction(plot.type, gr.genome, plot.params)
   
   
   #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
