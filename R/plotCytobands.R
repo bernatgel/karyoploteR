@@ -3,16 +3,16 @@
 plotCytobands <- function(karyoplot, color.table=NULL, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
-  
+  mids <- karyoplot$ideogram.mid.y
+    
   color.table <- getCytobandColors(color.table)
-  
   
   
   if(!is.null(karyoplot$cytobands)) {
     if(length(karyoplot$cytobands)>0) { #If there are cytobands to plot, plot them
 
-      ybottom <- ccf(as.character(seqnames(karyoplot$cytobands)))$y + pp$ybelowmargin
-      ytop <- ccf(as.character(seqnames(karyoplot$cytobands)))$y + pp$ybelowmargin + pp$ideogramheight
+      ybottom <- mids(as.character(seqnames(karyoplot$cytobands))) - pp$ideogramheight/2
+      ytop <- mids(as.character(seqnames(karyoplot$cytobands))) + pp$ideogramheight/2
       
       xleft <- ccf(x=start(karyoplot$cytobands))$x
       xright <- ccf(x=end(karyoplot$cytobands))$x

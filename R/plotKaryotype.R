@@ -57,14 +57,16 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   }
 
   #Get the Coordinates Change Function to be used in this plot
-  coordChangeFunction <- getCoordChangeFunction(plot.type, gr.genome, plot.params)
+  coordChangeFunctions <- getCoordChangeFunctions(plot.type, gr.genome, plot.params)
   
   
   #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
-    kp$coord.change.function <- coordChangeFunction
+    kp$coord.change.function <- coordChangeFunctions$coorChangeFunction
+    kp$ideogram.mid.y <- coordChangeFunctions$ideogramMidY
+    kp$ideogram.height <- coordChangeFunctions$chr.height
     if(is.character(genome)) {
       kp$genome.name <- genome
     } else {

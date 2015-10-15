@@ -6,13 +6,16 @@ getCoordChangeFunctions <- function(plot.type, genome, plot.params)
  
   if(plot.type == 1) {
     genomic2plot <- genomic2plot_1HorizDataAboveIdeogram
+    ideogramMid <- getIdeogramMidY_1HorizDataAboveIdeogram
+    chrHeight <- getChrHeight_1HorizDataAboveIdeogram
   }
   if(plot.type == 2) {
     genomic2plot <- genomic2plot_2HorizDataAboveAndBelowIdeogram
   }
   
   #TODO: check valid params
-  return(function(chr=NULL, x=NULL, y=NULL) {
+  return(list(
+    coorChangeFunction=function(chr=NULL, x=NULL, y=NULL) {
     if(!is.null(y)) {
       if(is.null(chr)) {
         stop("If y is not NULL, chr must be specified too")
@@ -23,16 +26,36 @@ getCoordChangeFunctions <- function(plot.type, genome, plot.params)
       }
     }
     return(genomic2plot(chr=chr, x=x, y=y, genome=genome, plot.params=plot.params))
-  })
+  },
+    ideogramMidY=function(chr) {
+      return(ideogramMid(chr=chr, genome=genome, plot.params=plot.params))
+  },
+    chr.height=chrHeight(plot.params)    
+  ))
 }
+# 
+# getChrLowestY <- function(chr, genome, pp) {
+#   chr.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin + pp$ydataheight
+#   chr.names <- seqlevels(genome)
+#   chrs <- c(length(chr.names):1)
+#   names(chrs) <- chr.names
+#   chr.num <- chrs[chr]
+#   return(pp$ybottommargin + (chr.num - 1) * chr.height)
+# }
 
-getChrLowestY <- function(chr, genome, pp) {
-  chr.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin + pp$ydataheight
+getIdeogramMidY_1HorizDataAboveIdeogram <- function(chr, genome, plot.params) {
+  pp <- plot.params
+  chr.height <- getChrHeight_1HorizDataAboveIdeogram(pp)
   chr.names <- seqlevels(genome)
   chrs <- c(length(chr.names):1)
   names(chrs) <- chr.names
   chr.num <- chrs[chr]
-  return(pp$ybottommargin + (chr.num - 1) * chr.height)
+  return(pp$ybottommargin + (chr.num - 1) * chr.height + pp$ybelowmargin + pp$ideogramheight/2)
+}
+
+getChrHeight_1HorizDataAboveIdeogram <- function(pp) {
+  chr.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin + pp$ydataheight
+  return(chr.height)
 }
 
 #Build the function mapping genomic regions into plotting coordinates
@@ -52,14 +75,15 @@ genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, genom
   if(is.null(chr)) {
     y.plot <- NULL 
   } else {
-    chrs.y <- getChrLowestY(chr, genome, pp) 
+    #chrs.y <- getChrLowestY(chr, genome, pp) 
+    chrs.y <- getIdeogramMidY_1HorizDataAboveIdeogram(chr, genome, pp) 
     if(is.null(y)) { #if y is null, set y to the bottom of the chromosome
       y.plot <- chrs.y
     } else { #Return the appropiate plot.y for the given original y
-      ideo.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin
+      #ideo.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin
       datayrange <- pp$dataymax - pp$dataymin 
       yscaled <- ((y - pp$dataymin) / datayrange) * pp$ydataheight
-      y.plot <- chrs.y + ideo.height + yscaled
+      y.plot <- chrs.y + pp$ideogramheight/2 + pp$yabovemargin + yscaled
     }
   }   
   return(list(x=x.plot, y=y.plot))
