@@ -31,7 +31,7 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
     #TODO: Move to a function that returns the default parameters
     plot.params <- list(xleftmargin=0.1, xrightmargin=0.05, ytopmargin=100, ybottommargin=100,
                    yabovemargin=5, ybelowmargin=5, ydataheight=200, ideogramheight=50,
-                   dataymin=0, dataymax=100)
+                   dataymin=0, dataymax=1)
   }
   
   #Prepare the genome and filter the chromosomes as required
@@ -47,7 +47,6 @@ plotKaryotype <- function(genome="hg19", ideogram.plotter=plotCytobands, labels.
       #Do not filter the chromosomes. If the genome is completely specified.
     } 
   }
-  print(gr.genome)
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
     if(is.character(genome)) {
