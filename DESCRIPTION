@@ -1,9 +1,30 @@
 Package: karyoploteR
 Type: Package
-Title: What the package does (short line)
-Version: 1.0
+Title: Karyotype plots with arbitrary data
+Version: 0.1.0
 Date: 2015-10-09
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Bernat Gel <bgel@imppc.org>
+Maintainer: Bernat Gel <bgel@imppc.org>
+Description: karyoploteR creates karyotype plots of arbitrary genomes and offers a 
+  complete set of functions to plot arbitrary data on them. The basic idea is to create a 
+  coordinate change function automatically mapping the chromosome and data coordinates into
+  the plot coordinates. In addition to the provided data plotting functions, it is easy to 
+  add new ones.
+License: Artistic-2.0
+Depends: 
+    memoise,
+    regioneR,
+    GenomicRanges,
+    rtracklayer
+Imports: 
+    memoise,
+    regioneR,
+    GenomicRanges,
+    rtracklayer
+Suggests: 
+    BiocStyle,
+    knitr,
+    testthat
+VignetteBuilder: knitr
+biocViews: ChIPSeq, DNASeq, MethylSeq, CopyNumberVariation
+NeedsCompilation: no
