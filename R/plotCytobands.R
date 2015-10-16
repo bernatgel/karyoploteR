@@ -3,7 +3,7 @@
 plotCytobands <- function(karyoplot, color.table=NULL, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
-  mids <- karyoplot$ideogram.mid.y
+  mids <- karyoplot$ideogram.mid
     
   color.table <- getCytobandColors(color.table)
   

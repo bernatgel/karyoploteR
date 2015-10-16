@@ -9,14 +9,17 @@ getDefaultPlotParams <- function(plot.type) {
   }
   
   if(plot.type == 1) { #Horizontal. Data above the ideogram
-    plot.params <- list(xleftmargin=0.1, xrightmargin=0.05, ytopmargin=100, ybottommargin=100,
-                      yabovemargin=10, ybelowmargin=10, ydataheight=200, ideogramheight=50,
-                      dataymin=0, dataymax=1)
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=100, bottommargin=100,
+                        ideogramheight=50, 
+                        data1height=200, data1inmargin=20, data1outmargin=20, data1min=0, data1max=1
+    )
   } 
   if(plot.type == 2) { #Horizontal. Data above and below the ideogram
-    plot.params <- list(xleftmargin=0.1, xrightmargin=0.05, ytopmargin=100, ybottommargin=100,
-                        yabovemargin=10, ybelowmargin=10, ydataheight=200, ideogramheight=50,
-                        dataymin=0, dataymax=1)
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=100, bottommargin=100,
+                        ideogramheight=50, 
+                        data1height=200, data1inmargin=20, data1outmargin=20, data1min=0, data1max=1,
+                        data2height=200, data2inmargin=20, data2outmargin=20, data2min=0, data2max=1                        
+                        )
   }
   if(plot.type == 3) { #Horizontal. Data below the ideogram
     stop("Plot type 3 still unimplemented")

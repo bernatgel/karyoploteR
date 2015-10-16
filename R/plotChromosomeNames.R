@@ -3,10 +3,10 @@
 plotChromosomeNames <- function(karyoplot, ...) {
   
   chr.labels <- karyoplot$chromosomes
-  
-  y <- karyoplot$ideogram.mid.y(chr=chr.labels) + (karyoplot$plot.params$yabovemargin + karyoplot$plot.params$ideogramheight/2 + karyoplot$plot.params$ydataheight)/2
 
-  x <- karyoplot$plot.params$xleftmargin / 2
+  x <- karyoplot$plot.params$leftmargin / 2
+  y <- karyoplot$ideogram.mid(chr=chr.labels)
+
     #karyoplot$plot.params$xleftmargin * 0.2 + strwidth(chr.labels)/2 #Align them to the left margin, 20% into the plot
 
   text(x=x, y=y, labels=chr.labels, ...)

@@ -65,8 +65,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
     kp$coord.change.function <- coordChangeFunctions$coorChangeFunction
-    kp$ideogram.mid.y <- coordChangeFunctions$ideogramMidY
-    kp$ideogram.height <- coordChangeFunctions$chr.height
+    kp$ideogram.mid <- coordChangeFunctions$ideogramMid
+    kp$chromosome.height <- coordChangeFunctions$chr.height
     if(is.character(genome)) {
       kp$genome.name <- genome
     } else {
@@ -81,8 +81,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
     xlim <- c(0, 1)
-    chr.height <- pp$ybelowmargin + pp$ideogramheight + pp$yabovemargin + pp$ydataheight
-    ylim <- c(0, pp$ybottommargin + length(gr.genome)*chr.height + pp$ytopmargin)
+    ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
     
     #create an empty plot
     #TODO: Should we remove any margin around the plot?
@@ -97,15 +96,15 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$ymin <- p[3]  
       kp$plot$ymax <- p[4]  
   
+  #And plot the ideogram
+  if(!is.null(ideogram.plotter)) {
+    ideogram.plotter(kp, ...)
+  }    
+  
   #Plot the Chromosome Labels
     if(!is.null(labels.plotter)) {
       labels.plotter(kp, ...)
     }  
  
-  #And plot the ideogram
-  if(!is.null(ideogram.plotter)) {
-    ideogram.plotter(kp, ...)
-  }  
-  
   return(kp)
 }
