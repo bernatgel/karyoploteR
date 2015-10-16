@@ -18,3 +18,4 @@ getCytobands <- memoise(function(genome="hg19") {
   return(toGRanges(cytobands))
   
 })
+

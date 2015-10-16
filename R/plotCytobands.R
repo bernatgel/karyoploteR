@@ -1,6 +1,6 @@
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, ...) {
+plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
@@ -20,6 +20,10 @@ plotCytobands <- function(karyoplot, color.table=NULL, ...) {
       col <- do.call(c, color.table[karyoplot$cytobands$gieStain])
       
       rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
+      
+      if(add.cytobands.names) {
+        plotCytobandsLabels(karyoplot=karyoplot)
+      }
       
     }
   } else {
