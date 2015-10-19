@@ -25,7 +25,7 @@ kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, 
     kpSegments(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=h, y1=h, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)  
   }    
    
-  if(!is.null(h)) {
+  if(!is.null(v)) {
     y0 <- ymin 
     y1 <- ymax
     
