@@ -50,9 +50,6 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
     y0 <- recycle.first(y0, chr, x0, x1, y1)
     y1 <- recycle.first(y1, chr, x0, x1, y0)
   
-  print(paste0(c(x0, x1, y0, y1), collapse=", ")) 
-  
-  
   #Scale it with ymin and ymax
     y0 <- (y0 - ymin)/(ymax - ymin)
     y1 <- (y1 - ymin)/(ymax - ymin)
@@ -60,14 +57,11 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
   #scale y to fit in the [r0, r1] range
     y0 <- (y0*(r1-r0))+r0
     y1 <- (y1*(r1-r0))+r0
-    
-  print(paste0(c(x0, x1, y0, y1), collapse=", ")) 
-  
+
   x0plot <- ccf(chr=chr, x=x0, data.panel=data.panel)$x
   x1plot <- ccf(chr=chr, x=x1, data.panel=data.panel)$x
   y0plot <- ccf(chr=chr, y=y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=chr, y=y1, data.panel=data.panel)$y
-  
   
   segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
   
