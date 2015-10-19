@@ -1,8 +1,12 @@
 
 
 
-kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, data.panel=1, ...) {
+kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  
+  #if null, get the r0 and r1
+  if(is.null(r0)) r0 <- kp$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(r1)) r1 <- kp$plot.params[[paste0("data", data.panel, "max")]]
   
   ccf <- karyoplot$coord.change.function
     
@@ -18,6 +22,17 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, data.panel=1
       }
     } 
   } 
+  
+  
+  
+  #Recicle any values as needed
+    chr <- recycle.first(chr, x, y)
+    x <- recycle.first(x, chr, y)
+    y <- recycle.first(y, chr, x)
+  
+  #scale y to fit in the [r0, r1] range
+    y <- (y*(r1-r0))+r0
+  
   
   ss <- sapply(karyoplot$chromosomes, function(current.chr) {
     in.chr <- which(chr==current.chr)

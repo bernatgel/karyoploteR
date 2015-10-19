@@ -85,8 +85,10 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     
     #create an empty plot
     #TODO: Should we remove any margin around the plot?
+    old.par <- par(no.readonly = TRUE)
     par(mar=c(0,0,0,0)+0.1)
     plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
+  
   
     #Get the limits of the plot from the graphical device
     kp$plot <- list()
@@ -95,6 +97,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$xmax <- p[2]
       kp$plot$ymin <- p[3]  
       kp$plot$ymax <- p[4]  
+      kp$plot$old.par <- old.par
   
   #And plot the ideogram
   if(!is.null(ideogram.plotter)) {
