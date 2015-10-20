@@ -1,7 +1,7 @@
 
 
 
-kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
+kpArrows <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   #if null, get the r0 and r1
@@ -37,7 +37,9 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
     }
   } 
   
+  
   if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
+  
   
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
@@ -49,7 +51,7 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
     x1 <- recycle.first(x1, chr, x0, y0, y1)
     y0 <- recycle.first(y0, chr, x0, x1, y1)
     y1 <- recycle.first(y1, chr, x0, x1, y0)
-  
+    
   #Scale it with ymin and ymax
     y0 <- (y0 - ymin)/(ymax - ymin)
     y1 <- (y1 - ymin)/(ymax - ymin)
@@ -63,6 +65,6 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
   y0plot <- ccf(chr=chr, y=y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=chr, y=y1, data.panel=data.panel)$y
   
-  segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
+  arrows(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
   
 }

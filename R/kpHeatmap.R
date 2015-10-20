@@ -28,6 +28,8 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ym
     }
   } 
   
+  if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
+    
   if(is.null(ymin)) ymin <- min(y)
   if(is.null(ymax)) ymax <- max(y)
   

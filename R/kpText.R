@@ -34,6 +34,10 @@ kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, 
     }
   } 
     
+  
+  if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
+  
+  
   #Recicle any values as needed
   chr <- recycle.first(chr, x, y, labels)
   x <- recycle.first(x, chr, y, labels)
