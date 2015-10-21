@@ -80,9 +80,13 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
-    xlim <- c(0, 1)
-    ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
-    
+    if(plot.type %in% c(1,2,3)) {
+      xlim <- c(0, 1)
+      ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
+    } else {
+      ylim <- c(0, 1)
+      xlim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
+    }
     #create an empty plot
     #TODO: Should we remove any margin around the plot?
     old.par <- par(no.readonly = TRUE)
