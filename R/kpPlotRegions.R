@@ -17,7 +17,7 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=N
   ccf <- karyoplot$coord.change.function
   
   if(is.null(col)) col <- "red"
-  if(is.null(border)) border <- "red"
+  if(is.null(border)) border <- col
     
   chr <- as.character(seqnames(data))
   x0 <- start(data)

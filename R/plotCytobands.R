@@ -1,6 +1,6 @@
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE, ...) {
+plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
@@ -24,7 +24,6 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
       if(add.cytobands.names) {
         plotCytobandsLabels(karyoplot=karyoplot)
       }
-      
     }
   } else {
     #If no cytobands are available, plot a solid rectangle representing the chromosomes
@@ -41,4 +40,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
     
   }
     
+  if(add.base.numbers) {
+    plotBaseNumbers(karyoplot, ...)
+  }
 }
