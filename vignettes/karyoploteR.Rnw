@@ -1,0 +1,187 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{karyoploteR vignette}
+%\VignetteKeywords{visualisation, karyotype, ideogram, genomics}
+%\VignettePackage{karyoploteR}
+
+
+
+\documentclass{article}
+
+\usepackage{graphicx} % Required for including images
+\usepackage[font=normalsize,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+\usepackage{indentfirst}
+\usepackage{xcolor}
+
+%%% %/software/FC14/general/R-3.0.2/lib64/R/library/
+%\RequirePackage{BiocStyle/sty/Bioconductor}
+
+\linespread{1.5}\selectfont
+
+
+<<style-knitr, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\newcommand{\regioneR}{\Biocpkg{karyoploteRR}}
+
+%%\makeindex
+
+\title{karyoploteR: customizable karyotypes with arbitrary data}
+\author{Bernat Gel\footnote{bgel@imppc.org}}
+\date{Edited: October 21, 2015; Compiled: \today}
+
+
+\begin{document}
+
+<<include=FALSE>>=
+library(knitr)
+library(karyoploteR)
+opts_chunk$set(concordance=FALSE)
+set.seed(21666641)
+@
+
+
+%\input{karyoploteR-concordance}
+
+\maketitle
+\linespread{1.2}\selectfont
+\tableofcontents
+\clearpage
+
+
+
+
+%==============================================================================
+%
+\section{Introduction}
+%
+%==============================================================================
+
+When working with genomics data
+
+La visualitzacio pot ajudara  entendre millor les dades i a descobrir coses. en genòmica també. Per això, tenir eines que permetin plotar aquestes dades és últil i si a més permeten fer-ho de manera senzilla, encara més, pq es poden afegir al procés de descoberta.
+
+
+
+%==============================================================================
+%
+\section{Quick Start}
+%
+%==============================================================================
+
+
+The basic idea behind \karyploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are basic functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
+
+This is a first simple example plotting a set of regions representing gains and losses using the \Rfunction{kpPlotRegions} function:
+<<fig.height=6,fig.width=8>>=
+  library(karyploteR)
+  gains <- data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 10000000, 40000000, 1), end=c(50000000, 32000000, 80000000, 12000000))
+  losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1), end=c(170000000, 30000000, 25000000))
+  kp <- plotKaryotype(genome="hg19") 
+  kpPlotRegions(kp, gains, col="red")
+  kpPlotRegions(kp, losses, col="green", )
+  kpOff(kp)
+@
+
+As you can see, the \Rfunction{plotKaryotype} returns a \textit{KaryoPlot} object that has to be passed to any subsequent plot call. 
+
+\subsection{TODO}
+More information about the \Rcode{localZScore} function can be found at section \ref{sec:localzscore}: Local Z-score.
+
+
+%==============================================================================
+%
+\section{Plot Karyotype}
+%
+%==============================================================================
+
+\subsection{Genomes and Chromosomes}
+
+\subsection{Types of Plots}
+
+Add kpDataBackground
+
+The parameters for each plot are at the end. Reference.
+
+
+\subsection{Ideograms and Labels}
+
+<<eval=FALSE>>=
+# NOT RUN
+pt <- permTest(A=my.regions, B=repeats, randomize.function=randomizeRegions,
+evaluate.function=overlapRegions)
+@
+
+
+
+
+%==============================================================================
+%
+\section{Adding Data}
+%
+%==============================================================================
+
+\subsection{Common Parameters}
+
+ymin, ymax, r0 r1 etc...
+
+\subsection{Basic Plotting Functions}
+
+
+
+\subsection{Higher Level Plotting Functions}
+
+
+
+
+
+%==============================================================================
+%
+\section{Customization}
+%
+%==============================================================================
+
+
+\subsection{The \Rcode{KaryoPlot} Object}
+
+
+\subsection{Using the coordinate change function}
+
+\subsection{Custom data plots}
+
+\subsection{Custom ideograms and labels}
+    
+    \incfig[h!]{figures/speed_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against number of regions}
+{}
+
+    \incfig[h!]{figures/mask_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against mask density}
+{}
+
+
+
+%==============================================================================
+%
+\section{Default Plot Parameters for each Plot Type}
+%
+%==============================================================================
+
+
+
+
+  %Here a couple of technical considerations about the implementation of regioneR. 
+  \subsection{Memoisation}
+    \regioneR{} uses \textit{memoise} to speed up the genome and mask retrieval functions, since they can be quite slow. Thus, the first call to \textit{getGenomeAndMask} (which is called from all functions accepting a genome) will have an additional delay of almost 30s. After that call, the genome and mask retrieval is almost intantaneous, since the result has been cached. In some special cases, one might want to remove the cache and retrieve the genome and mask from the original source. To do so, we have included the function \textit{emptyCacheRegioneR} that will forget the cached versions of genomes and masks.
+
+%==============================================================================
+%
+%                        Session Info
+%
+%==============================================================================
+\section{Session Info}
+<<sessionInfo>>=
+sessionInfo()
+@
+
+\end{document}
+
+
