@@ -19,8 +19,10 @@ kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, 
   
   
   if(!is.null(h)) {
-    x0 <- start(karyoplot$genome[seqnames(karyoplot$genome) == chr])
-    x1 <- end(karyoplot$genome[seqnames(karyoplot$genome) == chr])
+    names(karyoplot$genome) <- as.character(seqnames(karyoplot$genome))
+    chr <- rep(chr, each=length(h))
+    x0 <- start(karyoplot$genome[chr])
+    x1 <- end(karyoplot$genome[chr])
     
     kpSegments(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=h, y1=h, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)  
   }    
