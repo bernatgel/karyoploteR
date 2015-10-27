@@ -13,8 +13,6 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=N
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- kp$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(r1)) r1 <- kp$plot.params[[paste0("data", data.panel, "max")]]
-    
-  ccf <- karyoplot$coord.change.function
   
   if(is.null(col)) col <- "red"
   if(is.null(border)) border <- col
