@@ -2,12 +2,12 @@
 
 
 
-getCytobands <- memoise(function(genome="hg19", force.download=FALSE) {
+getCytobands <- memoise(function(genome="hg19", use.cache=TRUE) {
   if(!is.character(genome) | length(genome)>1) { #if it's a custom genome, do not attempt to get the cytobands
     return(GRanges())
   }
   
-  if(!force.download) { #If the cytobands are in the included cache, use them
+  if(use.cache) { #If the cytobands are in the included cache, use them
     if(genome %in% names(data.cache[["cytobands"]])) {
       return(data.cache[["cytobands"]][[genome]])
     }

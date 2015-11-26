@@ -23,7 +23,7 @@
 #' 
 
 
-plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, ...) {
+plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, ...) {
   
   #check required parameters...
   
@@ -32,18 +32,32 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   }
   
   #Prepare the genome and filter the chromosomes as required
-  gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
+  #Get the genome
+    gr.genome <- NULL
+    if(use.cache) { #Get the genome from the cache, if available
+      if(genome %in% names(data.cache[["genomes"]])) {
+        gr.genome <- data.cache[["genomes"]][[genome]]
+      }
+    }
+    if(is.null(gr.genome)) {
+      gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
+    }
+  #And filter it
   if(!is.null(chromosomes) & chromosomes != "all") {
     if(is.character(genome)) {
-      if(chromosomes %in% c("canonical", "autosomal")) {
-        gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
-      } else {
-        gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
-      }
-    } else {
-      #Do not filter the chromosomes. If the genome is completely specified.
-    } 
+      tryCatch(expr={
+        if(chromosomes %in% c("canonical", "autosomal")) {
+          gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
+        } else {
+          gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
+        }
+      }, error=function(e) {
+        message(paste0("There was an error when filtering the chromosomes. Using the unfiltered genome. \n", e))
+      })     
+    }
+    # else Do not filter the chromosomes. If the genome is completely specified (not a character).
   }
+  
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
     if(is.character(genome)) {
