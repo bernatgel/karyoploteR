@@ -22,7 +22,8 @@
 BiocStyle::latex()
 @
 
-\newcommand{\regioneR}{\Biocpkg{karyoploteRR}}
+\newcommand{\karyoploteR}{\Biocpkg{karyoploteR}}
+\newcommand{\regioneR}{\Biocpkg{regioneR}}
 
 %%\makeindex
 
@@ -70,11 +71,11 @@ La visualitzacio pot ajudara  entendre millor les dades i a descobrir coses. en 
 %==============================================================================
 
 
-The basic idea behind \karyploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are basic functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
+The basic idea behind \karyoploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are basic functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
 
 This is a first simple example plotting a set of regions representing gains and losses using the \Rfunction{kpPlotRegions} function:
-<<fig.height=6,fig.width=8>>=
-  library(karyploteR)
+<<fig.height=6,fig.width=8,eval=FALSE>>=
+  #NOT RUN: rtrack layer fails to set the session
   gains <- data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 10000000, 40000000, 1), end=c(50000000, 32000000, 80000000, 12000000))
   losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1), end=c(170000000, 30000000, 25000000))
   kp <- plotKaryotype(genome="hg19") 
@@ -151,12 +152,12 @@ ymin, ymax, r0 r1 etc...
 
 \subsection{Custom ideograms and labels}
     
-    \incfig[h!]{figures/speed_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against number of regions}
-{}
-
-    \incfig[h!]{figures/mask_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against mask density}
-{}
-
+%     \incfig[h!]{figures/speed_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against number of regions}
+% {}
+% 
+%     \incfig[h!]{figures/mask_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against mask density}
+% {}
+% 
 
 
 %==============================================================================
