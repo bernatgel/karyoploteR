@@ -7,37 +7,28 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
     
   color.table <- getCytobandColors(color.table)
   
-  
-  if(!is.null(karyoplot$cytobands)) {
-    if(length(karyoplot$cytobands)>0) { #If there are cytobands to plot, plot them
-
-      ybottom <- mids(as.character(seqnames(karyoplot$cytobands))) - pp$ideogramheight/2
-      ytop <- mids(as.character(seqnames(karyoplot$cytobands))) + pp$ideogramheight/2
-      
-      xleft <- ccf(x=start(karyoplot$cytobands))$x
-      xright <- ccf(x=end(karyoplot$cytobands))$x
-      
-      col <- do.call(c, color.table[karyoplot$cytobands$gieStain])
-      
-      rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
-      
-      if(add.cytobands.names) {
-        plotCytobandsLabels(karyoplot=karyoplot)
-      }
-    }
+  #If there are no cytobands, create a single "fake" cytoband to represent the whole chromosome
+  if(!is.null(karyoplot$cytobands) && length(karyoplot$cytobands)>0) { 
+    cyto <- karyoplot$cytobands  
   } else {
-    #If no cytobands are available, plot a solid rectangle representing the chromosomes
+    cyto <- karyoplot$genome
+    mcols(cyto) <- data.frame(name=seqnames(cyto), gieStain="gpos50", stringsAsFactors=FALSE)  
+  }
+  
+  #And plot them  
+  
+  ybottom <- mids(as.character(seqnames(cyto))) - pp$ideogramheight/2
+  ytop <- mids(as.character(seqnames(cyto))) + pp$ideogramheight/2
     
-    ybottom <- ccf(as.character(seqnames(karyoplot$genome)))$y + pp$ybelowmargin
-    ytop <- ccf(as.character(seqnames(karyoplot$genome)))$y + pp$ybelowmargin + pp$ideogramheight
+  xleft <- ccf(x=start(cyto))$x
+  xright <- ccf(x=end(cyto))$x
     
-    xleft <- ccf(x=start(karyoplot$genome))$x
-    xright <- ccf(x=end(karyoplot$genome))$x
+  col <- do.call(c, color.table[cyto$gieStain])
     
-    col <- "gray70"
+  rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
     
-    rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
-    
+  if(add.cytobands.names) {
+    plotCytobandsLabels(karyoplot=karyoplot, ...)
   }
     
   if(add.base.numbers) {

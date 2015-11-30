@@ -43,10 +43,10 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
     }
   #And filter it
-  if(!is.null(chromosomes) & chromosomes != "all") {
+  if(!is.null(chromosomes) && chromosomes != "all") {
     if(is.character(genome)) {
       tryCatch(expr={
-        if(chromosomes %in% c("canonical", "autosomal")) {
+        if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal"))) {
           gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
         } else {
           gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
@@ -62,9 +62,10 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   if(is.null(cytobands)) {
     if(is.character(genome)) {
       cytobands <- getCytobands(genome)
-      #Filter the cytobands using the current genome
-      cytobands <- keepSeqlevels(cytobands, value=seqlevels(gr.genome))
-      
+      #if there are sytobands, filter the cytobands using the current genome
+      if(!is.null(cytobands) && length(cytobands)>0) {
+        cytobands <- keepSeqlevels(cytobands, value=seqlevels(gr.genome))
+      }
     } else {
       message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
     }
