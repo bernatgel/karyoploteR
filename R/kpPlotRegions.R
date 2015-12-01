@@ -1,7 +1,7 @@
 
 
 
-kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, ...) {
+kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, ...) {
   #karyoplot
     if(!hasArg(karyoplot)) stop("The parameter 'karyoplot' is required")
     if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
@@ -14,7 +14,6 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=N
   if(is.null(r0)) r0 <- kp$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(r1)) r1 <- kp$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(is.null(col)) col <- "red"
   if(is.null(border)) border <- col
     
   chr <- as.character(seqnames(data))

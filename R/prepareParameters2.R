@@ -1,6 +1,5 @@
 
 
-
 prepareParameters2 <- function(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1, data.panel, ...) {
   if(!is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
     

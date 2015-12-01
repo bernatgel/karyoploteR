@@ -1,4 +1,7 @@
+#INTERNAL
 
+#Returns a table with the colors associated with each cytoband.
+# By default it returns the colors defined in Circos.
 
 getCytobandColors <- function(color.table) {
   

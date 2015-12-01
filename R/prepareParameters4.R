@@ -1,3 +1,6 @@
+#INTERNAL
+
+#Prepares the plotting parameters for the functions that need 4 params (x0, x1, y0 and y1) (rect...)
 
 
 

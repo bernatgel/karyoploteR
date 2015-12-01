@@ -1,3 +1,54 @@
+#' getCytobands
+#' 
+#' @description 
+#' 
+#' Get the cytobands of the specified genome.
+#' 
+#' @details 
+#'  
+#' It returns \code{GRanges} object with the cytobands of the specified genome. 
+#' The cytobands for some organisms and genome versions have been pre-downloaded from UCSC
+#' and included in the \code{karyoploteR} package. For any other genome, \code{getCytobands}
+#' will use \code{rtracklayer} to try to fetch the \code{cytoBandIdeo} table from UCSC. If for
+#' some reason it is not possible to retrieve the cytobands, it will return an empty \code{GRanges}
+#' object. Setting the parameter \code{use.cache} to \code{FALSE}, the data included in the 
+#' package will be ignored and the cytobands will be downloaded from UCSC.
+#' 
+#' The genomes (and versions) with pre-downloaded cytobands are: hg19, hg38, mm9, mm10, rn5, rn6,
+#' danRer10, dm6, ce6 and sacCer3.
+#'    
+#' 
+#' @usage getCytobands(genome="hg19", use.cache=TRUE)
+#' 
+#' @param genome   (character or other) specifies a genome using the UCSC genome name. Defaults to "hg19". If it's not a \code{character}, genome is ignored and and empty \code{GRanges} is returned.
+#' @param use.cache   (boolean) wether to use or not the cytoband information included in the packge. \code{use.cache=FALSE} will force a download from the UCSC.
+#' 
+#' @return
+#' It returns a \code{\link{GenomicRanges}} object with the cytobands of the specified genome. If no cytobands are available for any reason, an empty \code{GRanges} is returned.
+#' 
+#' 
+#' @note 
+#' 
+#' This function is memoised (cached) using the \code{\link{memoise}} package. To empty the cache, use \code{\link{forget}(getCytobands)}
+#'  
+#' @seealso \code{\link{plotCytobands}}, \code{\link{plotKaryotype}}
+#' 
+#' @examples
+#'  
+#' #get the cytobands for hg19 (using the data included in the package)
+#' cyto <- getCytobands("hg19")
+#' 
+#' #do not use the included data and force the download from UCSC
+#' cyto <- getCytobands("hg19", use.cache=FALSE)
+#' 
+#' #get the cytobands for Drosophila Melanogaster
+#' cyto <- getCytobands("dm6")
+#' 
+#' #get the cytobands for Chimpanzee (not included in the package)
+#' cyto <- getCytobands("panTro4")
+#'  
+#' @export getCytobands
+#' 
 
 
 
