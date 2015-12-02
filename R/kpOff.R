@@ -1,4 +1,6 @@
 
+#' @export kpOff
+
 #Finalize the KaryPlot (basically, recover the prior graphical parameters)
 
 kpOff <- function(karyoplot) {

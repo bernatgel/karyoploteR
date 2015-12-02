@@ -38,15 +38,18 @@
 #' @examples
 #'  
 #' set.seed(1000)
-#' data.points <- sort(createRandomRegions(nregions=500, mask=NA))
+#' data.points <- sort(createRandomRegions(nregions=500, length.mean=2000000, mask=NA))
 #' y <- runif(500, min=0, max=0.8)
-#' mcols(data.points) <- data.frame(y0=y, y1=0+0.2)
+#' mcols(data.points) <- data.frame(y0=y, y1=y+0.2)
 #' 
 #' kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 #'   kpDataBackground(kp, data.panel=1)
 #'   kpDataBackground(kp, data.panel=2)
 #' 
-#'   kpRect(kp, data=data.points)
+#'   kpRect(kp, data=data.points, col="black")
+#'   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0, r1=0.2, border=NA, col="lightblue", data.panel=2)
+#'   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.3, r1=0.5, border=NA, col="lightgreen", data.panel=2)
+#'   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.6, r1=0.8, border=NA, col="purple", data.panel=2)
 #'   
 #' kpOff(kp)
 #' 

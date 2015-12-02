@@ -1,5 +1,7 @@
 
 
+#internal
+
 plotCytobandsLabels <- function(karyoplot, cytobands.names.cex=0.5, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params

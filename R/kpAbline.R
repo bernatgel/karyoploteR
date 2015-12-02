@@ -1,5 +1,7 @@
 
 
+#' @export kpAbline
+
 
 kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,  r0=NULL, r1=NULL, ...) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")

@@ -1,6 +1,9 @@
 
 
 
+#' @export kpAxis
+
+
 
 kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...) {
   

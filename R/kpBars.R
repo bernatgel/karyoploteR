@@ -1,5 +1,7 @@
 
 
+#' @export kpBars
+
 
 kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
   if(!is(karyoplot, "KaryoPlot")) stop(paste0("In kpBars: 'karyoplot' must be a valid 'KaryoPlot' object"))

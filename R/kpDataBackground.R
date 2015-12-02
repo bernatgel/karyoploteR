@@ -1,4 +1,6 @@
 
+#' @export kpDataBackground
+
 kpDataBackground <- function(karyoplot, y0=NULL, y1=NULL, data.panel=1, color="gray90") {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   ccf <- karyoplot$coord.change.function

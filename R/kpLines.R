@@ -14,6 +14,8 @@
 #' combination of both. A number of parameters can be used to define exactly where 
 #' and how the lines are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpLines}
 #' accepts any parameter valid for \code{lines} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
+#' The lines are drawn in a per chromosome basis, so it is not possible to draw lines encompassing 
+#' more than one chromosome.
 #'
 #' @usage kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
 #' 

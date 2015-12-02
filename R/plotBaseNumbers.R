@@ -1,5 +1,7 @@
 
 
+#internal
+
 plotBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
