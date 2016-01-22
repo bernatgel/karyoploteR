@@ -5,6 +5,10 @@
 
 kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,  r0=NULL, r1=NULL, ...) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
  
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]

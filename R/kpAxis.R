@@ -6,6 +6,9 @@
 
 
 kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...) {
+  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
   
   
   ccf <- kp$coord.change.function

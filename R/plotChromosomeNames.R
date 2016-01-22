@@ -1,7 +1,6 @@
-
+#internal
 
 plotChromosomeNames <- function(karyoplot, ...) {
-  
   chr.labels <- karyoplot$chromosomes
 
   x <- karyoplot$plot.params$leftmargin / 2

@@ -1,8 +1,11 @@
 
-
+#'@export kpHeatmap
 
 kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
   
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]

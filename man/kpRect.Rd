@@ -63,7 +63,6 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.3, r1=0.5, border=NA, col="lightgreen", data.panel=2)
   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.6, r1=0.8, border=NA, col="purple", data.panel=2)
   
-kpOff(kp)
 
  
 }

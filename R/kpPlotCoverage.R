@@ -1,7 +1,12 @@
 
-
+#'@export kpPlotCoverage
 
 kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ...) {
+  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
+  
   #karyoplot
     if(!hasArg(karyoplot)) stop("The parameter 'karyoplot' is required")
     if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")

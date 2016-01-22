@@ -1,4 +1,5 @@
 
+#'@export kpPlotRegions
 
 
 kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, ...) {
@@ -7,6 +8,11 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="
     if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
     if(!hasArg(data)) stop("The parameter 'data' is required")
+    
+  
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+    
     
   data <- toGRanges(data)
       

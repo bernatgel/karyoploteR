@@ -64,7 +64,6 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   kpSegments(kp, data=data.points, y0=0, y1=1,  r0=0.2, r1=0.8, col="lightblue", data.panel=2)
   kpSegments(kp, data=data.points, y0=0, y1=1,  r0=0.8, r1=0.2, col="lightgreen", data.panel=2)
   
-kpOff(kp)
 
  
 }

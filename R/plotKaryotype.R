@@ -92,6 +92,23 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     kp$cytobands <- cytobands
   
   
+  #Remove all margins around the plot to take complete control of the available space
+    kp$graphical.par <- list()
+    kp$graphical.par$old.par <- par(no.readonly = TRUE)
+    par(mar=c(0,0,0,0)+0.1)
+    
+    kp$beginKpPlot <- function() {
+      par(kp$graphical.par$new.par)  
+    }
+    kp$endKpPlot <- function() {
+      par(kp$graphical.par$old.par)  
+    }
+    
+    on.exit(kp$endKpPlot())
+  
+  
+  
+  
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
@@ -102,10 +119,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       ylim <- c(0, 1)
       xlim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
     }
+  
     #create an empty plot
-    #TODO: Should we remove any margin around the plot?
-    old.par <- par(no.readonly = TRUE)
-    par(mar=c(0,0,0,0)+0.1)
     plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
   
   
@@ -115,8 +130,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$xmin <- p[1]
       kp$plot$xmax <- p[2]
       kp$plot$ymin <- p[3]  
-      kp$plot$ymax <- p[4]  
-      kp$plot$old.par <- old.par
+      kp$plot$ymax <- p[4]
   
   #And plot the ideogram
   if(!is.null(ideogram.plotter)) {
@@ -128,5 +142,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       labels.plotter(kp, ...)
     }  
  
+  
+  kp$graphical.par$new.par <- par(no.readonly = TRUE) #Remember the parameters used
+  
   return(kp)
 }

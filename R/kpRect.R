@@ -51,7 +51,6 @@
 #'   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.3, r1=0.5, border=NA, col="lightgreen", data.panel=2)
 #'   kpRect(kp, data=randomizeRegions(data.points, mask=NA), y0=0, y1=1,  r0=0.6, r1=0.8, border=NA, col="purple", data.panel=2)
 #'   
-#' kpOff(kp)
 #' 
 #'  
 #' @export kpRect
@@ -59,6 +58,10 @@
 
 
 kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, ...) {
+  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
   pp <- prepareParameters4("kpRect", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   

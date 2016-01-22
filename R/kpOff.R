@@ -6,6 +6,8 @@
 kpOff <- function(karyoplot) {
   if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
-  par(karyoplot$plot$old.par)
+  print("DEPRECATED")
+  
+  #par(karyoplot$plot$old.par)
     
 }

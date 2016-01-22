@@ -48,7 +48,7 @@
 #'   #It is also possible to "flip" the data by giving an r0 > r1
 #'   kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
 #' 
-#' kpOff(kp)
+
 #' 
 #'  
 #' @export kpPolygon
@@ -56,6 +56,10 @@
 
 
 kpPolygon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
   pp <- prepareParameters2("kpPolygon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
     

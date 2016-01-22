@@ -71,7 +71,6 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   #It is also possible to "flip" the data by giving an r0 > r1
   kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
 
-kpOff(kp)
 
  
 }

@@ -1,4 +1,21 @@
-
+#' getDefaultParameters
+#' 
+#' @description 
+#' 
+#' Returns the default parameter for the given plot.type
+#' 
+#' @details 
+#'  
+#'  TODO
+#'
+#'  
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+#' 
+#' @examples
+#' 
+#'  
+#' @export getDefaultPlotParams
+#' 
 
 
 getDefaultPlotParams <- function(plot.type) {
