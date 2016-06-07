@@ -1,6 +1,6 @@
-#karyoploteR - An R package to plot data along the genome
+# karyoploteR - An R package to plot data along the genome
 
-##Description
+## Description
 
 karyoploteR is an R package to plot data along the genome using a karyotype style plot. 
 It is entirely based on R base graphics and inspired by the R base graphics API. 
@@ -18,7 +18,7 @@ different data plotting functions, it is possible to specify custom functions
 for every plotting action from the basic chromosome bands to the chromosome labels
 or base numbers.
 
-##How to use it
+## How to use it
 
 
 ## Examples
