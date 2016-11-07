@@ -1,5 +1,7 @@
 
 
+#'@export plotCytobands
+
 plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...) {
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params

@@ -13,7 +13,7 @@
 #' via a \code{GRanges} object (\code{data}), independent parameters for chr, x and y or a 
 #' combination of both. A number of parameters can be used to define exactly where 
 #' and how the lines are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpLines}
-#' accepts any parameter valid for \code{lines} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
+#' accepts any parameter valid for \code{\link[graphics]{lines}} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
 #' The lines are drawn in a per chromosome basis, so it is not possible to draw lines encompassing 
 #' more than one chromosome.
 #'
@@ -70,5 +70,6 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
     xplot <- ccf(chr=pp$chr[in.chr], x=pp$x[in.chr], data.panel=data.panel)$x
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
     lines(x=xplot, y=yplot, ...)      
-  })  
+  })
+  return(karyoplot)
 }

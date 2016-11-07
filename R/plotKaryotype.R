@@ -6,10 +6,11 @@
 #' 
 #' @details 
 #'  
+#'  Explicar els tipus de plots disponibles!
 #' 
 #' @usage plotKaryotype(genome="hg19", ...)
 #' 
-#' @param genoms
+#' @param genome
 #' 
 #' @return
 #' The coordinates change function to be used to plot additional data onto the karyotype 

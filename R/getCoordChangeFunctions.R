@@ -1,4 +1,6 @@
+#INTERNAL
 
+#Return the coordinate change function mapping genomic to plot coordinates
 
 
 getCoordChangeFunctions <- function(plot.type, genome, plot.params)

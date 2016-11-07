@@ -58,10 +58,12 @@ set.seed(21666641)
 %
 %==============================================================================
 
-When working with genomics data
+Data visualisation is a powerful tool used for data analysis and exploration in many fields. Genomics data 
+analysis is one of these fields where good visualisation tools can be of great help. The aim of karyoploteR is to offer the user an easy way to plot data along the genome to get broad wide view where it is possible to identify genome wide relations and distributions. 
 
-La visualitzacio pot ajudara  entendre millor les dades i a descobrir coses. en genòmica també. Per això, tenir eines que permetin plotar aquestes dades és últil i si a més permeten fer-ho de manera senzilla, encara més, pq es poden afegir al procés de descoberta.
+\karyoploteR is based on base R graphics and mimicks its interface. You first create a plot with \Rfunction{plotKaryotype} and then sequentially call a number of functions (\Rfunction{kpLines}, \Rfunction{kpPoints}, \Rfunction{kpBars}...) to add data to the plot. 
 
+\karyoploteR is a plotting tool and only a plotting tool. That means that it is not able to download or retrieve any data. The downside of this is that the user is responsible of getting the data into R. The upside is that it is not tied to any data provider and thus can be used to plot genomic data coming from anywhere. The only exception to this are the ideograms cytobands, that by default are plotted using predownloaded data from UCSC. 
 
 
 %==============================================================================
@@ -71,20 +73,82 @@ La visualitzacio pot ajudara  entendre millor les dades i a descobrir coses. en 
 %==============================================================================
 
 
-The basic idea behind \karyoploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are basic functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
+The basic idea behind \karyoploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
 
-This is a first simple example plotting a set of regions representing gains and losses using the \Rfunction{kpPlotRegions} function:
-<<fig.height=6,fig.width=8,eval=FALSE>>=
-  #NOT RUN: rtrack layer fails to set the session
+This is a first simple example plotting a set of regions representing copy-number gains and losses using the \Rfunction{kpPlotRegions} function:
+<<fig.height=6,fig.width=8>>=
   gains <- data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 10000000, 40000000, 1), end=c(50000000, 32000000, 80000000, 12000000))
   losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1), end=c(170000000, 30000000, 25000000))
   kp <- plotKaryotype(genome="hg19") 
   kpPlotRegions(kp, gains, col="red")
   kpPlotRegions(kp, losses, col="green", )
-  kpOff(kp)
+
 @
 
 As you can see, the \Rfunction{plotKaryotype} returns a \textit{KaryoPlot} object that has to be passed to any subsequent plot call. 
+
+\Rfunction{plotKaryotype} accepts a number of parameters but the most commonly used are \Rcode{genome}, \Rcode{chromosomes} and \Rcode{plot.type}. The \Rcode{genome} and \Rcode{chromosomes} are used to specify the genome to be plotted (defaults to \textit{hg19} and which chromosomes to plot (defaults to \textit{canonical}). The \Rcode{plot.type} parameter is used to select between different modes of adding data to the genome (above, below or on the ideograms).
+
+For example, to create a plot of the mouse genome with data above the ideograms we would use this:
+
+<<fig.height=6,fig.width=8>>=
+  kp <- plotKaryotype(genome="mm10", plot.type=1)
+@
+
+And to plot the first thee chromosomes of the hg19 human genome assembly with data above and below them:
+
+<<fig.height=2,fig.width=8>>=
+  kp <- plotKaryotype(genome="hg19", plot.type=2, chromosomes=c("chr1", "chr2", "chr3"))
+@
+
+All low-level plotting functions share a similar interface, and in general, they accept the standard R plotting parameters (\textit{lwd}, \textit{cex}, \textit{pch}, etc...). The simplest way (althought not always the most convenient) is to treat them as the equivalent R base plotting functions with an additional \Rcode{chr} parameter. As an example, we can create a set of random 1 base regions (using \regioneR \Rfunction{createRandomRegions}) and add a random \Rcode{y} value to them:
+
+<<>>=
+  random.regs <- toDataframe(sort(createRandomRegions(genome="hg19", nregions=1000, length.mean=1, length.sd=0, mask=NA, non.overlapping=TRUE)))
+  random.regs <- cbind(random.regs, y=runif(n=1000, min=-1, max=1))
+  head(random.regs)
+@
+
+And then plot them in different maners.
+
+<<fig.height=4,fig.width=8>>=
+  kp <- plotKaryotype(genome="hg19", plot.type=2, chromosomes=c("chr1", "chr2", "chr3"))
+  kpPoints(kp, chr=random.regs$chr, x=random.regs$start, y=0.1, col="black", pch=".", cex=2)
+  kpPoints(kp, chr=random.regs$chr, x=random.regs$start, y=0.1, col="red", pch=5, cex=1)
+  kpAbline(kp, h=0.7, col="#888888")
+  kpLines(kp, chr=random.regs$chr, x=random.regs$start, y=random.regs$y, ymin=-1, ymax=1, r0=0.5, r1=0.9, col="blue")
+  kpSegments(kp, chr=random.regs$chr, x0=random.regs$start, x1=random.regs$start, y0=random.regs$y, y1=random.regs$y+0.5, ymin=-1, ymax=1, r0=0.5, r1=0.9, col="purple")
+  kpText(kp, chr=random.regs$chr, x=random.regs$start, y=random.regs$y+0.5, labels="~", col="purple", ymin=-1, ymax=1, r0=0.5, r1=0.9)
+
+  kpAbline(kp, h=0.5, data.panel=2)
+  kpAxis(kp, ymin=-1, ymax=1, data.panel=2, numticks=4)
+  kpSegments(kp, chr=random.regs$chr, x0=random.regs$start, x1=random.regs$end, y0=0, y1=random.regs$y, ymin=-1, ymax=1, col="blue", data.panel=2, lwd=6)
+
+@
+
+The interface for the higher level plotting functions is a little different and they usually take Bioconductor objects (\Rcode{GRanges}, etc...). As an example of these plotting functions we can create and plot 20 sets of 1000 random regions and see their coverage on the genome. In addition, we will plot the masked regions of the genomes where no random region should be.
+
+<<fig.height=6,fig.width=8>>=
+  n <- 10
+  kp <- plotKaryotype(plot.type=2)
+  kpPlotRegions(kp, data=getGenomeAndMask("hg19")$mask, r0=0, r1=1, col="gray", border="gray")
+    
+  all.regions <- GRanges()
+  for(i in (1:n)) {
+    rr <- filterChromosomes(createRandomRegions(nregions=200, length.mean=10000000))
+    kpPlotRegions(kp, rr, r0=(1/n)*(i-1), r1=(1/n)*i)
+    all.regions <- c(all.regions, rr)
+  }
+
+  kpAxis(kp, ymin=0, ymax=n, data.panel=2, cex=0.4)
+  #kpPlotCoverage(kp, data=all.regions, data.panel=2)
+  print("kpPlotCoverage FAILS in the vignette!!")
+  
+  kpAbline(kp, h=n/2, lty=2, col="#888888", ymin=0, ymax=n, data.panel=2)
+  
+@
+
+
 
 \subsection{TODO}
 More information about the \Rcode{localZScore} function can be found at section \ref{sec:localzscore}: Local Z-score.
