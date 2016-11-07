@@ -71,5 +71,5 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
     lines(x=xplot, y=yplot, ...)      
   })
-  return(karyoplot)
+  invisible(karyoplot)
 }

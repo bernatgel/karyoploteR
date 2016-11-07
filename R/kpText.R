@@ -67,4 +67,6 @@ kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, 
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
   text(x=xplot, y=yplot, labels=labels, ...)      
+  
+  invisible(karyoplot)
 }

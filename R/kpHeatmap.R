@@ -14,7 +14,7 @@
 #' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...)
 #'  
 #' @inheritParams kpPoints
-#' @param colors    (colors) A set of color used to determine the color associated with each value. Internally, it uses \code\link[grDevices]{colorRamp}. (defaults to c("blue", "white", "yellow"))
+#' @param colors    (colors) A set of color used to determine the color associated with each value. Internally, it uses \code{\link[grDevices]{colorRamp}}. (defaults to c("blue", "white", "yellow"))
 #'     
 #' @return
 #' 

@@ -25,7 +25,7 @@ kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymi
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
-\item{colors}{(colors) A set of color used to determine the color associated with each value. Internally, it uses \code\link[grDevices]{colorRamp}. (defaults to c("blue", "white", "yellow"))}
+\item{colors}{(colors) A set of color used to determine the color associated with each value. Internally, it uses \code{\link[grDevices]{colorRamp}}. (defaults to c("blue", "white", "yellow"))}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
