@@ -34,7 +34,26 @@
 #' 
 #' @examples
 #' 
-#'   
+#' set.seed(1000)
+#' data.points <- sort(createRandomRegions(nregions=1000, mask=NA))
+#' mcols(data.points) <- data.frame(y=rnorm(500, mean = 0.5, sd = 0.1))
+#' 
+#' kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
+#' kpDataBackground(kp, data.panel=1)
+#' 
+#' kpPoints(kp, data=data.points, pch=".", col="#2222FF", cex=3)
+#' 
+#' #Add horizontal lines at mean
+#' kpAbline(kp, h=0.5, col="red")
+#' 
+#' #and at the 1 sd
+#' kpAbline(kp, h=c(0.4, 0.6), col="orange", lwd=0.5)
+#' #and 2 sd's
+#' kpAbline(kp, h=c(0.3, 0.7), col="orange", lwd=0.5, lty=2)
+#' 
+#' #And add two vertical lines at specific chromosomal locations
+#' kpAbline(kp, v=c(67000000, 190000000), chr="chr1")
+#' 
 #' 
 #' @export kpAbline
 
