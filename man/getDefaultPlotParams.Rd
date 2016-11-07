@@ -7,16 +7,26 @@
 getDefaultPlotParams(plot.type)
 }
 \description{
-Returns the default parameter for the given plot.type
+Returns the default parameters for the given plot.type
 }
 \details{
-TODO
+Given a plot.type, this function returns a list suitable as a valid \code{plot.params} object.
+ The user can then proceed to change the parameter values as needed and supply the modified 
+ list to the plotKaryotype function.#'
 }
 \examples{
+
+pp <- getDefaultPlotParams(plot.type=2)
+pp
+
+#Change the ideogramheight param to create thicker ideograms 
+pp$ideogramheight <- 150
+
+plotKaryotype(genome="hg19", plot.type=2, plot.params=pp) 
 
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+\code{\link{plotKaryotype}}
 }
 

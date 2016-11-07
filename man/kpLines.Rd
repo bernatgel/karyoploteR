@@ -21,7 +21,7 @@ kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, da
 
 \item{ymax}{(numeric) The maximum value of \code{y} to be plotted. If NULL, it is set to the max value of the selected data panel. (defaults to NULL)}
 
-\item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{link{plotKaryotype}}. (defaults to 1)}
+\item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
 \item{r0}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
@@ -40,7 +40,7 @@ value (y) for each of them, it plots a line joining them. Data can be provided
 via a \code{GRanges} object (\code{data}), independent parameters for chr, x and y or a 
 combination of both. A number of parameters can be used to define exactly where 
 and how the lines are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpLines}
-accepts any parameter valid for \code{lines} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
+accepts any parameter valid for \code{\link[graphics]{lines}} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
 The lines are drawn in a per chromosome basis, so it is not possible to draw lines encompassing 
 more than one chromosome.
 }

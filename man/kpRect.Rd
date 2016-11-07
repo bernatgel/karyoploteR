@@ -29,7 +29,7 @@ kpRect(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NU
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
-\item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{link{plotKaryotype}}. (defaults to 1)}
+\item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }

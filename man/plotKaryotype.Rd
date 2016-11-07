@@ -7,7 +7,7 @@
 plotKaryotype(genome="hg19", ...)
 }
 \arguments{
-\item{genoms}{}
+\item{genome}{}
 }
 \value{
 The coordinates change function to be used to plot additional data onto the karyotype
@@ -16,7 +16,7 @@ The coordinates change function to be used to plot additional data onto the kary
 Create a new plot with a karyotype and nothing more and return the coordinates change function
 }
 \details{
-
+Explicar els tipus de plots disponibles!
 }
 \examples{
  

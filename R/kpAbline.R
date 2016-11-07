@@ -7,8 +7,9 @@
 #' 
 #' @details 
 #'  
-#' As with all other "base-inspired" low-level plotting functions in karyoploteR, the function has been designed to accept mostly
-#' the same parameters as the base one (see the package vignette for more information}. In this case, however, the interface has been reduced and it is only possible to plot 
+#' As with all other base-inspired low-level plotting functions in karyoploteR, the function has been designed to accept mostly
+#' the same parameters as the base one (see the package vignette for more information). In this case, however, the 
+#' interface has been reduced and it is only possible to plot 
 #' vertical and horizontal lines and it's not possible to provide an intercept and slope. In addition, the function accepts
 #' graphical parameters that are valid for the base function \code{\link[graphics]{segments}}.
 #' 
