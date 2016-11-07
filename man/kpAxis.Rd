@@ -40,7 +40,7 @@ Returns the original karyoplot object, unchanged.
 Plot axis at the sides of the data panels
 }
 \details{
-\code{kpAxis} plots axis at the sides of the data panels. It is possible to control the number of ticks and their labals,
+\code{kpAxis} plots axis at the sides of the data panels. It is possible to control the number of ticks and their labels,
  the placement of the plots and whether they span the whole data panel or just part of it. To do that they use the same placement 
  parameters used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not  Axis are always plotted for all chromosomes.
 }

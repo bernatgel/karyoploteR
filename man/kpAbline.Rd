@@ -44,7 +44,7 @@ graphical parameters that are valid for the base function \code{\link[graphics]{
 
 set.seed(1000)
 data.points <- sort(createRandomRegions(nregions=1000, mask=NA))
-mcols(data.points) <- data.frame(y=rnorm(500, mean = 0.5, sd = 0.1))
+mcols(data.points) <- data.frame(y=rnorm(1000, mean = 0.5, sd = 0.1))
 
 kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
 kpDataBackground(kp, data.panel=1)

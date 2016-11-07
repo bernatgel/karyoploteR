@@ -37,7 +37,7 @@
 #' 
 #' set.seed(1000)
 #' data.points <- sort(createRandomRegions(nregions=1000, mask=NA))
-#' mcols(data.points) <- data.frame(y=rnorm(500, mean = 0.5, sd = 0.1))
+#' mcols(data.points) <- data.frame(y=rnorm(1000, mean = 0.5, sd = 0.1))
 #' 
 #' kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
 #' kpDataBackground(kp, data.panel=1)
@@ -96,6 +96,6 @@ kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, 
     kpSegments(karyoplot=karyoplot, chr=chr, x0=v, x1=v, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)  
   }
   
-  return(karyoplot)
+  invisible(karyoplot)
         
 }

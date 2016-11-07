@@ -33,6 +33,10 @@
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #'  
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged.
+#'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
 #' 
 #' @examples
@@ -72,4 +76,5 @@ kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=N
   
   rect(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot, ...)
   
+  invisible(karyoplot)
 }
