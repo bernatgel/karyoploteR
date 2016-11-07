@@ -62,4 +62,6 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
   
   segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
+  
+  invisible(karyoplot)
 }

@@ -44,11 +44,11 @@
 #'
 #' #Prepare data panel 2
 #' #Data panel 2 is conceptually split into two parts and the second part is "inverted"
-#' kpDataBackground(kp, data.panel=2, y0 = 0, y1 = 0.45, color = "#EEEEFF")
+#' kpDataBackground(kp, data.panel=2, r0 = 0, r1 = 0.45, color = "#EEEEFF")
 #' kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
 #' kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, side=2)
 #' 
-#' kpDataBackground(kp, data.panel=2, y0 = 0.55, y1 = 1, color = "#EEFFEE")
+#' kpDataBackground(kp, data.panel=2, r0 = 0.55, r1 = 1, color = "#EEFFEE")
 #' kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=1, cex=0.5)
 #' kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=2, cex=0.5)
 #' 
