@@ -70,7 +70,7 @@ kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, 
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
-  pp <- prepareParameters2("kpLines", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+  pp <- prepareParameters2("kpPoints", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
