@@ -88,6 +88,10 @@ kp <- plotKaryotype(cytobands = GRanges())
 kp <- plotKaryotype(labels.plotter = NULL)
 kpPoints(kp, rand.data, pch=".")
 
+#In addition, it's possible to use maggrittr piping to chain the plotting calls
+kp <- plotKaryotype() \%>\%
+   kpDataBackground(color = "lightgreen") \%>\%
+   kpPoints(rand.data, pch=".")
 
 }
 \seealso{
