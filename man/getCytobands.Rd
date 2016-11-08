@@ -48,6 +48,6 @@ cyto <- getCytobands("panTro4")
  
 }
 \seealso{
-\code{\link{plotCytobands}}, \code{\link{plotKaryotype}}
+\code{\link{plotKaryotype}}
 }
 

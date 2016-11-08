@@ -31,7 +31,7 @@
 #' 
 #' This function is memoised (cached) using the \code{\link{memoise}} package. To empty the cache, use \code{\link{forget}(getCytobands)}
 #'  
-#' @seealso \code{\link{plotCytobands}}, \code{\link{plotKaryotype}}
+#' @seealso \code{\link{plotKaryotype}}
 #' 
 #' @examples
 #'  

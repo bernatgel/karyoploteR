@@ -1,4 +1,4 @@
-#INTERNAL
+#' @keywords internal
 
 #Return the coordinate change function mapping genomic to plot coordinates
 

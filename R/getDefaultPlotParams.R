@@ -28,7 +28,7 @@
 
 
 getDefaultPlotParams <- function(plot.type) {
-  valid.plot.types <- c(1:4)
+  valid.plot.types <- c(1:2) #c(1:4)
   
   if(!plot.type %in% valid.plot.types) {
     stop(paste0("plot.type is not valid. Select a valid value: ", paste0(valid.plot.types, collapse=", ")))
