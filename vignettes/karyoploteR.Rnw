@@ -73,19 +73,29 @@ analysis is one of these fields where good visualisation tools can be of great h
 %==============================================================================
 
 
-The basic idea behind \karyoploteR{} has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
+The basic idea behind \karyoploteR has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using \Rfunction{plotKaryotype} and then add the data plots as required. To add the data there are functions based on the R base graphics low-level primitives -e.g \Rfunction{kpPoints}, \Rfunction{kpLines}, \Rfunction{kpSegments}, \Rfunction{kpRects}... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. \Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}...-.
 
 This is a first simple example plotting a set of regions representing copy-number gains and losses using the \Rfunction{kpPlotRegions} function:
+
 <<fig.height=6,fig.width=8>>=
   gains <- data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 10000000, 40000000, 1), end=c(50000000, 32000000, 80000000, 12000000))
   losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1), end=c(170000000, 30000000, 25000000))
   kp <- plotKaryotype(genome="hg19") 
   kpPlotRegions(kp, gains, col="red")
-  kpPlotRegions(kp, losses, col="green", )
+  kpPlotRegions(kp, losses, col="green")
 
 @
 
-As you can see, the \Rfunction{plotKaryotype} returns a \textit{KaryoPlot} object that has to be passed to any subsequent plot call. 
+As you can see, the \Rfunction{plotKaryotype} returns a \textit{KaryoPlot} object that has to be passed to any subsequent plot call. However, \karyoploteR is compatible with \Biocpkg{magrittr} and so it is also possible to use \Rcode{\%>\%} pipes to chain the calls to the plotting functions. 
+
+This code is equivalent to the one above.
+
+<<eval=FALSE>>=
+  library(magrittr)
+  kp <- plotKaryotype(genome="hg19") %>%
+    kpPlotRegions(gains, col="red") %>%
+    kpPlotRegions(losses, col="green")
+@
 
 \Rfunction{plotKaryotype} accepts a number of parameters but the most commonly used are \Rcode{genome}, \Rcode{chromosomes} and \Rcode{plot.type}. The \Rcode{genome} and \Rcode{chromosomes} are used to specify the genome to be plotted (defaults to \textit{hg19} and which chromosomes to plot (defaults to \textit{canonical}). The \Rcode{plot.type} parameter is used to select between different modes of adding data to the genome (above, below or on the ideograms).
 
@@ -109,7 +119,7 @@ All low-level plotting functions share a similar interface, and in general, they
   head(random.regs)
 @
 
-And then plot them in different maners.
+And then plot them in different maners (producing a not very elegant plot).
 
 <<fig.height=4,fig.width=8>>=
   kp <- plotKaryotype(genome="hg19", plot.type=2, chromosomes=c("chr1", "chr2", "chr3"))
@@ -141,8 +151,8 @@ The interface for the higher level plotting functions is a little different and 
   }
 
   kpAxis(kp, ymin=0, ymax=n, data.panel=2, cex=0.4)
-  #kpPlotCoverage(kp, data=all.regions, data.panel=2)
-  print("kpPlotCoverage FAILS in the vignette!!")
+  kpPlotCoverage(kp, data=all.regions, data.panel=2)
+  
   
   kpAbline(kp, h=n/2, lty=2, col="#888888", ymin=0, ymax=n, data.panel=2)
   
@@ -150,15 +160,14 @@ The interface for the higher level plotting functions is a little different and 
 
 
 
-\subsection{TODO}
-More information about the \Rcode{localZScore} function can be found at section \ref{sec:localzscore}: Local Z-score.
-
-
 %==============================================================================
 %
-\section{Plot Karyotype}
+\section{Creating a karyotype plot}
 %
 %==============================================================================
+
+All plots in \karyoploteR start with a call to \Rfunction{plotKaryotype}. This function is used to define the desired type of plot and the basic plotting parameters, creates an empty plot with the ideograms representing the chromosomes and finally returns a \Rcode{KaryoPlot} object that will be needed by all functions adding data into the plot.
+
 
 \subsection{Genomes and Chromosomes}
 
@@ -199,22 +208,23 @@ ymin, ymax, r0 r1 etc...
 
 
 
+%Coming in the future
 
 %==============================================================================
 %
-\section{Customization}
+%\section{Customization}
 %
 %==============================================================================
 
 
-\subsection{The \Rcode{KaryoPlot} Object}
+%\subsection{The \Rcode{KaryoPlot} Object}
 
 
-\subsection{Using the coordinate change function}
+%\subsection{Using the coordinate change function}
 
-\subsection{Custom data plots}
+%\subsection{Custom data plots}
 
-\subsection{Custom ideograms and labels}
+%\subsection{Custom ideograms and labels}
     
 %     \incfig[h!]{figures/speed_test_regioneR_small.pdf}{0.8\textwidth}{Randomization time against number of regions}
 % {}
@@ -224,18 +234,6 @@ ymin, ymax, r0 r1 etc...
 % 
 
 
-%==============================================================================
-%
-\section{Default Plot Parameters for each Plot Type}
-%
-%==============================================================================
-
-
-
-
-  %Here a couple of technical considerations about the implementation of regioneR. 
-  \subsection{Memoisation}
-    \regioneR{} uses \textit{memoise} to speed up the genome and mask retrieval functions, since they can be quite slow. Thus, the first call to \textit{getGenomeAndMask} (which is called from all functions accepting a genome) will have an additional delay of almost 30s. After that call, the genome and mask retrieval is almost intantaneous, since the result has been cached. In some special cases, one might want to remove the cache and retrieve the genome and mask from the original source. To do so, we have included the function \textit{emptyCacheRegioneR} that will forget the cached versions of genomes and masks.
 
 %==============================================================================
 %
