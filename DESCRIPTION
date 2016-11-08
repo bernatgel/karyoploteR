@@ -15,7 +15,8 @@ Depends:
     memoise,
     regioneR,
     GenomicRanges,
-    rtracklayer
+    rtracklayer,
+    magrittr
 Imports:
     memoise,
     regioneR,
