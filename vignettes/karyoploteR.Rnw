@@ -194,10 +194,27 @@ Chromosomes
 
 \subsection{Types of Plots}
 
-Add kpDataBackground
+There are currently 2 plot types available: 
 
-The parameters for each plot are at the end. Reference.
+\begin{description}
+  \item[plot.type=1] A plot with horizontal ideograms and a single data panel on top of them
+  \item[plot.type=2] A plot with horizontal ideograms and two data panels, one above and one below them
+\end{description}
 
+To clearly see where the data panels are and in some cases, to help the readers interpret the data it is possible to add a background to the data panels with \Rfunction{kpDataBackground}. Please take into account that the function draws a solid rectangle and so if any data was already plotted it would be no longer visible.
+
+This is plot type 1:
+<<fig.height=1,fig.width=8>>=
+kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 1)
+kpDataBackground(kp, data.panel = 1)
+@
+
+And this is plot type 2:
+<<fig.height=1,fig.width=8>>=
+kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 2)
+kpDataBackground(kp, data.panel = 1)
+kpDataBackground(kp, data.panel = 2)
+@
 
 \subsection{Ideograms and Labels}
 
@@ -210,7 +227,41 @@ evaluate.function=overlapRegions)
 
 \subsection{Changing the plotting parameters}
 
-plot.params amb mides diferents.
+In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. This are the available parameters and their default values:
+
+%%\begin{center}\vspace{1cm}
+%%\includegraphics{./figures/plot.params.type2.png}
+%%%\captionof{figure}{Plotting parameters available}
+%%\end{center}\vspace{1cm}
+
+The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response.
+
+For example, we can create a plot with a data plot larger than the other and smaller margins:
+
+<<fig.height=3,fig.width=8>>=
+plot.params <- getDefaultPlotParams(plot.type=2)
+plot.params$ideogramheight <- 5
+plot.params$data2height <- 50
+plot.params$leftmargin <- 0.05
+plot.params$bottommargin <- 20
+plot.params$topmargin <- 20
+
+kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 2, plot.params = plot.params) %>%
+  kpDataBackground(data.panel = 1) %>%
+  kpDataBackground(data.panel = 2, color = "#CCFFDD")
+@
+
+Or a plot with a smaller single data panel toucing the ideogram, and add the base numbers and cytoband names:
+
+<<fig.height=2,fig.width=8>>=
+plot.params <- getDefaultPlotParams(plot.type=1)
+plot.params$ideogramheight <- 100
+plot.params$data1height <- 100
+plot.params$data1inmargin <- 0
+
+kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 1, plot.params = plot.params, add.cytobands.names=TRUE, cytobands.names.cex=0.25, add.base.numbers=TRUE) %>%
+  kpDataBackground(data.panel = 1)
+@
 
 
 %==============================================================================
