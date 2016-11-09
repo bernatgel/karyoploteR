@@ -86,6 +86,15 @@
 #'    kpDataBackground(color = "lightgreen") %>%
 #'    kpPoints(rand.data, pch=".")
 #' 
+#' 
+#' @import memoise
+#' @import regioneR
+#' @import GenomicRanges
+#' @import rtracklayer
+#' @import magrittr
+#' 
+#'  
+#' 
 #' @export plotKaryotype
 #' 
 

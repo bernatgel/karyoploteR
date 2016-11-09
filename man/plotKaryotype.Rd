@@ -93,6 +93,7 @@ kp <- plotKaryotype() \%>\%
    kpDataBackground(color = "lightgreen") \%>\%
    kpPoints(rand.data, pch=".")
 
+
 }
 \seealso{
 \code{\link{getDefaultPlotParams}}, \code{\link{kpPoints}}
