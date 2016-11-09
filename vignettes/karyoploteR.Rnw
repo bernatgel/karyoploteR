@@ -168,8 +168,29 @@ The interface for the higher level plotting functions is a little different and 
 
 All plots in \karyoploteR start with a call to \Rfunction{plotKaryotype}. This function is used to define the desired type of plot and the basic plotting parameters, creates an empty plot with the ideograms representing the chromosomes and finally returns a \Rcode{KaryoPlot} object that will be needed by all functions adding data into the plot.
 
+There are two main parts in the karyoplots: the ideograms and the data panels. The ideograms represent the chromosomes and are usually represented by the chromosomic cytobands. The data panels are the parts of the plot where data will be plotted. They are not marked by default (no border or background) and depending on the plot type there may be more than one per chromosome.
+
+\Rfunction{plotKaryotype} accepts a number of parameters to modify its behaviour, but by default it will create an empty karyoplot of the human genome version hg19 with a single data panel above the ideograms:
+
+<<fig.height=6,fig.width=8>>=
+  kp <- plotKaryotype()
+@
+
+In this section we will see how the different parameters of \Rfunction{plotKarytype} can be used to modify this basic plot and create plots with more data panels, for other organisms, with a different style or showing just some of the chromosomes.
+
 
 \subsection{Genomes and Chromosomes}
+
+A karyoplot is a representation of a genome, and thus, one of the main parameters of \Rfunction{plotKaryotype} is \Rcode{genome}. With it we can specify what genome we want to plot. The package includes a small cache with information on some genomes and to use it we have to specify the genome using the standard UCSC genome name (hg19, hg38, mm10, dm6, ...). However, internally it can use \regioneR's \Rfunction{getGenomeAndMask} function and so we can specify the genome in any fornmat accepted by this function, including the name of any \Rcode{BSGenome} object available in the system. If we want \Rfunction{plotKaryotype} to ignore the included cache and try to automatically get the genome information from other sources we can set \Rcode{use.cache} to \Rcode{FALSE}.
+
+Chromosomes
+
+2 exemples amb chromosomes
+
+
+
+
+
 
 \subsection{Types of Plots}
 
@@ -187,6 +208,9 @@ evaluate.function=overlapRegions)
 @
 
 
+\subsection{Changing the plotting parameters}
+
+plot.params amb mides diferents.
 
 
 %==============================================================================
