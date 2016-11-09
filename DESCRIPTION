@@ -25,7 +25,8 @@ Imports:
 Suggests:
     BiocStyle,
     knitr,
-    testthat
+    testthat,
+    BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
 biocViews: ChIPSeq, DNASeq, MethylSeq, CopyNumberVariation
 NeedsCompilation: no
