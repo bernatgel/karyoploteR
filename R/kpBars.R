@@ -23,6 +23,7 @@
 #' 
 #' 
 #' set.seed(1000)
+#' library(BSgenome.Hsapiens.UCSC.hg19)
 #' windows <- unlist(tileGenome(tilewidth=10000000, seqlengths = seqlengths(Hsapiens)))
 #' y1 <- (sin(x=c(1:length(windows))/2)+3)/6
 #' y0 <- y1 - rnorm(length(windows), mean = 0, sd = 0.15)
