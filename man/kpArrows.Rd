@@ -33,6 +33,9 @@ kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymi
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
+\value{
+Returns the original karyoplot object, unchanged.
+}
 \description{
 Plots segments at the specified genomic positions.
 }

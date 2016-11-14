@@ -9,6 +9,9 @@ getDefaultPlotParams(plot.type)
 \arguments{
 \item{plot.type}{(integer) the required plot type. can be any valid plot type (see \code{\link{plotKaryotype}})}
 }
+\value{
+A valid \code{plot.params} object with the default values for the plotting parameters and ready to be used in the \code{plotKaryotype}
+}
 \description{
 Returns the default parameters for the given plot.type
 }

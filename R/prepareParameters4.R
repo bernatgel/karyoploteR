@@ -6,7 +6,7 @@
 
 
 prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
+  if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]

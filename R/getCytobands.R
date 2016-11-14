@@ -53,7 +53,7 @@
 
 
 
-getCytobands <- memoise(function(genome="hg19", use.cache=TRUE) {
+getCytobands <- memoise::memoise(function(genome="hg19", use.cache=TRUE) {
   if(!is.character(genome) | length(genome)>1) { #if it's a custom genome, do not attempt to get the cytobands
     return(GRanges())
   }
@@ -67,7 +67,7 @@ getCytobands <- memoise(function(genome="hg19", use.cache=TRUE) {
   cytobands <- tryCatch(expr={
     ucsc.session <- browserSession()
     genome(ucsc.session) <- genome
-    cytobands <- getTable(ucscTableQuery(ucsc.session,"cytoBandIdeo"))
+    cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
     cytobands$name <- as.character(cytobands$name)
     cytobands$gieStain <- as.character(cytobands$gieStain)
     toGRanges(cytobands)    

@@ -29,6 +29,9 @@ kpPolygon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, 
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
+\value{
+Returns the original karyoplot object, unchanged.
+}
 \description{
 Plots the the given polygons along the genome
 }
@@ -62,11 +65,6 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   }
   
   
-  kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
-  kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y), ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
-  #It is also possible to "flip" the data by giving an r0 > r1
-  kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
-
 
  
 }

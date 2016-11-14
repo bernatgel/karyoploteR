@@ -48,7 +48,7 @@
 #'@export kpHeatmap
 
 kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -93,7 +93,7 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ym
   
   
   #Create the colorRamp
-  cr <- colorRamp(colors=colors)
+  cr <- grDevices::colorRamp(colors=colors)
   
  
   #Determine the plotting coordinates
@@ -102,7 +102,7 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ym
   yminplot <- ccf(chr=chr, y=rep_len(r0, length(chr)), data.panel=data.panel)$y
   ymaxplot <- ccf(chr=chr, y=rep_len(r1, length(chr)), data.panel=data.panel)$y
   
-  rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot, col=rgb(cr(y), max=255), border=NA, ...)
+  graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot, col=grDevices::rgb(cr(y), max=255), border=NA, ...)
   
   invisible(karyoplot)
 }

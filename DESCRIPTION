@@ -12,15 +12,17 @@ Description: karyoploteR creates karyotype plots of arbitrary genomes and offers
     plotting functions, it is easy to add new ones.
 License: Artistic-2.0
 Depends:
+    R (>= 3.4),
     memoise,
     regioneR,
     GenomicRanges,
-    rtracklayer
+    rtracklayer,
+    GenomeInfoDb,
+    S4Vectors,
+    methods
 Imports:
-    memoise,
     regioneR,
-    GenomicRanges,
-    rtracklayer
+    GenomicRanges
 Suggests:
     BiocStyle,
     knitr,
@@ -28,6 +30,6 @@ Suggests:
     magrittr,
     BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
-biocViews: ChIPSeq, DNASeq, MethylSeq, CopyNumberVariation
+biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport
 NeedsCompilation: no
 RoxygenNote: 5.0.1

@@ -20,6 +20,9 @@
 #' 
 #' @inheritParams kpPoints
 #' 
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged. 
 #'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
 #' 
@@ -43,12 +46,6 @@
 #'   }
 #'   
 #'   
-#'   kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
-#'   kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y), ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
-#'   #It is also possible to "flip" the data by giving an r0 > r1
-#'   kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
-#' 
-
 #' 
 #'  
 #' @export kpPolygon
@@ -56,7 +53,7 @@
 
 
 kpPolygon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -65,7 +62,7 @@ kpPolygon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL,
     
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
-  polygon(x=xplot, y=yplot, ...)
+  graphics::polygon(x=xplot, y=yplot, ...)
   
   invisible(karyoplot)
 }

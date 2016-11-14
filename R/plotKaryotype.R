@@ -82,16 +82,19 @@
 #' kpPoints(kp, rand.data, pch=".")
 #' 
 #' #In addition, it's possible to use maggrittr piping to chain the plotting calls
+#' library(magrittr)
 #' kp <- plotKaryotype() %>%
 #'    kpDataBackground(color = "lightgreen") %>%
 #'    kpPoints(rand.data, pch=".")
 #' 
 #' 
-#' @import memoise
 #' @import regioneR
 #' @import GenomicRanges
-#' @import rtracklayer
-#' 
+#' @importFrom GenomeInfoDb seqlevels keepSeqlevels
+#' @importFrom S4Vectors runLength runValue
+#' @importFrom memoise memoise
+#' @importFrom rtracklayer ucscTableQuery
+#' @import methods
 #' 
 #' @export plotKaryotype
 #' 
@@ -138,7 +141,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       cytobands <- getCytobands(genome)
       #if there are cytobands, filter the cytobands using the current genome
       if(!is.null(cytobands) && length(cytobands)>0) {
-        cytobands <- keepSeqlevels(cytobands, value=seqlevels(gr.genome))
+        cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome))
       }
     } else {
       message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
@@ -161,21 +164,21 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     } else {
       kp$genome.name <- "custom"
     }
-    kp$chromosomes <- as.character(seqlevels(gr.genome))
+    kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
   
   
   #Remove all margins around the plot to take complete control of the available space
     kp$graphical.par <- list()
-    kp$graphical.par$old.par <- par(no.readonly = TRUE)
-    par(mar=c(0,0,0,0)+0.1)
+    kp$graphical.par$old.par <- graphics::par(no.readonly = TRUE)
+    graphics::par(mar=c(0,0,0,0)+0.1)
     
     kp$beginKpPlot <- function() {
-      par(kp$graphical.par$new.par)  
+      graphics::par(kp$graphical.par$new.par)  
     }
     kp$endKpPlot <- function() {
-      par(kp$graphical.par$old.par)  
+      graphics::par(kp$graphical.par$old.par)  
     }
     
     on.exit(kp$endKpPlot())
@@ -195,12 +198,12 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     }
   
     #create an empty plot
-    plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
+    graphics::plot(0, type="n", xlim=xlim, ylim=ylim, axes=FALSE, ylab="", xlab="", xaxs="i", yaxs="i")
   
   
     #Get the limits of the plot from the graphical device
     kp$plot <- list()
-      p <- par("usr")
+      p <- graphics::par("usr")
       kp$plot$xmin <- p[1]
       kp$plot$xmax <- p[2]
       kp$plot$ymin <- p[3]  
@@ -217,7 +220,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     }  
  
   
-  kp$graphical.par$new.par <- par(no.readonly = TRUE) #Remember the parameters used
+  kp$graphical.par$new.par <- graphics::par(no.readonly = TRUE) #Remember the parameters used
   
   return(kp)
 }

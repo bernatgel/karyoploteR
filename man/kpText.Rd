@@ -31,6 +31,9 @@ kpText(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, y
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
+\value{
+Returns the original karyoplot object, unchanged.
+}
 \description{
 Plots the text given in \code{labels} at the positions defined by chr, x and y along the genome.
 }

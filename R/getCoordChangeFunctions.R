@@ -55,7 +55,7 @@ getCoordChangeFunctions <- function(plot.type, genome, plot.params)
 getIdeogramMidY_1HorizDataAboveIdeogram <- function(chr, genome, plot.params) {
   pp <- plot.params
   chr.height <- getChrHeight_1HorizDataAboveIdeogram(pp)
-  chr.names <- seqlevels(genome)
+  chr.names <- GenomeInfoDb::seqlevels(genome)
   chrs <- c(length(chr.names):1)
   names(chrs) <- chr.names
   chr.num <- chrs[chr]
@@ -124,7 +124,7 @@ genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.
 getIdeogramMidY_2HorizDataAboveAndBelowIdeogram <- function(chr, genome, plot.params) {
   pp <- plot.params
   chr.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp)
-  chr.names <- seqlevels(genome)
+  chr.names <- GenomeInfoDb::seqlevels(genome)
   chrs <- c(length(chr.names):1)
   names(chrs) <- chr.names
   chr.num <- chrs[chr]
@@ -199,7 +199,7 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
 getIdeogramMidY_4VerticalDataAboveAndBelowIdeogram <- function(chr, genome, plot.params) {
   pp <- plot.params
   chr.height <- getChrHeight_4VerticalDataAboveAndBelowIdeogram(pp)
-  chr.names <- seqlevels(genome)
+  chr.names <- GenomeInfoDb::seqlevels(genome)
   chrs <- c(length(chr.names):1)
   names(chrs) <- chr.names
   chr.num <- chrs[chr]

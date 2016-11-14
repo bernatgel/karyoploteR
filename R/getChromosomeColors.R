@@ -23,7 +23,7 @@
 # 
 # # Default UCSC color scheme for chromosome colors. 
 # 
-# chr1  = rgb(153/256,102/256,0/256)
+# chr1  = grDevices::rgb153/256,102/256,0/256)
 # chr2  = 102,102,0
 # chr3  = 153,153,30
 # chr4  = 204,0,0

@@ -26,7 +26,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
     
   col <- do.call(c, color.table[cyto$gieStain])
     
-  rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
+  graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
     
   if(add.cytobands.names) {
     plotCytobandsLabels(karyoplot=karyoplot, ...)

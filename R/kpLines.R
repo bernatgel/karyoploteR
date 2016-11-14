@@ -21,6 +21,10 @@
 #' 
 #' @inheritParams kpPoints 
 #' 
+#' 
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged.
 #'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}, \code{\link{kpPlotRegions}}
 #' 
@@ -58,7 +62,7 @@
 
 
 kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -69,7 +73,7 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
     in.chr <- which(pp$chr==current.chr)
     xplot <- ccf(chr=pp$chr[in.chr], x=pp$x[in.chr], data.panel=data.panel)$x
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
-    lines(x=xplot, y=yplot, ...)      
+    graphics::lines(x=xplot, y=yplot, ...)      
   })
   invisible(karyoplot)
 }

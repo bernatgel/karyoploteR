@@ -306,8 +306,8 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
     
     In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response. To see the available plot params and their default values we can call \Rfunction{plotDefaultPlotParams}, which will create a plot with the representation of the plot parameters:
     
-    <<fig.height=3,fig.width=8>>=
-    plotDefaultPlotParams(plot.type=2)
+    <<fig.height=6,fig.width=8>>=
+    plotDefaultPlotParams(plot.type=2, cex=0.6)
     @
     
     

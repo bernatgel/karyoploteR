@@ -4,10 +4,15 @@
 \alias{plotDefaultPlotParams}
 \title{plotDefaultPlotParameters}
 \usage{
-plotDefaultPlotParams(plot.type=2)
+plotDefaultPlotParams(plot.type=2, ...)
 }
 \arguments{
 \item{plot.type}{(numeric) plot the params of this plot type. Currently, only plot type 2 is accepted. (defaults to 2)}
+
+\item{...}{The ellipsis operator can be used to pass any additional graphics parameter}
+}
+\value{
+Returns the original karyoplot object, unchanged.
 }
 \description{
 Creates a karyoplot with the default parameters drawn.

@@ -3,9 +3,9 @@
 # #Given a color, returns a lighter one
 # #TODO: Is there a better way to do that?
 # lighter <- function(col, amount=150) {
-#   col <- (col2rgb(col)+amount)/255
+#   col <- (col2grDevices::rgbcol)+amount)/255
 #   col[col[,1]>1,1] <- 1
-#   return(rgb(t(col)))  
+#   return(grDevices::rgbt(col)))  
 # }
 # 
 # #Helper Function

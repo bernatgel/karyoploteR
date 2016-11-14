@@ -20,6 +20,9 @@
 #' 
 #' @inheritParams kpRect 
 #' 
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged. 
 #'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
 #' 
@@ -49,7 +52,7 @@
 
 
 kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -61,7 +64,7 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
   y0plot <- ccf(chr=pp$chr, y=pp$y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
   
-  segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
+  graphics::segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
   
   invisible(karyoplot)
 }

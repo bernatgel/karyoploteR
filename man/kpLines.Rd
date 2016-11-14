@@ -29,6 +29,9 @@ kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, da
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
+\value{
+Returns the original karyoplot object, unchanged.
+}
 \description{
 Plots a line joining the data points along the genome.
 }

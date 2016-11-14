@@ -48,7 +48,7 @@
 #' @export kpDataBackground
 
 kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -64,7 +64,7 @@ kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="g
   xright <- ccf(x=end(karyoplot$genome), data.panel=data.panel)$x
   ytop <- ccf(chr=as.character(seqnames(karyoplot$genome)), y=rep(r0, length(karyoplot$genome)), data.panel=data.panel)$y
   ybottom <- ccf(chr=as.character(seqnames(karyoplot$genome)), y=rep(r1, length(karyoplot$genome)), data.panel=data.panel)$y
-  rect(xleft=xleft, xright=xright, ytop=ytop, ybottom=ybottom, col=color, border=FALSE, ...)
+  graphics::rect(xleft=xleft, xright=xright, ytop=ytop, ybottom=ybottom, col=color, border=FALSE, ...)
  
   invisible(karyoplot)
 }

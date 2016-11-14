@@ -62,7 +62,7 @@
 
 
 kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, ...) {
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -74,7 +74,7 @@ kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=N
   y0plot <- ccf(chr=pp$chr, y=pp$y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
   
-  rect(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot, ...)
+  graphics::rect(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot, ...)
   
   invisible(karyoplot)
 }

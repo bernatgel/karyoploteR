@@ -69,25 +69,25 @@
 kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax=NULL, ...) {
   #Check parameters
   #karyoplot
-  if(!hasArg(karyoplot)) stop("The parameter 'karyoplot' is required")
-  if(!is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!methods::hasArg(karyoplot)) stop("The parameter 'karyoplot' is required")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
-  if(!hasArg(data)) stop("The parameter 'data' is required")
+  if(!methods::hasArg(data)) stop("The parameter 'data' is required")
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
   #Compute (if needed) the coverage
-  if(!is(data, "SimpleRleList")) {  #If its not a coverage object, assume it's a valid RS and compute the coverage
+  if(!methods::is(data, "SimpleRleList")) {  #If its not a coverage object, assume it's a valid RS and compute the coverage
     data <- toGRanges(data)
     data <- coverage(data)
   } 
   
   #Transform to plot
-  ends <- cumsum(runLength(data))
+  ends <- cumsum(S4Vectors::runLength(data))
   valid.chrs <- lapply(ends, length)>0 #remove the chromosomes with no data
   ends <- ends[valid.chrs] 
-  coverage.lvl <- runValue(data)[valid.chrs]
+  coverage.lvl <- S4Vectors::runValue(data)[valid.chrs]
   
   starts <- lapply(ends, function(x) {return(c(1, (x[-length(x)]+1)))})
   

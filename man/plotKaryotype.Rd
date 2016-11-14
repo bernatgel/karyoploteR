@@ -89,6 +89,7 @@ kp <- plotKaryotype(labels.plotter = NULL)
 kpPoints(kp, rand.data, pch=".")
 
 #In addition, it's possible to use maggrittr piping to chain the plotting calls
+library(magrittr)
 kp <- plotKaryotype() \%>\%
    kpDataBackground(color = "lightgreen") \%>\%
    kpPoints(rand.data, pch=".")
