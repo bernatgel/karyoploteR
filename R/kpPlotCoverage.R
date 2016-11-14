@@ -30,7 +30,7 @@
 #' 
 #' Returns the original karyoplot object, unchanged.
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpPlotBars}}, \code{\link[IRanges]{coverage}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}, \code{\link[IRanges]{coverage}}
 #' 
 #' @examples
 #'  

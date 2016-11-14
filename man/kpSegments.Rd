@@ -4,7 +4,7 @@
 \alias{kpSegments}
 \title{kpSegments}
 \usage{
-kpSegments(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, ...)
+kpSegments(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}

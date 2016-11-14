@@ -28,7 +28,7 @@ plotBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.tic
       tick.labels <- sapply(tick.pos, toLabel)
       
       xplot <- ccf(chr=chr.name, x=tick.pos)$x
-      y0plot <- mids(chr.name)-kp$plot.params$ideogramheight/2
+      y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
       segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len)
       text(x=xplot, y=y0plot-tick.len, labels=tick.labels, pos=1, cex=cex, offset=0.1)
     
@@ -38,7 +38,7 @@ plotBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.tic
       minor.tick.pos <- start(chr) + (minor.tick.dist*(0:(minor.num.ticks-1))) - 1
 
       xplot <- ccf(chr=chr.name, x=minor.tick.pos)$x
-      y0plot <- mids(chr.name)-kp$plot.params$ideogramheight/2
+      y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
       segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len)     
     }
   }

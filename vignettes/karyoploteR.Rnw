@@ -28,8 +28,8 @@ BiocStyle::latex()
 %%\makeindex
 
 \title{karyoploteR: customizable karyotypes with arbitrary data}
-\author{Bernat Gel\footnote{bgel@imppc.org}}
-\date{Edited: October 21, 2015; Compiled: \today}
+\author{Bernat Gel\footnote{bgel@igtp.cat}}
+\date{Edited: November 11, 2016; Compiled: \today}
 
 
 \begin{document}
@@ -37,6 +37,8 @@ BiocStyle::latex()
 <<include=FALSE>>=
 library(knitr)
 library(karyoploteR)
+library(regioneR)
+library(magrittr)
 opts_chunk$set(concordance=FALSE)
 set.seed(21666641)
 @
@@ -82,7 +84,7 @@ This is a first simple example plotting a set of regions representing copy-numbe
                       end=c(5000000, 3200000, 80000000, 1200000))
   losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1),
                        end=c(170000000, 30000000, 25000000))
-  kp <- plotKaryotype(genome="hg19") 
+  kp <- plotKaryotype(genome="hg19")
   kpPlotRegions(kp, gains, col="#FFAACC")
   kpPlotRegions(kp, losses, col="#CCFFAA")
 
@@ -128,7 +130,7 @@ All low-level plotting functions share a similar interface, and in general, they
 
 And then plot them in different ways.
 
-<<fig.height=4,fig.width=8>>=
+<<fig.height=6,fig.width=8>>=
   kp <- plotKaryotype(genome="hg19", plot.type=2, chromosomes=c("chr1", "chr2", "chr3"))
   
   kpDataBackground(kp, data.panel = 1, r0=0, r1=0.45)
@@ -138,7 +140,8 @@ And then plot them in different ways.
   kpPoints(kp, chr=sel.data$chr, x=sel.data$start, y=sel.data$y,
            ymin=-1, ymax=1, r0=0.05, r1=0.4, col="red")
   kpText(kp, chr=sel.data$chr, x=sel.data$start, y=sel.data$y,
-         ymin=-1, ymax=1, r0=0.05, r1=0.4, labels=c("A", "B", "C", "D"), col="red", pos=4, cex=0.8)
+         ymin=-1, ymax=1, r0=0.05, r1=0.4, labels=c("A", "B", "C", "D"), col="red",
+         pos=4, cex=0.8)
   
   
   #Upper part: data.panel=1
@@ -157,22 +160,26 @@ And then plot them in different ways.
   
   
   #Lower part: data.panel=2
-  kpDataBackground(kp, r0=0, r1=0.3, color = "#EEFFEE", data.panel = 2)
-  kpAxis(kp, col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.3, data.panel = 2, numticks = 2, cex=0.5, tick.len = 0)
-  kpAbline(kp, h=0, col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.3, data.panel = 2)
+  kpDataBackground(kp, r0=0, r1=0.29, color = "#EEFFEE", data.panel = 2)
+  kpAxis(kp, col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.29, data.panel = 2,
+         numticks = 2, cex=0.5, tick.len = 0)
+  kpAbline(kp, h=0, col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.29, data.panel = 2)
   kpBars(kp, chr=rand.data$chr, x0=rand.data$start, x1=rand.data$end, y1 = rand.data$y,
-          col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.3, data.panel = 2, border="#AADDAA" )
+          col="#AADDAA", ymin=-1, ymax=1, r0=0, r1=0.29, data.panel = 2, border="#AADDAA" )
   
-  kpDataBackground(kp, r0=0.33, r1=0.63, color = "#EEEEFF", data.panel = 2)
-  kpAxis(kp, col="#AAAADD", ymin=-1, ymax=1, r0=0.33, r1=0.63, data.panel = 2, numticks = 2, cex=0.5, tick.len = 0)
-  kpAbline(kp, h=0, col="#AAAADD", ymin=-1, ymax=1, r0=0.33, r1=0.63, data.panel = 2)
-  kpArrows(kp, chr=rand.data$chr, x0=rand.data$start, x1=rand.data$end, y0=0, y1=rand.data$y,
-          col="#AAAADD", ymin=-1, ymax=1, r0=0.33, r1=0.63, data.panel = 2, lwd=2, length=0.05)
+  kpDataBackground(kp, r0=0.34, r1=0.63, color = "#EEEEFF", data.panel = 2)
+  kpAxis(kp, col="#AAAADD", ymin=-1, ymax=1, r0=0.34, r1=0.63, data.panel = 2, 
+         numticks = 2, cex=0.5, tick.len = 0)
+  kpAbline(kp, h=0, col="#AAAADD", ymin=-1, ymax=1, r0=0.34, r1=0.63, data.panel = 2)
+  kpSegments(kp, chr=rand.data$chr, x0=rand.data$start, x1=rand.data$end, 
+             y0=rand.data$y-0.2, y1=rand.data$y, 
+             col="#AAAADD", ymin=-1, ymax=1, r0=0.34, r1=0.63, data.panel = 2, lwd=2)
   
-  kpDataBackground(kp, r0=0.66, r1=0.96, color = "#FFEEEE", data.panel = 2)
-  kpAxis(kp, col="#DDAAAA", ymin=-1, ymax=1, r0=0.66, r1=0.96, data.panel = 2, numticks = 2, cex=0.5, tick.len = 0)
+  kpDataBackground(kp, r0=0.68, r1=0.97, color = "#FFEEEE", data.panel = 2)
+  kpAxis(kp, col="#DDAAAA", ymin=-1, ymax=1, r0=0.68, r1=0.97, data.panel = 2,
+         numticks = 2, cex=0.5, tick.len = 0)
   kpPoints(kp, chr=rand.data$chr, x=rand.data$start, y=rand.data$y,
-          col="#DDAAAA", ymin=-1, ymax=1, r0=0.66, r1=0.96, data.panel = 2, pch=".", cex=5)
+          col="#DDAAAA", ymin=-1, ymax=1, r0=0.68, r1=0.97, data.panel = 2, pch=".", cex=3)
  
 @
 
@@ -223,124 +230,119 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
 
 \subsection{Genomes and Chromosomes}
 
-A karyoplot is a representation of a genome, and thus, one of the main parameters of \Rfunction{plotKaryotype} is \Rcode{genome}. With it we can specify what genome we want to plot. The package includes a small cache with information on some genomes and to use it we have to specify the genome using the standard UCSC genome name (hg19, hg38, mm10, dm6, ...). However, internally it can use \regioneR's \Rfunction{getGenomeAndMask} function and so we can specify the genome in any fornmat accepted by this function, including the name of any \Rcode{BSGenome} object available in the system. If we want \Rfunction{plotKaryotype} to ignore the included cache and try to automatically get the genome information from other sources we can set \Rcode{use.cache} to \Rcode{FALSE}.
-
-In addition, with the \Rcode{chromosomes} parameter, it is possible to plot only a subset of the chromosomes of the genome. The chromosomes can be specified either as a list of chromosome names or as one of the predefined sets for the available organisms: autosomal, canonical and all. By default, only canonical chromosomes are drawn. The \Rcode{chromosomes} parameter can also be used to change the order of the chromosomes. 
-
-<<fig.height=3,fig.width=8>>=
-  kp <- plotKaryotype(chromosomes=c("autosomal"))
-  kp <- plotKaryotype(genome="mm10", chromosomes=c("chr10", "chr13", "chr2"))
-@
-
-
-
+    A karyoplot is a representation of a genome, and thus, one of the main parameters of \Rfunction{plotKaryotype} is \Rcode{genome}. With it we can specify what genome we want to plot. The package includes a small cache with information on some genomes and to use it we have to specify the genome using the standard UCSC genome name (hg19, hg38, mm10, dm6, ...). However, internally it can use \regioneR's \Rfunction{getGenomeAndMask} function and so we can specify the genome in any fornmat accepted by this function, including the name of any \Rcode{BSGenome} object available in the system. If we want \Rfunction{plotKaryotype} to ignore the included cache and try to automatically get the genome information from other sources we can set \Rcode{use.cache} to \Rcode{FALSE}.
+    
+    In addition, with the \Rcode{chromosomes} parameter, it is possible to plot only a subset of the chromosomes of the genome. The chromosomes can be specified either as a list of chromosome names or as one of the predefined sets for the available organisms: autosomal, canonical and all. By default, only canonical chromosomes are drawn. The \Rcode{chromosomes} parameter can also be used to change the order of the chromosomes. 
+    
+    <<fig.height=3,fig.width=8>>=
+      kp <- plotKaryotype(chromosomes=c("autosomal"))
+      kp <- plotKaryotype(genome="mm10", chromosomes=c("chr10", "chr13", "chr2"))
+    @
+    
+    
+    
 \subsection{Types of Plots}
-
-There are currently 2 plot types available: 
-
-\begin{description}
-  \item[plot.type=1] A plot with horizontal ideograms and a single data panel on top of them
-  \item[plot.type=2] A plot with horizontal ideograms and two data panels, one above and one below them
-\end{description}
-
-To clearly see where the data panels are and in some cases, to help the readers interpret the data it is possible to add a background to the data panels with \Rfunction{kpDataBackground}. Please take into account that the function draws a solid rectangle and so if any data was already plotted it would be no longer visible.
-
-This is plot type 1:
-<<fig.height=2,fig.width=8>>=
-  kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 1)
-  kpDataBackground(kp, data.panel = 1)
-@
-
-And this is plot type 2:
-<<fig.height=2,fig.width=8>>=
- kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 2)
- kpDataBackground(kp, data.panel = 1)
- kpDataBackground(kp, data.panel = 2)
-@
-
-%\subsection{Ideograms and Labels}
-
-%' <<eval=FALSE>>=
-%' # NOT RUN
-%' pt <- permTest(A=my.regions, B=repeats, randomize.function=randomizeRegions,
-%' evaluate.function=overlapRegions)
-%' @
+    
+    There are currently 2 plot types available: 
+    
+    \begin{description}
+      \item[plot.type=1] A plot with horizontal ideograms and a single data panel on top of them
+      \item[plot.type=2] A plot with horizontal ideograms and two data panels, one above and one below them
+    \end{description}
+    
+    To clearly see where the data panels are and in some cases, to help the readers interpret the data it is possible to add a background to the data panels with \Rfunction{kpDataBackground}. Please take into account that the function draws a solid rectangle and so if any data was already plotted it would be no longer visible.
+    
+    This is plot type 1:
+    <<fig.height=2,fig.width=8>>=
+      kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 1)
+      kpDataBackground(kp, data.panel = 1)
+    @
+    
+    And this is plot type 2:
+    <<fig.height=2,fig.width=8>>=
+     kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 2)
+     kpDataBackground(kp, data.panel = 1)
+     kpDataBackground(kp, data.panel = 2)
+    @
+    
+    %\subsection{Ideograms and Labels}
+    
+    %' <<eval=FALSE>>=
+    %' # NOT RUN
+    %' pt <- permTest(A=my.regions, B=repeats, randomize.function=randomizeRegions,
+    %' evaluate.function=overlapRegions)
+    %' @
 
 
 \subsection{Adding Axis}
 
-In some cases, adding axis to the plots can help stablishing a context for the data. \Rfunction{kpAxis} draws an axis on the letf or right side of the data panel and it's possible to change it's appearance, position, labels and ticks. If combined with a \Rfunction{kpDataBackground}, its important to draw the axis after the background, so it's not overdrawn by it.
-
-<<fig.height=6,fig.width=8>>=
-  kp <- plotKaryotype(chromosomes=c("chr1", "chr2"), plot.type=2)
- 
-  #data.panel=1
-  kpDataBackground(kp)
-  #Default axis
-    kpAxis(kp) 
-  #Axis on the right side of the data.panel
-    kpAxis(kp, side = 2) 
-  
-  #data.panel=2
-  kpDataBackground(kp, r1=0.47, data.panel=2)
-  #Changing the limits and having more ticks, with a smaller font size
-  kpAxis(kp, r1=0.47, ymin=-5000, ymax = 5000, numticks = 5, cex=0.5, data.panel=2)  
-  #and a different scale on the right
-  kpAxis(kp, r1=0.47, ymin=-2, ymax = 2, numticks = 3, cex=0.5, data.panel=2, side=2)
-  
-  kpDataBackground(kp, r0=0.53, data.panel=2)
-  #Changing the colors and labels and tick positions
-  kpAxis(kp, r0=0.53, tick.pos = c(0.3, 0.6, 1), labels = c("A", "B", "C"), col="#66AADD", cex=0.5, data.panel=2)
-  
-@
+    In some cases, adding axis to the plots can help stablishing a context for the data. \Rfunction{kpAxis} draws an axis on the letf or right side of the data panel and it's possible to change it's appearance, position, labels and ticks. If combined with a \Rfunction{kpDataBackground}, its important to draw the axis after the background, so it's not overdrawn by it.
+    
+    <<fig.height=6,fig.width=8>>=
+      kp <- plotKaryotype(chromosomes=c("chr1", "chr2"), plot.type=2)
+     
+      #data.panel=1
+      kpDataBackground(kp)
+      #Default axis
+        kpAxis(kp) 
+      #Axis on the right side of the data.panel
+        kpAxis(kp, side = 2) 
+      
+      #data.panel=2
+      kpDataBackground(kp, r1=0.47, data.panel=2)
+      #Changing the limits and having more ticks, with a smaller font size
+      kpAxis(kp, r1=0.47, ymin=-5000, ymax = 5000, numticks = 5, cex=0.5, data.panel=2)  
+      #and a different scale on the right
+      kpAxis(kp, r1=0.47, ymin=-2, ymax = 2, numticks = 3, cex=0.5, data.panel=2, side=2)
+      
+      kpDataBackground(kp, r0=0.53, data.panel=2)
+      #Changing the colors and labels and tick positions
+      kpAxis(kp, r0=0.53, tick.pos = c(0.3, 0.6, 1), labels = c("A", "B", "C"), col="#66AADD",
+             cex=0.5, data.panel=2)
+      
+    @
 
 \subsection{Changing the plotting parameters}
-
-In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. 
-
-% This are the available parameters and their default values:
-% 
-% \begin{center}\vspace{1cm}
-%   \includegraphics{./figures/plot.params.type2.png}
-%   \captionof{figure}{Plotting parameters available}
-% \end{center}\vspace{1cm}
-
-The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response.
-
-For example, we can create a plot with a data plot larger than the other and smaller margins:
-
-<<fig.height=3,fig.width=8>>=
-plot.params <- getDefaultPlotParams(plot.type=2)
-plot.params$ideogramheight <- 5
-plot.params$data2height <- 50
-plot.params$leftmargin <- 0.05
-plot.params$bottommargin <- 20
-plot.params$topmargin <- 20
-
-kp <- plotKaryotype(chromosomes = c("chr1", "chr2"),
-                    plot.type = 2,
-                    plot.params = plot.params
-      ) %>%
-      kpDataBackground(data.panel = 1) %>%
-      kpDataBackground(data.panel = 2, color = "#CCFFDD")
-@
-
-Or a plot with a smaller single data panel toucing the ideogram, and add the base numbers and cytoband names:
-
-<<fig.height=2,fig.width=8>>=
-plot.params <- getDefaultPlotParams(plot.type=1)
-plot.params$ideogramheight <- 100
-plot.params$data1height <- 100
-plot.params$data1inmargin <- 0
-
-kp <- plotKaryotype(chromosomes = c("chr1", "chr2"),
-                    plot.type = 1, plot.params = plot.params,
-                    add.cytobands.names=TRUE, 
-                    cytobands.names.cex=0.25,
-                    add.base.numbers=TRUE
-      ) %>%
-      kpDataBackground(data.panel = 1)
-@
+    
+    In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response. To see the available plot params and their default values we can call \Rfunction{plotDefaultPlotParams}, which will create a plot with the representation of the plot parameters:
+    
+    <<fig.height=3,fig.width=8>>=
+    plotDefaultPlotParams(plot.type=2)
+    @
+    
+    
+    
+    
+    For example, we can create a plot with a data plot larger than the other and smaller margins:
+    
+    <<fig.height=3,fig.width=8>>=
+    plot.params <- getDefaultPlotParams(plot.type=2)
+    plot.params$ideogramheight <- 5
+    plot.params$data2height <- 50
+    plot.params$leftmargin <- 0.05
+    plot.params$bottommargin <- 20
+    plot.params$topmargin <- 20
+    
+    kp <- plotKaryotype(chromosomes = c("chr1", "chr2"),
+                        plot.type = 2,
+                        plot.params = plot.params
+          ) %>%
+          kpDataBackground(data.panel = 1) %>%
+          kpDataBackground(data.panel = 2, color = "#CCFFDD")
+    @
+    
+    Or a plot with a smaller single data panel touching the ideogram:
+    
+    <<fig.height=2,fig.width=8>>=
+    plot.params <- getDefaultPlotParams(plot.type=1)
+    plot.params$ideogramheight <- 100
+    plot.params$data1height <- 100
+    plot.params$data1inmargin <- 0
+    
+    kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 1,
+                        plot.params = plot.params) %>%
+          kpDataBackground(data.panel = 1)
+    @
 
 
 %==============================================================================
@@ -349,18 +351,165 @@ kp <- plotKaryotype(chromosomes = c("chr1", "chr2"),
 %
 %==============================================================================
 
-\subsection{Common Parameters}
+After creating a plot we can add data to it using successive calls to the various data plotting functions. There are two types of data plotting functions: the low levels ones, based on the basic plotting functions from base graphics (\Rfunction{kpPoints}, \Rfunction{kpLines}, etc...) and the higher level ones, that are functions specialized in drawing certain object types such as \Rcode{GRanges} (\Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}). It is perfectly possible to draw new data on top of the alreeady plotted one in order to create combined plots. 
 
-ymin, ymax, r0 r1 etc...
+In addition, it is be possible to create custom plotting functions based on the coordinates change function included in the \Rcode{keryoplot} object.
+
+\subsection{Common Parameters}
+    
+    All plotting functions share a set of common parameters that define where and how data will be plotted.
+    
+    \Rcode{r0} and \Rcode{r1} define the region of the data panel where the data will be plotted. They are inspired by the r0 and r1 parameters in Circos, where they define the min and max radius where the data will be confined. A value of 0 is the most proximal to the ideogram and 1 is the farthest one. In addition, if \Rcode{r0>r1}, the data will be "flipped", drawing larger values of y closer to the ideogram.
+    
+    \Rcode{ymin} and \Rcode{ymax} define the minimum and maximum expected y value to be plotted. By default they are 0 and 1 but any finite number is possible. They work together with \Rcode{r0} and \Rcode{r1} to define where a data point will be drawn. In general, a data point with \Rcode{y=ymin} will be plotted at \Rcode{r0} and a data point with \Rcode{y=ymax} will be plotted at \Rcode{r1}.
+    
+    \Rcode{data.panel} states in which data panel (if there's more than one available) the data will be plotted. The data panel identifier depends on the \Rcode{plot.type}.
+
+    In addition, all plotting functions accept the applicable standard R graphic parameters (\Rcode{lwd}, \Rcode{col}, \Rcode{cex}, ...)
 
 \subsection{Basic Plotting Functions}
 
+    The basic or low-level plotting functions mimmick the base R plotting functions and are use to draw basic types: points, lines, segments, arrows, etc... 
+    
+    All basic plotting functions share a number of parameters to specify the data points. \Rcode{chr} accepts a vector of chromosome names stating the chromosome to which data point belongs. \Rcode{x} (or \Rcode{x0} and \Rcode{x1}) are used to specify the horizontal position of the data points (or its start and end) and the units are base pairs. \Rcode{y} (or \Rcode{y0} and \Rcode{y1}) specify the value (or start and end value) of the data point and should be in the range \Rcode{[ymin-ymax]}. All parameters are recycled if needed using the standard vector recycling rules, but in some situations this might result in strange results.
+    
+    For example, to plot a point with value 0.2 in position 30Mb of chromosome 1 and a rectangle with values 0.2 to 0.4 in positions from 100Mb to 120Mb we would use:
+    
+    <<fig.height=2,fig.width=8>>=
+      kp <- plotKaryotype(chromosomes=c("chr1")) %>% kpDataBackground() %>% kpAxis()
+      kpPoints(kp, chr="chr1", x=30000000, y=0.2)  
+      kpRect(kp, chr="chr1", x0=100000000, x1=120000000, y0=0.2, y1=0.4)
+    @
+    
+    Another possibility is to create a \Rcode{GRanges} object with the data, with \Rcode{chr}, \Rcode{x0} and \Rcode{x1} as the sequence, start and end, and one (\Rcode{y}) or two (\Rcode{y0} and \Rcode{y1}) metadata columns with the values. This \Rcode{GRanges} object can then be passed in in the \Rcode{data} parameter. In addition, it is possible to overrule the content of data if any of the explicit parameters is used.
+     
+    <<fig.height=2,fig.width=8>>=
+      dd <- toGRanges(data.frame(chr="chr1", start=30000000, end=30000000, y=0.2))
+      dd2 <- toGRanges(data.frame(chr="chr1", start=100000000, end=120000000, y0=0.2, y1=0.4))
+      
+      kp <- plotKaryotype(chromosomes=c("chr1")) 
+      kpDataBackground(kp) %>% kpAxis()
+      kpPoints(kp, data=dd)
+      kpPoints(kp, data=dd, y=0.8)  
+      kpRect(kp, data=dd2)
+      
+    @ 
+    
+    
+    These are the available basic plotting functions: 
+    \begin{description}
+      \item[kpAbline] Draws horizontal and vertical lines spanning the whole avaliable space
+      \item[kpArrows] Draws arrows. Using the  \Rcode{code} parameter, it's possible to specify where the arrowhead should be placed.
+      \item[kpBars] Draws vertical bars. If \Rcode{y0} is present, bars span from \Rcode{y0} to \Rcode{y1}, if it's ommited, bars span from 0 to \Rcode{y1} 
+      \item[kpHeatmap] Draws a heatmap-like representation of the data. Specifically, for each data point a rectangle is drawn with the color determined by the \Rcode{y} value 
+      \item[kpLines] Draws straight lines joining the data points.  
+      \item[kpPoints] Draws points (or other shaes using \Rcode{pch}) in the data points.
+      \item[kpPolygon] Draws a closed polygon joining all data points
+      \item[kpRect] Draws a rectangle at the specified points.
+      \item[kpSegments] Draws segments joining the specified points
+      \item[kpText] Draws text labels at the specified positions. Text labels are provided via the \Rcode{labels} argument.
+    \end{description}
 
+
+    <<fig.height=5,fig.width=8>>=
+      pp <- getDefaultPlotParams(plot.type = 1)
+      pp$data1height=600
+      
+      tr.i <- 1/11
+      tr.o <- 1/10
+      
+      kp <- plotKaryotype(chromosomes=c("chr1"), plot.params = pp) 
+      
+      dd <- toGRanges(data.frame(chr="chr1", start=end(kp$genome[1])/50*(0:49), end=end(kp$genome[1])/50*(1:50)))
+      mcols(dd) <- data.frame(y=((sin(start(dd)) + rnorm(n=50, mean=0, sd=0.1))/5)+0.5)
+      
+      tn <- 0
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpPoints(kp, dd, r0=tr.o*tn, r1=tr.o*tn+tr.i, pch=".", cex=2)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpPoints", cex=0.7)
+      
+      tn <- 1
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpLines(kp, dd, r0=tr.o*tn, r1=tr.o*tn+tr.i, pch=".", cex=2)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpLines", cex=0.7)
+      
+      tn <- 2
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpBars(kp, dd, y1=dd$y, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#AAFFAA", border="#66DD66")
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpBars", cex=0.7)
+      
+      tn <- 3
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpRect(kp, dd, y0=dd$y-0.3, y1=dd$y, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#AAAAFF", border="#6666DD")
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpRect", cex=0.7)
+      
+      tn <- 4
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpText(kp, dd, labels=as.character(1:50), cex=0.5, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#DDAADD")
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpText", cex=0.7)
+      
+      tn <- 5
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpSegments(kp, dd, y0=dd$y-0.3, y1=dd$y, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpSegments", cex=0.7)
+    
+      tn <- 6
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpArrows(kp, dd, y0=dd$y-0.3, y1=dd$y, r0=tr.o*tn, r1=tr.o*tn+tr.i, length=0.04)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpArrows", cex=0.7)
+  
+      tn <- 7
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpHeatmap(kp, dd, r0=tr.o*tn+tr.i/4, r1=tr.o*tn+tr.i-tr.i/4, colors = c("green", "black", "red"))
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpHeatmap", cex=0.7)
+  
+      tn <- 8
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpPolygon(kp, dd, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpPolygon", cex=0.7)
+      
+      tn <- 9
+      kpDataBackground(kp, r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpAbline(kp, h=c(0.25, 0.5, 0.75), v=start(dd), r0=tr.o*tn, r1=tr.o*tn+tr.i)
+      kpRect(kp, chr="chr1", x0=5000000, x1=45000000, y0=0.2, y1=0.8, r0=tr.o*tn, r1=tr.o*tn+tr.i, col="#EEEEEE", border="#666666")
+      kpText(kp, chr="chr1", x=25000000, y=0.5, col="red", r0=tr.o*tn, r1=tr.o*tn+tr.i, labels="kpAbline", cex=0.7)
+      
+      
+    @
 
 \subsection{Higher Level Plotting Functions}
 
+    Higher level functions are designed to plot specific data types and objects and they expect data to be given using a specific object.
+    
+    These are the currently available high-level plotting functions:
+    
+    \begin{description}
+      \item[kpPlotRegions] Accepts a \Rcode{GRanges} object and plots the regions as solid rectangles. If there are overlapping regions, it automatically detect them and plot them in a stacked way. 
+      \item[kpPlotCoverage] Accepts a \Rcode{Granges} object and plots the coverage level over the genome as a histogram-like bar plot.
+    \end{description}
 
-
+    
+    <<fig.height=3,fig.width=8>>=
+      pp <- getDefaultPlotParams(plot.type = 1)
+      pp$data1height<-300
+      
+      kp <- plotKaryotype(chromosomes=c("chr1"), plot.params = pp) 
+      
+      rr <- createRandomRegions(nregions=2000, length.mean = 10000000) %>% filterChromosomes(keep.chr = "chr1")
+    
+      kpPlotRegions(kp, data=rr, r0 = 0, r1=0.8)
+      kpAbline(kp, h=0.8, col="#444444")
+      kpPlotCoverage(kp, data=rr, r0=0.8, r1=1, col="#AACCFF")
+    @
 
 %Coming in the future
 

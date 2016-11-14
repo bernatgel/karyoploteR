@@ -1,4 +1,4 @@
-#' kpSegments
+#' kpArrows
 #' 
 #' @description 
 #' 
@@ -9,14 +9,14 @@
 #' This is one of the functions from karyoploteR implementing the adaptation to the genome context 
 #' of basic plot functions from R base graphics. 
 #' Given a set of positions on the genome (chromosome, x0 and x1) and values 
-#' (y0 and y1) for each of them, it plots segments going from (x0, y0) to (x1, y1). Data can be 
+#' (y0 and y1) for each of them, it plots arrows going from (x0, y0) to (x1, y1). Data can be 
 #' provided via a \code{GRanges} object (\code{data}), independent parameters for chr, 
 #' x0, x1, y0 and y1, or a combination of both.
-#' A number of parameters can be used to define exactly where and how the segments are drawn.
+#' A number of parameters can be used to define exactly where and how the arrows are drawn.
 #' In addition, via the ellipsis operator (\code{...}), \code{kpSegments} accepts any parameter 
-#' valid for \code{segments} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
+#' valid for \code{segments} (e.g. \code{code}, \code{lwd}, \code{lty}, \code{col}, ...)
 #'
-#' @usage kpSegments(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, ...) 
+#' @usage kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) 
 #' 
 #' @inheritParams kpRect 
 #' 

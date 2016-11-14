@@ -16,7 +16,7 @@
 #' In addition, via the ellipsis operator (\code{...}), \code{kpSegments} accepts any parameter 
 #' valid for \code{segments} (e.g. \code{lwd}, \code{lty}, \code{col}, ...)
 #'
-#' @usage kpSegments(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, ...) 
+#' @usage kpSegments(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...)
 #' 
 #' @inheritParams kpRect 
 #' 

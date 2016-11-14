@@ -10,6 +10,10 @@
 #'  The user can then proceed to change the parameter values as needed and supply the modified 
 #'  list to the plotKaryotype function.#'
 #'  
+#' @usage getDefaultPlotParams(plot.type)
+#'  
+#' @param plot.type   (integer) the required plot type. can be any valid plot type (see \code{\link{plotKaryotype}})
+#'
 #' @seealso \code{\link{plotKaryotype}}
 #' 
 #' @examples

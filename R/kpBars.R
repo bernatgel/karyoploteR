@@ -23,24 +23,24 @@
 #' 
 #' 
 #' set.seed(1000)
-#' library(BSgenome.Hsapiens.UCSC.hg19)
-#' windows <- unlist(tileGenome(tilewidth=10000000, seqlengths = seqlengths(Hsapiens)))
-#' y1 <- (sin(x=c(1:length(windows))/2)+3)/6
-#' y0 <- y1 - rnorm(length(windows), mean = 0, sd = 0.15)
 #' 
+#' data <- toGRanges(data.frame(chr="chr1", start=10000000*(0:23), end=10000000*(1:24)))
+#' y1 <- ((sin(start(data)) + rnorm(n=24, mean=0, sd=0.1))/5)+0.5
+#' y0 <- y1 - rnorm(n=24, mean = 0, sd = 0.15)
+#'  
 #' kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 #' 
 #' #We can specify all data values separately. If missing y0, it defaults to ymin
-#' kpBars(kp, chr=as.character(seqnames(windows)), x0=start(windows), x1=end(windows), y1=y1, col="#FFBBBB", border="#EEAAAA")
-#' kpLines(kp, data=windows, y=y1, col="red")
+#' kpBars(kp, chr=as.character(seqnames(data)), x0=start(data), x1=end(data), y1=y1, col="#FFBBBB", border="#EEAAAA")
+#' kpLines(kp, data=data, y=y1, col="red")
 #' 
 #' #or we can provide all data into a single GRanges object
-#' mcols(windows) <- data.frame(y0=y0, y1=y1)
-#' kpBars(kp, windows[windows$y0>windows$y1], col="orange", border="orange", data.panel=2)
-#' kpBars(kp, windows[windows$y0<=windows$y1], col="purple", border="purple", data.panel=2)
+#' mcols(data) <- data.frame(y0=y0, y1=y1)
+#' kpBars(kp, data[data$y0>data$y1], col="orange", border="orange", data.panel=2)
+#' kpBars(kp, data[data$y0<=data$y1], col="purple", border="purple", data.panel=2)
 #' 
-#' kpLines(kp, windows, y=windows$y1, data.panel=2, col="red")
-#' kpLines(kp, windows, y=windows$y0, data.panel=2, col="blue")
+#' kpLines(kp, data, y=data$y1, data.panel=2, col="red")
+#' kpLines(kp, data, y=data$y0, data.panel=2, col="blue")
 #' 
 #' kpAxis(kp, data.panel = 1, cex=0.8, numticks = 5, col="#777777")
 #' kpAxis(kp, data.panel = 2, cex=0.8, numticks = 5, col="#777777")

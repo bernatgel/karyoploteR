@@ -91,9 +91,7 @@
 #' @import regioneR
 #' @import GenomicRanges
 #' @import rtracklayer
-#' @import magrittr
 #' 
-#'  
 #' 
 #' @export plotKaryotype
 #' 

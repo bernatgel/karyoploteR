@@ -1,8 +1,8 @@
 Package: karyoploteR
 Type: Package
 Title: Karyotype plots with arbitrary data
-Version: 0.1.8
-Date: 2015-10-09
+Version: 0.1.10
+Date: 2016-11-11
 Author: Bernat Gel <bgel@imppc.org>
 Maintainer: Bernat Gel <bgel@imppc.org>
 Description: karyoploteR creates karyotype plots of arbitrary genomes and offers
@@ -15,8 +15,7 @@ Depends:
     memoise,
     regioneR,
     GenomicRanges,
-    rtracklayer,
-    magrittr
+    rtracklayer
 Imports:
     memoise,
     regioneR,
@@ -26,6 +25,7 @@ Suggests:
     BiocStyle,
     knitr,
     testthat,
+    magrittr,
     BSgenome.Hsapiens.UCSC.hg19
 VignetteBuilder: knitr
 biocViews: ChIPSeq, DNASeq, MethylSeq, CopyNumberVariation

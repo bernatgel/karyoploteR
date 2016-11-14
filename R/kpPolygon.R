@@ -16,7 +16,7 @@
 #' (\code{...}), \code{kpPolygon} accepts any parameter valid for \code{polygon} 
 #' (e.g. \code{border}, \code{density}, \code{fillOddEven}, ...)
 #'
-#' @usage kpPolygon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpPolygon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) 
 #' 
 #' @inheritParams kpPoints
 #' 

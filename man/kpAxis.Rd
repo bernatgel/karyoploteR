@@ -19,6 +19,8 @@ kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, la
 
 \item{side}{(numeric) In which side of the data panel should the axis be plotted. 1 - plot it on the right of the data panel. 2 - Plot it on the left. (defualts to 1)}
 
+\item{numticks}{(numeric) the number of ticks (and labels) of the axis. If \code{tick.pos} is present, it takes precedence over \code{num.ticks} and \code{num.ticks} is ignored. (defaults to 3)}
+
 \item{labels}{(character) the labels to be placed next to the ticks. If the number of labels is lower than the number of  tickes, the labels will be reused. If NULL, the numeric values of the ticks will be used. (defaults to NULL)}
 
 \item{tick.pos}{(numeric) the places in the axis where a tick should be drawn. If present, \code{num.ticks} is ignored. If NULL, ticks are placed equidistant. (defaults to NULL)}
@@ -30,8 +32,6 @@ kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, la
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
-
-\item{num.ticks}{(numeric) the number of ticks (and labels) of the axis. If \code{tick.pos} is present, it takes precedence over \code{num.ticks} and \code{num.ticks} is ignored. (defaults to 3)}
 }
 \value{
 Returns the original karyoplot object, unchanged.
