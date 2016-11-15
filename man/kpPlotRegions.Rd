@@ -9,7 +9,7 @@ kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", bord
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
 
-\item{data}{(a \code{GRanges}) A GRanges object with the regions to plot. It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.}
+\item{data}{(a \code{GRanges}) A GRanges object with the regions to plot.}
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
@@ -36,11 +36,10 @@ Returns the original karyoplot object, unchanged.
 Plots rectangles along the genome representing the regions (or intervals) specified by a \code{GRanges} object
 }
 \details{
-This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object (or 
- any object accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}) and
+This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object and
  plots its content. Overlapping regions can be stacked and the number of layers for overlapping regions can be set.
  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
- independent numeric vectors and the function only takes in \code{GRanges} or equivalent objects.
+ independent numeric vectors and the function only takes in \code{GRanges}.
 }
 \examples{
  

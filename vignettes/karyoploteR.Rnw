@@ -80,10 +80,10 @@ The basic idea behind \karyoploteR has been to create a plotting system inspired
 This is a first simple example plotting a set of regions representing copy-number gains and losses using the \Rfunction{kpPlotRegions} function:
 
 <<fig.height=6,fig.width=8>>=
-  gains <- data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 1000000, 4000000, 1),
-                      end=c(5000000, 3200000, 80000000, 1200000))
-  losses <- data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1),
-                       end=c(170000000, 30000000, 25000000))
+  gains <- makeGRangesFromDataFrame(data.frame(chr=c("chr1", "chr5", "chr17", "chr22"), start=c(1, 1000000, 4000000, 1),
+                      end=c(5000000, 3200000, 80000000, 1200000)))
+  losses <- makeGRangesFromDataFrame(data.frame(chr=c("chr3", "chr9", "chr17"), start=c(80000000, 20000000, 1),
+                       end=c(170000000, 30000000, 25000000)))
   kp <- plotKaryotype(genome="hg19")
   kpPlotRegions(kp, gains, col="#FFAACC")
   kpPlotRegions(kp, losses, col="#CCFFAA")

@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Karyotype plots with arbitrary data
-Version: 0.99.1
+Version: 0.99.2
 Date: 2016-11-11
 Author: Bernat Gel <bgel@imppc.org>
 Maintainer: Bernat Gel <bgel@imppc.org>
@@ -19,7 +19,8 @@ Depends:
     rtracklayer,
     GenomeInfoDb,
     S4Vectors,
-    methods
+    methods,
+    biovizBase
 Imports:
     regioneR,
     GenomicRanges

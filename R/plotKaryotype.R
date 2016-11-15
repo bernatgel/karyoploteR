@@ -94,6 +94,8 @@
 #' @importFrom S4Vectors runLength runValue
 #' @importFrom memoise memoise
 #' @importFrom rtracklayer ucscTableQuery
+#' @importFrom biovizBase getBioColor
+#' @importFrom biovizBase getIdeogram
 #' @import methods
 #' 
 #' @export plotKaryotype
@@ -208,7 +210,10 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$xmax <- p[2]
       kp$plot$ymin <- p[3]  
       kp$plot$ymax <- p[4]
+ 
+  kp$graphical.par$new.par <- graphics::par(no.readonly = TRUE) #Remember the parameters used
   
+  #Finally, plot the ideograms and labels, if needed
   #And plot the ideogram
   if(!is.null(ideogram.plotter)) {
     ideogram.plotter(kp, ...)
@@ -220,7 +225,6 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     }  
  
   
-  kp$graphical.par$new.par <- graphics::par(no.readonly = TRUE) #Remember the parameters used
-  
+ 
   return(kp)
 }

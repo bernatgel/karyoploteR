@@ -6,16 +6,16 @@
 #' 
 #' @details 
 #'  
-#'  This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object (or 
-#'  any object accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}) and
+#'  This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object and
 #'  plots its content. Overlapping regions can be stacked and the number of layers for overlapping regions can be set.
 #'  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
-#'  independent numeric vectors and the function only takes in \code{GRanges} or equivalent objects.
+#'  independent numeric vectors and the function only takes in \code{GRanges}.
 #'
 #' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
-#' @param data    (a \code{GRanges}) A GRanges object with the regions to plot. It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.
+#' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
+# #removed as requested by the package reviewer. It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
@@ -71,17 +71,24 @@
 
 kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, ...) {
   #karyoplot
-    if(!methods::hasArg(karyoplot)) stop("The parameter 'karyoplot' is required")
+    if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
     if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
-    if(!methods::hasArg(data)) stop("The parameter 'data' is required")
-    
+    if(missing(data)) stop("The parameter 'data' is required")
+    if(!methods::is(data, "GRanges")) stop("'data' must be a GRanges object")
+  
+  #if there's nothing to plot, return
+  if(length(data)==0) {
+    invisible(karyoplot)
+  }
+  
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
     
-    
-  data <- toGRanges(data)
+  #data <- toGRanges(data) #Removed as requested by the package reviewer
+  
+  
       
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]

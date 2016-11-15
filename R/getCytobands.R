@@ -65,17 +65,20 @@ getCytobands <- memoise::memoise(function(genome="hg19", use.cache=TRUE) {
   }
     
   cytobands <- tryCatch(expr={
-    ucsc.session <- browserSession()
-    genome(ucsc.session) <- genome
-    cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
-    cytobands$name <- as.character(cytobands$name)
-    cytobands$gieStain <- as.character(cytobands$gieStain)
-    toGRanges(cytobands)    
-  },
+    biovizBase::getIdeogram(genome, cytobands=TRUE)
+    #Old version. Changed to a dependency on boivizBase as requested by package reviewer.    
+    # ucsc.session <- browserSession()
+    # genome(ucsc.session) <- genome
+    # cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
+    # cytobands$name <- as.character(cytobands$name)
+    # cytobands$gieStain <- as.character(cytobands$gieStain)
+    # toGRanges(cytobands)    
+    },
     error = function(e) {
       message(paste0("Error when retrieving from UCSC the Cytobands for ", genome,". Returning no cytobands.", e))
       return(GRanges())
-    })
+    }
+  )
   
   return(cytobands)
   
