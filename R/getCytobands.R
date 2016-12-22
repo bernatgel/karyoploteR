@@ -29,7 +29,8 @@
 #' 
 #' @note 
 #' 
-#' This function is memoised (cached) using the \code{\link{memoise}} package. To empty the cache, use \code{\link{forget}(getCytobands)}
+#' This function is memoised (cached) using the \code{\link{memoise}} package. To empty the 
+#' cache, use \code{\link{forget}(getCytobands)}
 #'  
 #' @seealso \code{\link{plotKaryotype}}
 #' 
@@ -51,14 +52,20 @@
 #' 
 
 
+getCytobands <- NULL #Neede so roxygen writes the documentation file
 
 
-getCytobands <- memoise::memoise(function(genome="hg19", use.cache=TRUE) {
-  if(!is.character(genome) | length(genome)>1) { #if it's a custom genome, do not attempt to get the cytobands
+#This is the internal function used. The exported and memoised version is created on-load 
+#time as a memoised version of this.
+
+.getCytobands <- function(genome="hg19", use.cache=TRUE) {
+  #if it's a custom genome, do not attempt to get the cytobands
+  if(!is.character(genome) | length(genome)>1) { 
     return(GRanges())
   }
   
-  if(use.cache) { #If the cytobands are in the included cache, use them
+  #If the cytobands are in the included cache, use them
+  if(use.cache) {
     if(genome %in% names(data.cache[["cytobands"]])) {
       return(data.cache[["cytobands"]][[genome]])
     }
@@ -75,14 +82,15 @@ getCytobands <- memoise::memoise(function(genome="hg19", use.cache=TRUE) {
     # toGRanges(cytobands)    
     },
     error = function(e) {
-      message(paste0("Error when retrieving from UCSC the Cytobands for ", genome,". Returning no cytobands.", e))
+      message("Error when retrieving from UCSC the Cytobands for ", genome,
+              ". Returning no cytobands.", e)
       return(GRanges())
     }
   )
   
   return(cytobands)
   
-})
+}
 
 # 
 # #Code used to save the predownloaded Cytobands for some common genomes

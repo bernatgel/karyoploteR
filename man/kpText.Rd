@@ -63,7 +63,9 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   #Three ways of specifying the exact same data.points
   kpPoints(kp, data=data.points)
   kpPoints(kp, data=data.points, y=data.points$y, pch=16, col="#CCCCFF", cex=0.6)
-  kpPoints(kp, chr=as.character(seqnames(data.points)), x=(start(data.points)+end(data.points))/2, y=data.points$y, pch=".", col="black", cex=1)
+  kpPoints(kp, chr=as.character(seqnames(data.points)), 
+           x=(start(data.points)+end(data.points))/2,
+           y=data.points$y, pch=".", col="black", cex=1)
 
   #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
   kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
@@ -78,6 +80,8 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}
+
+\code{\link{kpPlotRegions}}
 }
 

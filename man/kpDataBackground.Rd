@@ -26,8 +26,9 @@ Returns the original karyoplot object, unchanged.
 Draws a solid rectangle delimiting the plotting area
 }
 \details{
-This function is used to add a background color to delimit the plotting area. It can either delimit the
-  whole plotting area or part of it so different data plotting regions can be seen.
+This function is used to add a background color to delimit the plotting area. 
+ It can either delimit the whole plotting area or part of it so different data plotting
+ regions can be seen.
 }
 \examples{
 
@@ -41,7 +42,8 @@ kpAxis(kp, data.panel = 1, ymin = 0, ymax=10, numticks = 11, side = 2, cex = 0.4
 #Prepare data panel 2
 #Data panel 2 is conceptually split into two parts and the second part is "inverted"
 kpDataBackground(kp, data.panel=2, r0 = 0, r1 = 0.45, color = "#EEEEFF")
-kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
+kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, 
+       tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
 kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, side=2)
 
 kpDataBackground(kp, data.panel=2, r0 = 0.55, r1 = 1, color = "#EEFFEE")

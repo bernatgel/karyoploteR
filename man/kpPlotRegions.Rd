@@ -53,7 +53,8 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
  
  nreps <- 20
  for(i in 1:nreps) {
-   regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000, non.overlapping = TRUE, genome = "hg19", mask=NA)
+   regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
+                               non.overlapping = TRUE, genome = "hg19", mask=NA)
    all.regs <- c(all.regs, regs)
    kpPlotRegions(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
  }
@@ -66,7 +67,9 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
  
  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
  
- regs <- createRandomRegions(nregions = 1000, length.mean = 10000000, length.sd = 1000000, non.overlapping = FALSE, genome = "hg19", mask=NA)
+ regs <- createRandomRegions(nregions = 1000, length.mean = 10000000, length.sd = 1000000,
+                             non.overlapping = FALSE, genome = "hg19", mask=NA)
+                             
  kpPlotRegions(kp, regs, r0 = 0, r1 = 0.8, col="#AAAAAA")
  
  kpPlotCoverage(kp, regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")

@@ -24,7 +24,8 @@
 #' 
 #' Returns the original karyoplot object, unchanged. 
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpPoints}}
+#' @seealso \code{\link{kpPlotRegions}}
 #' 
 #' @examples
 #'  
@@ -51,12 +52,15 @@
 
 
 
-kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
+kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL,
+                       ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
-  pp <- prepareParameters4("kpSegments", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+  pp <- prepareParameters4("kpSegments", karyoplot=karyoplot, data=data, chr=chr,
+                           x0=x0, x1=x1, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1,
+                           data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
   x0plot <- ccf(chr=pp$chr, x=pp$x0, data.panel=data.panel)$x

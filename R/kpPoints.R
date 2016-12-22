@@ -34,7 +34,8 @@
 #' 
 #' Returns the original karyoplot object, unchanged.  
 #' 
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}, \code{\link{kpPlotRegions}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}
+#' @seealso \code{\link{kpPlotRegions}}
 #' 
 #' @examples
 #'  
@@ -51,16 +52,20 @@
 #'   #Three ways of specifying the exact same data.points
 #'   kpPoints(kp, data=data.points)
 #'   kpPoints(kp, data=data.points, y=data.points$y, pch=16, col="#CCCCFF", cex=0.6)
-#'   kpPoints(kp, chr=as.character(seqnames(data.points)), x=(start(data.points)+end(data.points))/2, y=data.points$y, pch=".", col="black", cex=1)
+#'   kpPoints(kp, chr=as.character(seqnames(data.points)), 
+#'            x=(start(data.points)+end(data.points))/2, 
+#'            y=data.points$y, pch=".", col="black", cex=1)
 #' 
 #'   #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
 #'   kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
 #'   kpPoints(kp, data=data.points, r0=0, r1=0.3, data.panel=2, pch=".", cex=3)
 #' 
 #'   kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
-#'   kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y), ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
+#'   kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y),
+#'           ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
 #'   #It is also possible to "flip" the data by giving an r0 > r1
-#'   kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
+#'   kpPoints(kp, data=data.points, col="red", y=(data.points$y), 
+#'            r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
 #' 
 #' 
 #'  
@@ -68,12 +73,14 @@
 #' 
 
 
-kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, 
+                     data.panel=1, r0=NULL, r1=NULL, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
-  pp <- prepareParameters2("kpPoints", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+  pp <- prepareParameters2("kpPoints", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
+                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x

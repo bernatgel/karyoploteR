@@ -69,6 +69,8 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}
+
+\code{\link{kpPlotRegions}}
 }
 

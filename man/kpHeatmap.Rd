@@ -40,10 +40,10 @@ Returns the original karyoplot object, unchanged.
 Plots the given data as a heatmap along the genome
 }
 \details{
-Given regions of the genome with a start, end and a value, draws a heatmap-like representation, with the 
-color of the region determined by its value. It is important to note that \code{kpHeatmap} will not extend
-the regions in any way, so if regions are not contiguous, they will appear as a series of rectangles and
-not as a continuous plot.
+Given regions of the genome with a start, end and a value, draws a heatmap-like
+representation, with the color of the region determined by its value. It is important to 
+note that \code{kpHeatmap} will not extend the regions in any way, so if regions are not 
+contiguous, they will appear as a series of rectangles and not as a continuous plot.
 }
 \examples{
   

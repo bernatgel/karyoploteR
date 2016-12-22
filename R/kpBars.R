@@ -6,8 +6,9 @@
 #' 
 #' @details 
 #'  
-#' \code{kpBars} plots bars (rectangles) along the genome. It is very similar to \code{\link{kpRect}} except that if 
-#' \code{y0} is missing, it's automatically set to \code{ymin} so all bars start from the base of the plotting region.
+#' \code{kpBars} plots bars (rectangles) along the genome. It is very similar to 
+#' \code{\link{kpRect}} except that if \code{y0} is missing, it's automatically set 
+#' to \code{ymin} so all bars start from the base of the plotting region.
 #' 
 #' @usage kpBars(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
 #'  
@@ -31,7 +32,8 @@
 #' kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 #' 
 #' #We can specify all data values separately. If missing y0, it defaults to ymin
-#' kpBars(kp, chr=as.character(seqnames(data)), x0=start(data), x1=end(data), y1=y1, col="#FFBBBB", border="#EEAAAA")
+#' kpBars(kp, chr=as.character(seqnames(data)), x0=start(data), x1=end(data), y1=y1,
+#'        col="#FFBBBB", border="#EEAAAA")
 #' kpLines(kp, data=data, y=y1, col="red")
 #' 
 #' #or we can provide all data into a single GRanges object
@@ -48,7 +50,8 @@
 #' @export kpBars
 
 
-kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL,
+                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpBars: 'karyoplot' must be a valid 'KaryoPlot' object"))
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -65,6 +68,7 @@ kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=N
     }
   }
   
-  invisible(kpRect(karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...))
+  invisible(kpRect(karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1,
+                   ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...))
   
 }

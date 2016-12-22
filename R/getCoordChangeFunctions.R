@@ -68,7 +68,8 @@ getChrHeight_1HorizDataAboveIdeogram <- function(pp) {
 }
 
 #Build the function mapping genomic regions into plotting coordinates
-genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.panel=1, genome, plot.params) {
+genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.panel=1,
+                                                 genome, plot.params) {
   
   if(is.null(data.panel)) data.panel <- 1
   if(data.panel != 1) {
@@ -140,7 +141,8 @@ getChrHeight_2HorizDataAboveAndBelowIdeogram <- function(pp) {
 }
 
 #Build the function mapping genomic regions into plotting coordinates
-genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.panel, genome, plot.params) {
+genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.panel,
+                                                         genome, plot.params) {
   
   pp <- plot.params
   
@@ -215,7 +217,8 @@ getChrHeight_4VerticalDataAboveAndBelowIdeogram <- function(pp) {
 }
 
 #Build the function mapping genomic regions into plotting coordinates
-genomic2plot_4VerticalDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.panel, genome, plot.params) {
+genomic2plot_4VerticalDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NULL, 
+                                                            data.panel, genome, plot.params) {
   
   pp <- plot.params
   

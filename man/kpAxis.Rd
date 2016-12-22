@@ -40,9 +40,11 @@ Returns the original karyoplot object, unchanged.
 Plot axis at the sides of the data panels
 }
 \details{
-\code{kpAxis} plots axis at the sides of the data panels. It is possible to control the number of ticks and their labels,
- the placement of the plots and whether they span the whole data panel or just part of it. To do that they use the same placement 
- parameters used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not  Axis are always plotted for all chromosomes.
+\code{kpAxis} plots axis at the sides of the data panels. It is possible to control the 
+number of ticks and their labels, the placement of the plots and whether they span the
+whole data panel or just part of it. To do that they use the same placement parameters 
+used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not have
+a chr option: axis are always plotted for all chromosomes.
 }
 \examples{
 
@@ -56,7 +58,8 @@ kpAxis(kp, data.panel = 1, ymin = 0, ymax=10, numticks = 11, side = 2, cex = 0.4
 #Prepare data panel 2
 #Data panel 2 is conceptually split into two parts and the second part is "inverted"
 kpDataBackground(kp, data.panel=2, r0 = 0, r1 = 0.45, color = "#EEEEFF")
-kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
+kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, 
+           tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
 kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, side=2)
 
 kpDataBackground(kp, data.panel=2, r0 = 0.55, r1 = 1, color = "#EEFFEE")

@@ -4,7 +4,7 @@
 \alias{kpAbline}
 \title{kpAbline}
 \usage{
-kpAbline(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,  r0=NULL, r1=NULL, ...)
+kpAbline(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -31,14 +31,16 @@ kpAbline(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1
 Returns the original karyoplot object, unchanged.
 }
 \description{
-This is the \code{KaryoploteR} version of the \code{\link[graphics]{abline}} function to add horizontal or vertical lines to the plot.
+This is the \code{KaryoploteR} version of the \code{\link[graphics]{abline}} function to
+add horizontal or vertical lines to the plot.
 }
 \details{
-As with all other base-inspired low-level plotting functions in karyoploteR, the function has been designed to accept mostly
-the same parameters as the base one (see the package vignette for more information). In this case, however, the 
-interface has been reduced and it is only possible to plot 
-vertical and horizontal lines and it's not possible to provide an intercept and slope. In addition, the function accepts
-graphical parameters that are valid for the base function \code{\link[graphics]{segments}}.
+As with all other base-inspired low-level plotting functions in karyoploteR, the function 
+has been designed to accept mostly the same parameters as the base one (see the package 
+vignette for more information). In this case, however, the interface has been reduced
+and it is only possible to plot vertical and horizontal lines and it's not possible to 
+provide an intercept and slope. In addition, the function accepts graphical parameters 
+that are valid for the base function \code{\link[graphics]{segments}}.
 }
 \examples{
 

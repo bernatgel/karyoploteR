@@ -6,7 +6,8 @@
 #' 
 #' @details 
 #'  
-#'  Given a plot.type, this function creates a new karyoplot with lines and arrows showing the meaning and values of the plot.params
+#'  Given a plot.type, this function creates a new karyoplot with lines and arrows showing 
+#'  the meaning and values of the plot.params
 #'  
 #' @usage plotDefaultPlotParams(plot.type=2, ...)
 #' 

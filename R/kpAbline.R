@@ -2,19 +2,21 @@
 #' 
 #' @description 
 #' 
-#' This is the \code{KaryoploteR} version of the \code{\link[graphics]{abline}} function to add horizontal or vertical lines to the plot.
+#' This is the \code{KaryoploteR} version of the \code{\link[graphics]{abline}} function to
+#' add horizontal or vertical lines to the plot.
 #' 
 #' 
 #' @details 
 #'  
-#' As with all other base-inspired low-level plotting functions in karyoploteR, the function has been designed to accept mostly
-#' the same parameters as the base one (see the package vignette for more information). In this case, however, the 
-#' interface has been reduced and it is only possible to plot 
-#' vertical and horizontal lines and it's not possible to provide an intercept and slope. In addition, the function accepts
-#' graphical parameters that are valid for the base function \code{\link[graphics]{segments}}.
+#' As with all other base-inspired low-level plotting functions in karyoploteR, the function 
+#' has been designed to accept mostly the same parameters as the base one (see the package 
+#' vignette for more information). In this case, however, the interface has been reduced
+#' and it is only possible to plot vertical and horizontal lines and it's not possible to 
+#' provide an intercept and slope. In addition, the function accepts graphical parameters 
+#' that are valid for the base function \code{\link[graphics]{segments}}.
 #' 
 #' 
-#' @usage kpAbline(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,  r0=NULL, r1=NULL, ...)
+#' @usage kpAbline(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param chr    (a charecter vector) A vector of chromosome names specifying the chromosomes where the lines will be plotted. If NULL, the lines will be plotted in all chromosomes. (defaults to NULL)
@@ -59,7 +61,8 @@
 #' @export kpAbline
 
 
-kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,  r0=NULL, r1=NULL, ...) {
+kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, data.panel=1,
+                     r0=NULL, r1=NULL, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   karyoplot$beginKpPlot()
@@ -86,14 +89,16 @@ kpAbline <- function(karyoplot, chr=NULL, h=NULL, v=NULL, ymin=NULL, ymax=NULL, 
     x0 <- start(karyoplot$genome[chr])
     x1 <- end(karyoplot$genome[chr])
     
-    kpSegments(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=h, y1=h, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)  
+    kpSegments(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=h, y1=h, ymin=ymin, ymax=ymax,
+               r0=r0, r1=r1, data.panel=data.panel, ...)  
   }    
    
   if(!is.null(v)) {
     y0 <- ymin 
     y1 <- ymax
     
-    kpSegments(karyoplot=karyoplot, chr=chr, x0=v, x1=v, y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)  
+    kpSegments(karyoplot=karyoplot, chr=chr, x0=v, x1=v, y0=y0, y1=y1, ymin=ymin, ymax=ymax,
+               r0=r0, r1=r1, data.panel=data.panel, ...)  
   }
   
   invisible(karyoplot)

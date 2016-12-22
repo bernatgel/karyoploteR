@@ -6,12 +6,12 @@
 #' 
 #' @details 
 #'  
-#'  This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object 
-#'  and plots it's coverage, that is, the number of regions overlapping each genomic position. 
-#'  The input can also be a \code{SimpleRleList} resulting from computing the coverage with \code{coverage(data)}.
-#'  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
-#'  independent numeric vectors and the function only takes in the 
-#'  expected object types.
+#'  This is one of the high-level, or specialized, plotting functions of karyoploteR.
+#'  It takes a \code{GRanges} object and plots it's coverage, that is, the number of regions
+#'  overlapping each genomic position. The input can also be a \code{SimpleRleList} resulting
+#'  from computing the coverage with \code{coverage(data)}. In contrast with the low-level 
+#'  functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
+#'  independent numeric vectors and the function only takes in the expected object types.
 #'
 #' @usage kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax=NULL, ...)
 #' 
@@ -29,7 +29,8 @@
 #' 
 #' Returns the original karyoplot object, unchanged.
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}, \code{\link[IRanges]{coverage}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}
+#' @seealso \code{\link[IRanges]{coverage}}
 #' 
 #' @examples
 #'  
@@ -42,7 +43,8 @@
 #'  
 #'  nreps <- 20
 #'  for(i in 1:nreps) {
-#'    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000, non.overlapping = TRUE, genome = "hg19", mask=NA)
+#'    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
+#'                                non.overlapping = TRUE, genome = "hg19", mask=NA)
 #'    all.regs <- c(all.regs, regs)
 #'    kpPlotRegions(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
 #'  }
@@ -55,7 +57,8 @@
 #'  
 #'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
 #'  
-#'  regs <- createRandomRegions(nregions = 1000, length.mean = 10000000, length.sd = 1000000, non.overlapping = FALSE, genome = "hg19", mask=NA)
+#'  regs <- createRandomRegions(nregions = 1000, length.mean = 10000000, length.sd = 1000000,
+#'                              non.overlapping = FALSE, genome = "hg19", mask=NA)
 #'  kpPlotRegions(kp, regs, r0 = 0, r1 = 0.8, col="#AAAAAA")
 #'  
 #'  kpPlotCoverage(kp, regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
@@ -79,7 +82,8 @@ kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=
   on.exit(karyoplot$endKpPlot())
   
   #Compute (if needed) the coverage
-  if(!methods::is(data, "SimpleRleList")) {  #If its not a coverage object, assume it's a valid RS and compute the coverage
+  #If its not a coverage object, assume it's a GRanges and compute the coverage
+  if(!methods::is(data, "SimpleRleList")) { 
     #data <- toGRanges(data)
     data <- coverage(data)
   } 
@@ -95,7 +99,8 @@ kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=
   if(is.null(ymax)) ymax <- max(max(coverage.lvl))
   
   for(chr in names(ends)) {
-    kpBars(karyoplot=karyoplot, chr=chr, x0=starts[[chr]], x1=ends[[chr]], y0=0, y1=coverage.lvl[[chr]], ymin=0, ymax=ymax, 
+    kpBars(karyoplot=karyoplot, chr=chr, x0=starts[[chr]], x1=ends[[chr]], 
+           y0=0, y1=coverage.lvl[[chr]], ymin=0, ymax=ymax, 
            r0=r0, r1=r1, data.panel=data.panel, col=col, border=col, ... )
   }
   

@@ -32,15 +32,18 @@ The \code{KaryoPlot} object needed by the plotting functions.
 Create a new empty plot with a karyotype (the chromosome ideograms and chromosome names).
 }
 \details{
-This is the main function of \code{karyoploteR}. It creates the basic empty plot with the chromosome ideograms and returns the
- karyoplot object needed for all other plotting functions. Both the basic plotting parameters (margins, sizes, etc.) and the 
- specific plotting functions for the ideograms and chromosome labels are customizable. In particular, passing in a 
- \code{plot.params} object specifies the basic plotting parameters to use and the \code{ideogram.plotter} and \code{labels.plotter}
- parameters can be used to specify custom plotting functions for the ideogram and the chromosome labels. It is also possible
- to specify the genome and a list with the chromosomes to be plotted. 
+This is the main function of \code{karyoploteR}. It creates the basic empty plot with 
+ the chromosome ideograms and returns the karyoplot object needed for all other plotting 
+ functions. Both the basic plotting parameters (margins, sizes, etc.) and the specific
+ plotting functions for the ideograms and chromosome labels are customizable. 
+ In particular, passing in a \code{plot.params} object specifies the basic plotting 
+ parameters to use and the \code{ideogram.plotter} and \code{labels.plotter} parameters 
+ can be used to specify custom plotting functions for the ideogram and the chromosome 
+ labels. It is also possible to specify the genome and a list with the chromosomes to
+ be plotted. 
  
- The \code{plot.type} parameter specifies the type of karyoplot to create: the number and positions of the data panels respect
- to the ideograms: 
+ The \code{plot.type} parameter specifies the type of karyoplot to create: the number
+ and positions of the data panels respect to the ideograms: 
  \itemize{
    \item \code{plot.type=1}  Horizontal ideograms with a single data panel above them
    \item \code{plot.type=2}  Horizontal ideograms with a two data panels, one above and one below them
@@ -52,7 +55,8 @@ This is the main function of \code{karyoploteR}. It creates the basic empty plot
  
  set.seed(1000)
 
-rand.data <- createRandomRegions(genome="hg19", nregions=10000, length.mean=1, length.sd=0, mask=NA, non.overlapping=TRUE)
+rand.data <- createRandomRegions(genome="hg19", nregions=10000, length.mean=1, 
+                                 length.sd=0, mask=NA, non.overlapping=TRUE)
 mcols(rand.data) <- data.frame(y=rnorm(n=10000, mean = 0.5, sd=0.1))
 
 #The simplest way, with all default parameters
@@ -70,7 +74,8 @@ kpPoints(kp, rand.data, pch=".", data.panel = 2)
 kp <- plotKaryotype(genome = "mm10")
 kp <- plotKaryotype(genome = "dm6")
 
-#Or we can change the plotting parameters. In this case, to create a smaller ideogram and smaller data panel below it
+# Or we can change the plotting parameters. In this case, to create a smaller ideogram
+# and smaller data panel below it
 plot.params <- getDefaultPlotParams(plot.type=2)
 plot.params$ideogramheight <- 5
 plot.params$data2height <- 50

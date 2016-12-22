@@ -18,7 +18,8 @@ Returns the original karyoplot object, unchanged.
 Creates a karyoplot with the default parameters drawn.
 }
 \details{
-Given a plot.type, this function creates a new karyoplot with lines and arrows showing the meaning and values of the plot.params
+Given a plot.type, this function creates a new karyoplot with lines and arrows showing 
+ the meaning and values of the plot.params
 }
 \examples{
 

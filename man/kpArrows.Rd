@@ -40,8 +40,8 @@ Returns the original karyoplot object, unchanged.
 Plots segments at the specified genomic positions.
 }
 \details{
-This is one of the functions from karyoploteR implementing the adaptation to the genome context 
-of basic plot functions from R base graphics. 
+This is one of the functions from karyoploteR implementing the adaptation to the genome 
+context of basic plot functions from R base graphics. 
 Given a set of positions on the genome (chromosome, x0 and x1) and values 
 (y0 and y1) for each of them, it plots arrows going from (x0, y0) to (x1, y1). Data can be 
 provided via a \code{GRanges} object (\code{data}), independent parameters for chr, 
@@ -69,6 +69,8 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+\code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpPoints}},
+
+\code{\link{kpPlotRegions}}
 }
 

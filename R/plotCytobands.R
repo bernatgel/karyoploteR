@@ -38,7 +38,8 @@
 
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...) {
+plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE,
+                          add.base.numbers=FALSE, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())

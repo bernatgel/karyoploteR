@@ -6,10 +6,10 @@
 #' 
 #' @details 
 #'  
-#' Given regions of the genome with a start, end and a value, draws a heatmap-like representation, with the 
-#' color of the region determined by its value. It is important to note that \code{kpHeatmap} will not extend
-#' the regions in any way, so if regions are not contiguous, they will appear as a series of rectangles and
-#' not as a continuous plot.
+#' Given regions of the genome with a start, end and a value, draws a heatmap-like
+#' representation, with the color of the region determined by its value. It is important to 
+#' note that \code{kpHeatmap} will not extend the regions in any way, so if regions are not 
+#' contiguous, they will appear as a series of rectangles and not as a continuous plot.
 #' 
 #' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...)
 #'  
@@ -47,7 +47,9 @@
 #' 
 #'@export kpHeatmap
 
-kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...) {
+kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, 
+                      ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, 
+                      colors=c("blue", "white", "yellow"), ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -102,7 +104,8 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ym
   yminplot <- ccf(chr=chr, y=rep_len(r0, length(chr)), data.panel=data.panel)$y
   ymaxplot <- ccf(chr=chr, y=rep_len(r1, length(chr)), data.panel=data.panel)$y
   
-  graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot, col=grDevices::rgb(cr(y), max=255), border=NA, ...)
+  graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot,
+                 col=grDevices::rgb(cr(y), max=255), border=NA, ...)
   
   invisible(karyoplot)
 }

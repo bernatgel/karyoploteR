@@ -6,10 +6,10 @@
 #' 
 #' @details 
 #'  
-#' The function returns a named character vector with the colors of associated with the cytoband names. 
-#' Two color schemas are available: circos (which copies the colors used by Circos) and biovizbase (that 
-#' gets the cytoband colors from the biovizBase Bioconductor package). If a color.table is given, it is 
-#' returned untouched.
+#' The function returns a named character vector with the colors of associated with the 
+#' cytoband names. Two color schemas are available: circos (which copies the colors used by 
+#' Circos) and biovizbase (that gets the cytoband colors from the biovizBase Bioconductor 
+#' package). If a color.table is given, it is returned untouched.
 #' 
 #' @usage getCytobandColors(color.table=NULL, color.schema=c("circos", "biovizbase")) 
 #' 

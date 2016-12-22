@@ -6,9 +6,11 @@
 #' 
 #' @details 
 #'  
-#' \code{kpAxis} plots axis at the sides of the data panels. It is possible to control the number of ticks and their labels,
-#'  the placement of the plots and whether they span the whole data panel or just part of it. To do that they use the same placement 
-#'  parameters used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not  Axis are always plotted for all chromosomes.
+#' \code{kpAxis} plots axis at the sides of the data panels. It is possible to control the 
+#' number of ticks and their labels, the placement of the plots and whether they span the
+#' whole data panel or just part of it. To do that they use the same placement parameters 
+#' used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not have
+#' a chr option: axis are always plotted for all chromosomes.
 #' 
 #' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...)
 #' 
@@ -45,7 +47,8 @@
 #' #Prepare data panel 2
 #' #Data panel 2 is conceptually split into two parts and the second part is "inverted"
 #' kpDataBackground(kp, data.panel=2, r0 = 0, r1 = 0.45, color = "#EEEEFF")
-#' kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
+#' kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, 
+#'            tick.pos = c(0.3, 0.5, 0.7), labels = c("-1 sd", "mean", "+1 sd"))
 #' kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, side=2)
 #' 
 #' kpDataBackground(kp, data.panel=2, r0 = 0.55, r1 = 1, color = "#EEFFEE")
@@ -57,7 +60,9 @@
 
 
 
-kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...) {
+kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, 
+                   labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, 
+                   data.panel=1, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -87,15 +92,34 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(is.null(labels)) labels <- as.character(round(tick.pos, digits = 2))
   if(is.null(label.margin)) label.margin <-  0
   
-  kpSegments(karyoplot, chr=as.character(seqnames(karyoplot$genome)), x0=x, x1=x, y0=ymin, y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
+  kpSegments(karyoplot, chr=as.character(seqnames(karyoplot$genome)), x0=x, x1=x, y0=ymin,
+             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
   
  
   if(side==1) {
-    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), y0=rep(tick.pos, length(karyoplot$genome)), y1=rep(tick.pos, length(karyoplot$genome)), ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
-    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), x=rep(x-tick.len-label.margin, each=numticks), y=rep(tick.pos, length(karyoplot$genome)), labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1, pos=2, data.panel=data.panel, ...)  #pos=2 -> left to the given coordinate
+    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), 
+               x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), 
+               y0=rep(tick.pos, length(karyoplot$genome)),
+               y1=rep(tick.pos, length(karyoplot$genome)),
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
+    
+    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+           x=rep(x-tick.len-label.margin, each=numticks), 
+           y=rep(tick.pos, length(karyoplot$genome)),
+           labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1, pos=2, 
+           data.panel=data.panel, ...)  #pos=2 -> left to the given coordinate
   } else {
-    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), y0=rep(tick.pos, length(karyoplot$genome)), y1=rep(tick.pos, length(karyoplot$genome)),  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
-    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), x=rep(x+tick.len+label.margin, each=numticks), y=rep(tick.pos, length(karyoplot$genome)), labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4,  data.panel=data.panel, ...)  #pos=4 -> right to the given coordinate
+    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+               x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), 
+               y0=rep(tick.pos, length(karyoplot$genome)), 
+               y1=rep(tick.pos, length(karyoplot$genome)), 
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
+    
+    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+           x=rep(x+tick.len+label.margin, each=numticks), 
+           y=rep(tick.pos, length(karyoplot$genome)),
+           labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4, 
+           data.panel=data.panel, ...)  #pos=4 -> right to the given coordinate
   }
   
   invisible(karyoplot)

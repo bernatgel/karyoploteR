@@ -25,7 +25,8 @@
 #' 
 #' Returns the original karyoplot object, unchanged. 
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}, \code{\link{kpPlotRegions}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}
+#' @seealso \code{\link{kpPlotRegions}}
 #' 
 #' @examples
 #'  
@@ -42,7 +43,9 @@
 #'   #Three ways of specifying the exact same data.points
 #'   kpPoints(kp, data=data.points)
 #'   kpPoints(kp, data=data.points, y=data.points$y, pch=16, col="#CCCCFF", cex=0.6)
-#'   kpPoints(kp, chr=as.character(seqnames(data.points)), x=(start(data.points)+end(data.points))/2, y=data.points$y, pch=".", col="black", cex=1)
+#'   kpPoints(kp, chr=as.character(seqnames(data.points)), 
+#'            x=(start(data.points)+end(data.points))/2,
+#'            y=data.points$y, pch=".", col="black", cex=1)
 #' 
 #'   #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
 #'   kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
@@ -59,12 +62,14 @@
 #' 
 
 
-kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL,
+                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
-  pp <- prepareParameters2("kpText", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+  pp <- prepareParameters2("kpText", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y,
+                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
     
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x

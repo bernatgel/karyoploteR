@@ -3,7 +3,8 @@
 
 
 #Recycle the arguments as needed.
-#Taken from: http://stackoverflow.com/questions/9335099/implementation-of-standard-recycling-rules
+#Taken from:
+# http://stackoverflow.com/questions/9335099/implementation-of-standard-recycling-rules
 recycle <- function(...){
   dotList <- list(...)
   max.length <- max(sapply(dotList, length))

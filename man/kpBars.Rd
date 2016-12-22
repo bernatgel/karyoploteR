@@ -40,8 +40,9 @@ Returns the original karyoplot object, unchanged.
 Plot bars along the genome
 }
 \details{
-\code{kpBars} plots bars (rectangles) along the genome. It is very similar to \code{\link{kpRect}} except that if 
-\code{y0} is missing, it's automatically set to \code{ymin} so all bars start from the base of the plotting region.
+\code{kpBars} plots bars (rectangles) along the genome. It is very similar to 
+\code{\link{kpRect}} except that if \code{y0} is missing, it's automatically set 
+to \code{ymin} so all bars start from the base of the plotting region.
 }
 \examples{
 
@@ -55,7 +56,8 @@ y0 <- y1 - rnorm(n=24, mean = 0, sd = 0.15)
 kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 
 #We can specify all data values separately. If missing y0, it defaults to ymin
-kpBars(kp, chr=as.character(seqnames(data)), x0=start(data), x1=end(data), y1=y1, col="#FFBBBB", border="#EEAAAA")
+kpBars(kp, chr=as.character(seqnames(data)), x0=start(data), x1=end(data), y1=y1,
+       col="#FFBBBB", border="#EEAAAA")
 kpLines(kp, data=data, y=y1, col="red")
 
 #or we can provide all data into a single GRanges object
