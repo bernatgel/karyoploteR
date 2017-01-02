@@ -150,7 +150,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       cytobands <- getCytobands(genome)
       #if there are cytobands, filter the cytobands using the current genome
       if(!is.null(cytobands) && length(cytobands)>0) {
-        cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome))
+        cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome), pruning.mode="coarse")
       }
     } else {
       message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")

@@ -1,15 +1,16 @@
 Package: karyoploteR
 Type: Package
 Title: Karyotype plots with arbitrary data
-Version: 0.99.3
+Version: 0.99.4
 Date: 2016-11-11
 Author: Bernat Gel <bgel@imppc.org>
 Maintainer: Bernat Gel <bgel@imppc.org>
 Description: karyoploteR creates karyotype plots of arbitrary genomes and offers
-    a complete set of functions to plot arbitrary data on them. The basic idea is
-    to create a coordinate change function automatically mapping the chromosome and
-    data coordinates into the plot coordinates. In addition to the provided data
-    plotting functions, it is easy to add new ones.
+    a complete set of functions to plot arbitrary data on them. It mimicks many
+    R base graphics functions coupling them with a coordinate change function 
+    automatically mapping the chromosome and data coordinates into the plot 
+    coordinates. In addition to the provided data plotting functions, it is 
+    easy to add new ones.
 License: Artistic-2.0
 Depends:
     R (>= 3.3),
