@@ -1,4 +1,4 @@
-# karyoploteR - An R package to plot data along the genome
+# karyoploteR - An R/Biocondutor package to plot arbitrary data along the genome
 
 ## Description
 
