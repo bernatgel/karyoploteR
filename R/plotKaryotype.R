@@ -174,10 +174,11 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$genome.name <- "custom"
     }
     kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
+    kp$chromosome.lengths <- end(gr.genome)
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
-  
-  
+    
+
   #Remove all margins around the plot to take complete control of the available space
     kp$graphical.par <- list()
     kp$graphical.par$old.par <- graphics::par(no.readonly = TRUE)
