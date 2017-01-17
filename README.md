@@ -1,5 +1,7 @@
 # karyoploteR - An R/Biocondutor package to plot arbitrary data along the genome
 
+[![Build Status](https://travis-ci.org/bernatgel/karyoploteR.svg?branch=master)](https://travis-ci.org/bernatgel/karyoploteR)
+
 ## Description
 
 [karyoploteR](http://bioconductor.org/packages/karyoploteR) is an R package to 
