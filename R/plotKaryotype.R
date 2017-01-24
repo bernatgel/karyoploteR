@@ -119,8 +119,13 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   
   #Prepare the genome and filter the chromosomes as required
   #Get the genome
+  #If the user has given us a valid GRanges as genome, use it directly
+  #if it's something else, try with the cache or rely on regioneR::getGenomeAndMask
+  if(is(genome, "GRanges")) {
+    gr.genome <- genome
+  } else {
     gr.genome <- NULL
-    if(use.cache) { #Get the genome from the cache, if available
+    if(is(genome, "character") & use.cache==TRUE) { #Get the genome from the cache, if available
       if(genome %in% names(data.cache[["genomes"]])) {
         gr.genome <- data.cache[["genomes"]][[genome]]
       }
@@ -128,6 +133,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     if(is.null(gr.genome)) {
       gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
     }
+  }
+  
   #And filter it
   if(!is.null(chromosomes) && chromosomes != "all") {
     if(is.character(genome)) {
@@ -174,10 +181,11 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$genome.name <- "custom"
     }
     kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
+    kp$chromosome.lengths <- end(gr.genome)
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
-  
-  
+    
+
   #Remove all margins around the plot to take complete control of the available space
     kp$graphical.par <- list()
     kp$graphical.par$old.par <- graphics::par(no.readonly = TRUE)

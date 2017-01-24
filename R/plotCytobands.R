@@ -68,7 +68,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
   xright <- ccf(x=end(cyto))$x
     
   #col <- do.call(c, color.table[cyto$gieStain])
-  col <- color.table[cyto$gieStain]
+  col <- color.table[as.character(cyto$gieStain)]
     
   graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
     
