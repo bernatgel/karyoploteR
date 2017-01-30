@@ -25,7 +25,7 @@
 #' @return
 #' invisibly returns the given karyoplot object
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBAseNumbers}}, \code{\link{kpAddCytobandNames}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBaseNumbers}}, \code{\link{kpAddCytobandLabels}}
 #' 
 #' @examples
 #'
@@ -38,8 +38,7 @@
 
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE,
-                          add.base.numbers=FALSE, ...) {
+plotCytobands <- function(karyoplot, color.table=NULL, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -71,14 +70,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
   col <- color.table[as.character(cyto$gieStain)]
     
   graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
-  #   
-  # if(add.cytobands.names) {
-  #   plotCytobandsLabels(karyoplot=karyoplot, ...)
-  # }
-  #   
-  # if(add.base.numbers) {
-  #   kpAddBaseNumbers(karyoplot, ...)
-  # }
+
   
   invisible(karyoplot)
 }
