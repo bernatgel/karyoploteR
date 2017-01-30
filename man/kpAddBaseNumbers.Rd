@@ -37,7 +37,6 @@ marks and labels
 }
 \examples{
  
-set.seed(1000)
 
 kp <- plotKaryotype()
 kpAddBaseNumbers(kp)

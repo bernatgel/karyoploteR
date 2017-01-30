@@ -1,8 +1,50 @@
+#' kpAddCytobandLabels
+#' 
+#' @description 
+#' 
+#' Plots the base numbers along the chromosome ideograms
+#' 
+#' @details 
+#'  
+#' This function can be used to add labels idenfifying the cytobands. It gets the
+#' labels from the cytobands information stored in the karyoplot object and it will
+#' only plot the labels that fit inside the available space. This means than in some 
+#' cases (such as when plotting a complete genome with default parameters) it is 
+#' possible that no labels at all are added.
+#' 
+#' @usage kpAddCytobandLabels(karyoplot, cex=0.5, ...)
+#' 
+#' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
+#' @param cex  (numeric) The cex parameter for the cytoband labels
+#' @param ...  Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.
+#' 
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged.
+#'  
+#' @seealso \code{\link{plotKaryotype}}
+#' 
+#' @examples
+#'   
+#' kp <- plotKaryotype()
+#' kpAddBaseNumbers(kp)
+#' kpAddCytobandLabels(kp)
+#' 
+#' kp <- plotKaryotype(chromosomes="chr17")
+#' kpAddBaseNumbers(kp, tick.dist=10000000, minor.tick.dist=1000000)
+#' kpAddCytobandLabels(kp)
+#' 
+#'  
+#' @export kpAddCytobandLabels
+#' 
 
-
-#internal
-
-plotCytobandsLabels <- function(karyoplot, cytobands.names.cex=0.5, ...) {
+kpAddCytobandLabels <- function(karyoplot, cytobands.names.cex=0.5, ...) {
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
+  
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
@@ -33,4 +75,6 @@ plotCytobandsLabels <- function(karyoplot, cytobands.names.cex=0.5, ...) {
     }
   }
   #If no cytobands are available, do nothing
+  
+  invisible(karyoplot)
 }
