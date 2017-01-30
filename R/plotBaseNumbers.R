@@ -11,7 +11,7 @@
 #' independent x axis. It is possible to control the number and position of the tick
 #' marks and labels
 #' 
-#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...)
+#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, ...)
 #' 
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases
@@ -20,6 +20,8 @@
 #' @param minor.tick.dist   (numeric) The distance between the minor ticks in bases
 #' @param minor.tick.len   (numeric) The length of the minor tick marks in plot coordinates
 #' @param cex  (numeric) The cex parameter for the major ticks label
+#' @param tick.col   (color) If specified, the color to plot the major ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)
+#' @param minor.tick.col  (color) If specified, the color to plot the minor ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)
 #' @param ...  Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.
 #' 
 #' @return
@@ -44,7 +46,8 @@
 
 
 kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, 
-                            minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...) {
+                            minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, 
+                            tick.col=NULL, minor.tick.col=NULL, ...) {
   
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
@@ -77,7 +80,11 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
       
       xplot <- ccf(chr=chr.name, x=tick.pos)$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
-      graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len)
+      if(is.null(tick.col)) {
+        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len, ...)
+      } else {
+        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len, col=tick.col, ...)
+      }
       graphics::text(x=xplot, y=y0plot-tick.len, labels=tick.labels, pos=1, cex=cex, offset=0.1)
     
     #Minor ticks
@@ -87,7 +94,12 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
 
       xplot <- ccf(chr=chr.name, x=minor.tick.pos)$x
       y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
-      graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len)     
+      if(is.null(minor.tick.col)) {
+        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
+      } else {
+        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, col=minor.tick.col, ...)       
+      }
+      
     }
   }
   
