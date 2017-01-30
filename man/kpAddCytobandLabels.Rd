@@ -4,14 +4,16 @@
 \alias{kpAddCytobandLabels}
 \title{kpAddCytobandLabels}
 \usage{
-kpAddCytobandLabels(karyoplot, cex=0.5, ...)
+kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, ...)
 }
 \arguments{
 \item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}}
 
-\item{...}{Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.}
-
 \item{cex}{(numeric) The cex parameter for the cytoband labels}
+
+\item{force.all}{(boolean) If true, all cytoband labels are plotted, even if they do not fit into the cytobands (Defaults to FALSE)}
+
+\item{...}{Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.}
 }
 \value{
 Returns the original karyoplot object, unchanged.
