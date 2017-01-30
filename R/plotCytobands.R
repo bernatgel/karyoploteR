@@ -8,24 +8,24 @@
 #' 
 #' Plots the cytobands representing the chromosome structure in a karyoplot. It extracts the 
 #' cytobands from the \code{karyoplot} object it recieves as a parameter. It is possible to 
-#' specify the colors used to plot the cytobands. In addition, it can add the cytonand names
-#' and base numbers to the plot. 
+#' specify the colors used to plot the cytobands. 
 #' 
 #' @note In general, this function is automatically called by plotKaryotype
 #' and the user never nees to call it. 
 #' 
-#' @usage plotCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
+## @usage plotCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
+#' @usage plotCytobands(karyoplot, color.table=NULL, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
-#' @param add.cytobands.names  (boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)
-#' @param add.base.numbers  (boolean) whether to add the base numbers to the plot. (defaults to FALSE)
+## @param add.cytobands.names  (boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)
+## @param add.base.numbers  (boolean) whether to add the base numbers to the plot. (defaults to FALSE)
 #' @param ...  any additional parameter to be passed to the functions called from plotCytobands.
 #' 
 #' @return
 #' invisibly returns the given karyoplot object
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBaseNumbers}}, \code{\link{kpAddCytobandLabels}}
 #' 
 #' @examples
 #'
@@ -38,8 +38,7 @@
 
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE,
-                          add.base.numbers=FALSE, ...) {
+plotCytobands <- function(karyoplot, color.table=NULL, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -71,14 +70,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
   col <- color.table[as.character(cyto$gieStain)]
     
   graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
-    
-  if(add.cytobands.names) {
-    plotCytobandsLabels(karyoplot=karyoplot, ...)
-  }
-    
-  if(add.base.numbers) {
-    plotBaseNumbers(karyoplot, ...)
-  }
+
   
   invisible(karyoplot)
 }

@@ -4,16 +4,12 @@
 \alias{plotCytobands}
 \title{plotCytobands}
 \usage{
-plotCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
+plotCytobands(karyoplot, color.table=NULL, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
 
 \item{color.table}{(named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)}
-
-\item{add.cytobands.names}{(boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)}
-
-\item{add.base.numbers}{(boolean) whether to add the base numbers to the plot. (defaults to FALSE)}
 
 \item{...}{any additional parameter to be passed to the functions called from plotCytobands.}
 }
@@ -26,8 +22,7 @@ Plots the chromosome cytobands in a karyoplot
 \details{
 Plots the cytobands representing the chromosome structure in a karyoplot. It extracts the 
 cytobands from the \code{karyoplot} object it recieves as a parameter. It is possible to 
-specify the colors used to plot the cytobands. In addition, it can add the cytonand names
-and base numbers to the plot.
+specify the colors used to plot the cytobands.
 }
 \note{
 In general, this function is automatically called by plotKaryotype
@@ -41,6 +36,6 @@ plotCytobands(kp)
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}
+\code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBaseNumbers}}, \code{\link{kpAddCytobandLabels}}
 }
 
