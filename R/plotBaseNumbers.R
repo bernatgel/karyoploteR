@@ -46,7 +46,12 @@
 
 kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, 
                             minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...) {
-   
+  
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
@@ -64,9 +69,10 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
   
   #For every chromsome
   for(chr.name in as.character(seqnames(karyoplot$genome))) {
+
     chr <- karyoplot$genome[as.character(seqnames(karyoplot$genome)) == chr.name]
     #Major ticks
-      num.ticks <- width(chr)/tick.dist 
+      num.ticks <- width(chr)/tick.dist + 1
       tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1
       tick.labels <- sapply(tick.pos, toLabel)
       
