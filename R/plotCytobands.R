@@ -77,7 +77,7 @@ plotCytobands <- function(karyoplot, color.table=NULL, add.cytobands.names=FALSE
   }
     
   if(add.base.numbers) {
-    plotBaseNumbers(karyoplot, ...)
+    kpAddBaseNumbers(karyoplot, ...)
   }
   
   invisible(karyoplot)

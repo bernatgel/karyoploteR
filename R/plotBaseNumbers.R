@@ -1,8 +1,50 @@
+#' kpAddBaseNumbers
+#' 
+#' @description 
+#' 
+#' Plots the base numbers along the chromosome ideograms
+#' 
+#' @details 
+#'  
+#' This function can be used to add the base numbers scale to the chromosome ideograms.
+#' The base numbers and ticks witll be drawn next to the ideograms and not on a separate
+#' independent x axis. It is possible to control the number and position of the tick
+#' marks and labels
+#' 
+#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...)
+#' 
+#' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
+#' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases
+#' @param tick.len  (numeric) The length of the major tick marks in plot coordinates
+#' @param minor.ticks (boolean) Whether to add unlabeled minor ticks between the major ticks
+#' @param minor.tick.dist   (numeric) The distance between the minor ticks in bases
+#' @param minor.tick.len   (numeric) The length of the minor tick marks in plot coordinates
+#' @param cex  (numeric) The cex parameter for the major ticks label
+#' @param ...  Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.
+#' 
+#' @return
+#' 
+#' Returns the original karyoplot object, unchanged.
+#'  
+#' @seealso \code{\link{plotKaryotype}}
+#' 
+#' @examples
+#'  
+#' set.seed(1000)
+#' 
+#' kp <- plotKaryotype()
+#' kpAddBaseNumbers(kp)
+#' 
+#' kp <- plotKaryotype(chromosomes="chr17")
+#' kpAddBaseNumbers(kp, tick.dist=10000000, minor.tick.dist=1000000)
+#' 
+#' 
+#'  
+#' @export kpAddBaseNumbers
+#' 
 
 
-#internal
-
-plotBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, 
+kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, 
                             minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, ...) {
    
   ccf <- karyoplot$coord.change.function
@@ -43,5 +85,6 @@ plotBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.tic
       graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len)     
     }
   }
-
+  
+  invisible(karyoplot)
 }
