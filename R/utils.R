@@ -18,3 +18,19 @@ recycle.first <- function(...){
   max.length <- max(sapply(dotList, length))
   return(rep_len(dotList[[1]], length.out=max.length))
 }
+
+#Colors
+#Given a color, returns a lighter one
+#TODO: Is there a better way to do that?
+lighter <- function(col, amount=150) {
+  new.col <- ((grDevices::col2rgb(col))+amount)/255
+  new.col[new.col[,1]>1,1] <- 1
+  return(grDevices::rgb(t(new.col)))  
+}
+
+#Given a color, returns a darker one
+darker <- function(col, amount=150) {
+  new.col <- ((grDevices::col2rgb(col))-amount)/255
+  new.col[new.col[,1]<0, 1] <- 0
+  return(grDevices::rgb(t(new.col)))  
+}
