@@ -31,5 +31,5 @@ bb <- getChromosomeNamesBoundingBox(kp)
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{plotChromosomeNames}}
+\code{\link{plotKaryotype}}, \code{\link{kpAddChromosomeNames}}
 }

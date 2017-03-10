@@ -190,6 +190,37 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
 
 
 
+####################################################################################
+#
+#    Plot Type 3 - Horizontal, all chromosomes in one line (BEGIN)
+#
+####################################################################################
+
+getIdeogramMidY_3HorizAllChromosomesInOneLine <- function(chr, genome, plot.params) {
+  pp <- plot.params
+  chr.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp)
+  chr.names <- GenomeInfoDb::seqlevels(genome)
+  chrs <- c(length(chr.names):1)
+  names(chrs) <- chr.names
+  chr.num <- chrs[chr]
+  return(pp$bottommargin + (chr.num - 1) * chr.height +
+           pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2)
+}
+
+getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
+  chr.height <- (pp$data2outmargin + pp$data2height + pp$data2inmargin
+                 + pp$ideogramheight
+                 + pp$data1inmargin + pp$data1height + pp$data1outmargin)
+  return(chr.height)
+}
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#
+#    Plot Type 3 - Horizontal, all chromosomes in one line (BEGIN)
+#
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 
 ####################################################################################

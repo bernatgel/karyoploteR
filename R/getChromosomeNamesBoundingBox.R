@@ -20,7 +20,7 @@
 #' Returns a list with four elements (x0, x1, y0 and y1), each of them a names
 #' vector of integers with one coordinatefor every chromosome in the plot.
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{plotChromosomeNames}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpAddChromosomeNames}}
 #' 
 #' @examples
 #'
@@ -34,11 +34,11 @@
 getChromosomeNamesBoundingBox <- function(karyoplot) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
-  if(kp$plot.type %in% c(1,2)) {
+  if(karyoplot$plot.type %in% c(1,2)) {
     chr.labels <- karyoplot$chromosomes
     
-    y0 <- karyoplot$ideogram.mid(chr=chr.labels) - kp$plot.params$ideogramheight
-    y1 <- karyoplot$ideogram.mid(chr=chr.labels) + kp$plot.params$ideogramheight
+    y0 <- karyoplot$ideogram.mid(chr=chr.labels) - karyoplot$plot.params$ideogramheight
+    y1 <- karyoplot$ideogram.mid(chr=chr.labels) + karyoplot$plot.params$ideogramheight
     x0 <- setNames(rep(0, length(chr.labels)), chr.labels)
     x1 <- setNames(rep(karyoplot$plot.params$leftmargin, length(chr.labels)), chr.labels)
   
