@@ -70,4 +70,3 @@ kpHeatmap(kp, sample(x = dd, 10), r0=0.8, r1=1, color=c("orange", "black", "purp
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpLines}}
 }
-

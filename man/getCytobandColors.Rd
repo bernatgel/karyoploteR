@@ -32,4 +32,3 @@ getCytobandColors(color.schema="biovizbase")
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{plotCytobands}}
 }
-

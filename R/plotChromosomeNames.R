@@ -12,3 +12,4 @@ plotChromosomeNames <- function(karyoplot, ...) {
 
   graphics::text(x=x, y=y, labels=chr.labels, ...)
 }
+

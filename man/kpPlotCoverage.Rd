@@ -76,4 +76,3 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
 
 \code{\link[IRanges]{coverage}}
 }
-

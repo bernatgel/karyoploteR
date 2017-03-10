@@ -31,4 +31,3 @@ darker("#333333")
 \seealso{
 \code{\link{lighter}}
 }
-

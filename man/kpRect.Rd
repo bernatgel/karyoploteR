@@ -74,4 +74,3 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 
 \code{\link{kpPlotRegions}}
 }
-

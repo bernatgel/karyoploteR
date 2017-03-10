@@ -65,4 +65,3 @@ kpPlotRibbon(kp, data, y0=0.5+(y-min(y)), y1=0.5-(y-min(y)), data.panel=2)
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpBars}}, \code{\link{kpLines}}
 }
-

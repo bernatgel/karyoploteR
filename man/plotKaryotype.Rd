@@ -104,4 +104,3 @@ kp <- plotKaryotype() \%>\%
 \seealso{
 \code{\link{getDefaultPlotParams}}, \code{\link{kpPoints}}
 }
-

@@ -30,4 +30,3 @@ kp <- plotDefaultPlotParams(plot.type=2)
 \seealso{
 \code{\link{plotKaryotype}}
 }
-

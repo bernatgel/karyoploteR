@@ -38,4 +38,3 @@ plotCytobands(kp)
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBaseNumbers}}, \code{\link{kpAddCytobandLabels}}
 }
-

@@ -36,4 +36,3 @@ plotKaryotype(genome="hg19", plot.type=2, plot.params=pp)
 \seealso{
 \code{\link{plotKaryotype}}
 }
-

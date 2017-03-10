@@ -69,4 +69,3 @@ kpAbline(kp, v=c(67000000, 190000000), chr="chr1")
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpSegments}}, \code{\link{kpLines}}
 }
-

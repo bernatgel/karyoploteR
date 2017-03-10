@@ -81,4 +81,3 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpSegments}}
 }
-
