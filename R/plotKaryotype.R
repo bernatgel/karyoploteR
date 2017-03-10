@@ -184,6 +184,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     kp$chromosome.lengths <- end(gr.genome)
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
+    kp$plot.type <- plot.type
     
 
   #Remove all margins around the plot to take complete control of the available space
