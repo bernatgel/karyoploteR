@@ -32,7 +32,7 @@ recycle.first <- function(...){
 #' 
 #' @usage lighter(col, amount=150)
 #' 
-#' @param color (color) The original color
+#' @param col (color) The original color
 #' @param amount (integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).
 #' 
 #' @return
@@ -66,7 +66,7 @@ lighter <- function(col, amount=150) {
 #' 
 #' @usage darker(col, amount=150)
 #' 
-#' @param color (color) The original color
+#' @param col (color) The original color
 #' @param amount (integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).
 #' 
 #' @return

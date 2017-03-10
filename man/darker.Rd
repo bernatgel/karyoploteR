@@ -7,9 +7,9 @@
 darker(col, amount=150)
 }
 \arguments{
-\item{amount}{(integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).}
+\item{col}{(color) The original color}
 
-\item{color}{(color) The original color}
+\item{amount}{(integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).}
 }
 \value{
 A darker color
