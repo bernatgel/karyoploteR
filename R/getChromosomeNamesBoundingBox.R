@@ -24,7 +24,7 @@
 #' 
 #' @examples
 #'
-#' kp <- plotKaryotype(ideogram.plotter = NULL)
+#' kp <- plotKaryotype()
 #' bb <- getChromosomeNamesBoundingBox(kp)
 #'  
 #' @export getChromosomeNamesBoundingBox
