@@ -97,15 +97,6 @@ getCoordChangeFunctions <- function(karyoplot)
     }
   }
   
-  
-  
-  if(plot.type == 4) {
-    genomic2plot <- genomic2plot_4VerticalDataAboveAndBelowIdeogram
-    ideoMid <- getIdeogramMidY_4VerticalDataAboveAndBelowIdeogram
-    chrHeight <- getChrHeight_4VerticalDataAboveAndBelowIdeogram
-  }
-  
-  
 
 
   return(list(

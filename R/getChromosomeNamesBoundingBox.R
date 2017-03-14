@@ -66,7 +66,7 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
     
     chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
     
-    y1 <- setNames(rep(karyoplot$plot.params$bottommargin), chr.labels)
+    y1 <- setNames(rep(karyoplot$plot.params$bottommargin, length(chr.labels)), chr.labels)
     y0 <- setNames(rep(0, length(chr.labels)), chr.labels)
     
     #use the coordinates change function to get the x positioning
