@@ -3,28 +3,127 @@
 #Return the coordinate change function mapping genomic to plot coordinates
 
 
-getCoordChangeFunctions <- function(plot.type, genome, plot.params)
+#getCoordChangeFunctions <- function(plot.type, genome, plot.params)
+getCoordChangeFunctions <- function(karyoplot)
 {
  
+  plot.params <- karyoplot$plot.params
+  genome <- karyoplot$genome
+  plot.type <- karyoplot$plot.type
+  
   if(plot.type == 1) {
     genomic2plot <- genomic2plot_1HorizDataAboveIdeogram
     ideoMid <- getIdeogramMidY_1HorizDataAboveIdeogram
     chrHeight <- getChrHeight_1HorizDataAboveIdeogram
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(y)) {
+        if(is.null(chr)) {
+          stop("If y is not NULL, chr must be specified too")
+        }
+        l <- length(chr)
+        if(length(y) != l) {
+          stop("If y is not NULL, it have to have the same length as chr")
+        }
+      }
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+    }
   }
   if(plot.type == 2) {
     genomic2plot <- genomic2plot_2HorizDataAboveAndBelowIdeogram
     ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(y)) {
+        if(is.null(chr)) {
+          stop("If y is not NULL, chr must be specified too")
+        }
+        l <- length(chr)
+        if(length(y) != l) {
+          stop("If y is not NULL, it have to have the same length as chr")
+        }
+      }
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+    }
   }
+  if(plot.type == 3) { #All chromosomes in a line with 2 data panels
+    genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
+    ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
+    chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(x)) {
+        if(is.null(chr)) {
+          stop("If x is not NULL, chr must be specified too")
+        }
+        l <- length(chr)
+        if(length(x) != l) {
+          stop("If x is not NULL, it have to have the same length as chr")
+        }
+      }
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+    }
+  }
+  if(plot.type == 4) { #All chromosomes in a line with 1 data panel above
+    genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
+    ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
+    chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(x)) {
+        if(is.null(chr)) {
+          stop("If x is not NULL, chr must be specified too")
+        }
+        l <- length(chr)
+        if(length(x) != l) {
+          stop("If x is not NULL, it have to have the same length as chr")
+        }
+      }
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=1, genome=genome, plot.params=plot.params))
+    }
+  }
+  if(plot.type == 5) { #All chromosomes in a line with 1 data panel below
+    genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
+    ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
+    chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(x)) {
+        if(is.null(chr)) {
+          stop("If x is not NULL, chr must be specified too")
+        }
+        l <- length(chr)
+        if(length(y) != l) {
+          stop("If x is not NULL, it have to have the same length as chr")
+        }
+      }
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=2, genome=genome, plot.params=plot.params))
+    }
+  }
+  
+  
+  
   if(plot.type == 4) {
     genomic2plot <- genomic2plot_4VerticalDataAboveAndBelowIdeogram
     ideoMid <- getIdeogramMidY_4VerticalDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_4VerticalDataAboveAndBelowIdeogram
   }
   
-  #TODO: check valid params
+  
+  #Prepare the coord change function
+  
+  coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    if(!is.null(y)) {
+      if(is.null(chr)) {
+        stop("If y is not NULL, chr must be specified too")
+      }
+      l <- length(chr)
+      if(length(y) != l) {
+        stop("If y is not NULL, it have to have the same length as chr")
+      }
+    }
+    return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+  }
+  
+
   return(list(
-    coorChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
     if(!is.null(y)) {
       if(is.null(chr)) {
         stop("If y is not NULL, chr must be specified too")
@@ -147,7 +246,7 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
   pp <- plot.params
   
   genome.width <- 1 - pp$leftmargin - pp$rightmargin
-  max.chr.len <- max(end(genome)) - min(start(genome))
+  max.chr.len <- max(end(genome) - start(genome))
   
   if(!is.null(x)) {
     x.plot <- pp$leftmargin + (x/max.chr.len)*genome.width
@@ -198,13 +297,8 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
 
 getIdeogramMidY_3HorizAllChromosomesInOneLine <- function(chr, genome, plot.params) {
   pp <- plot.params
-  chr.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp)
-  chr.names <- GenomeInfoDb::seqlevels(genome)
-  chrs <- c(length(chr.names):1)
-  names(chrs) <- chr.names
-  chr.num <- chrs[chr]
-  return(pp$bottommargin + (chr.num - 1) * chr.height +
-           pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2)
+  chr.height <- getChrHeight_3HorizAllChromosomesInOneLine(pp)
+  return(pp$bottommargin + pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2)
 }
 
 getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
@@ -213,6 +307,60 @@ getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
                  + pp$data1inmargin + pp$data1height + pp$data1outmargin)
   return(chr.height)
 }
+
+
+#Build the function mapping genomic regions into plotting coordinates
+genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL, data.panel,
+                                                         genome, plot.params) {
+  
+  pp <- plot.params
+  
+  chr.names <- GenomeInfoDb::seqlevels(genome)
+  chrs <- setNames(seq_along(chr.names), chr.names)
+  chr.starts <- setNames(start(genome), chr.names)
+  chr.lens <- setNames(as.numeric(end(genome) - start(genome)), chr.names)
+  previous.chrs <- setNames(Reduce(sum, c(0, chr.lens[-length(chr.lens)]), accumulate = TRUE), chr.names) #For each chromosome, the sum of the lengths of the previous chromosomes
+  all.chr.len <- sum(chr.lens)
+  
+  genome.width <- 1 - pp$leftmargin - pp$rightmargin - pp$ideogramlateralmargin*length(genome)  #The space allowed for the genome plot
+  
+  if(is.null(chr) | is.null(x)) {
+    x.plot <- NULL 
+  } else {
+    if(!is.numeric(x)) {
+      x.plot <- NULL
+    } else{
+      x.plot <- pp$leftmargin + 
+                pp$ideogramlateralmargin*(chrs[chr]-1) +
+                ((previous.chrs[chr] + x - chr.starts[chr])/all.chr.len)*genome.width
+    }
+  }
+  
+  if(is.null(y) | !is.numeric(y)) {
+    y.plot <- NULL 
+  } else {
+    chrs.y <- getIdeogramMidY_3HorizAllChromosomesInOneLine(chr, genome, pp) 
+    if(is.null(y)) { #if y is null, set y to the bottom of the chromosome
+      y.plot <- chrs.y
+    } else { #Return the appropiate plot.y for the given original y
+      if(data.panel == 1) {
+        datayrange <- pp$data1max - pp$data1min 
+        yscaled <- ((y - pp$data1min) / datayrange) * pp$data1height
+        y.plot <- chrs.y + pp$ideogramheight/2 + pp$data1inmargin + yscaled
+      } else {
+        if(data.panel == 2) {
+          datayrange <- pp$data2max - pp$data2min 
+          yscaled <- ((y - pp$data2min) / datayrange) * pp$data2height
+          y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - yscaled
+        } else {
+          stop("Invalid data.panel")
+        }
+      }
+    }
+  }   
+  return(list(x=x.plot, y=y.plot))
+}
+
 
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

@@ -58,13 +58,15 @@ plotCytobands <- function(karyoplot, color.table=NULL, ...) {
     mcols(cyto) <- data.frame(name=seqnames(cyto), gieStain="gpos50", stringsAsFactors=FALSE)  
   }
   
-  #And plot them  
+  #filter out the cytobands out of our chromosomes
+  cyto <- filterChromosomes(cyto, keep.chr = karyoplot$chromosomes)
   
+  #And plot them
   ybottom <- mids(as.character(seqnames(cyto))) - pp$ideogramheight/2
   ytop <- mids(as.character(seqnames(cyto))) + pp$ideogramheight/2
     
-  xleft <- ccf(x=start(cyto))$x
-  xright <- ccf(x=end(cyto))$x
+  xleft <- ccf(x=start(cyto), chr=as.character(seqnames(cyto)))$x
+  xright <- ccf(x=end(cyto), chr=as.character(seqnames(cyto)))$x
     
   #col <- do.call(c, color.table[cyto$gieStain])
   col <- color.table[as.character(cyto$gieStain)]

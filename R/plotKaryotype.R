@@ -164,17 +164,12 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     }
   }
 
-  #Get the Coordinates Change Function to be used in this plot
-  coordChangeFunctions <- getCoordChangeFunctions(plot.type, gr.genome, plot.params)
   
   
   #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
-    kp$coord.change.function <- coordChangeFunctions$coorChangeFunction
-    kp$ideogram.mid <- coordChangeFunctions$ideogramMid
-    kp$chromosome.height <- coordChangeFunctions$chr.height
     if(is.character(genome)) {
       kp$genome.name <- genome
     } else {
@@ -186,7 +181,14 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     kp$cytobands <- cytobands
     kp$plot.type <- plot.type
     
-
+    #Get the Coordinates Change Function to be used in this plot
+    #coordChangeFunctions <- getCoordChangeFunctions(plot.type = plot.type, genome = gr.genome, plot.params = plot.params)
+    coordChangeFunctions <- getCoordChangeFunctions(karyoplot=kp)
+    kp$coord.change.function <- coordChangeFunctions$coordChangeFunction
+    kp$ideogram.mid <- coordChangeFunctions$ideogramMid
+    kp$chromosome.height <- coordChangeFunctions$chr.height
+    
+    
   #Remove all margins around the plot to take complete control of the available space
     kp$graphical.par <- list()
     kp$graphical.par$old.par <- graphics::par(no.readonly = TRUE)
@@ -207,12 +209,14 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
-    if(plot.type %in% c(1,2,3)) {
+    if(plot.type %in% c(1,2)) {
       xlim <- c(0, 1)
       ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
     } else {
-      ylim <- c(0, 1)
-      xlim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
+      if(plot.type %in% c(3,4,5)) {
+        xlim <- c(0, 1)
+        ylim <- c(0, pp$bottommargin + kp$chromosome.height + pp$topmargin)
+      }
     }
   
     #create an empty plot
@@ -228,13 +232,13 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$ymax <- p[4]
  
   kp$graphical.par$new.par <- graphics::par(no.readonly = TRUE) #Remember the parameters used
-  
+
   #Finally, plot the ideograms and labels, if needed
   #And plot the ideogram
   if(!is.null(ideogram.plotter)) {
     ideogram.plotter(kp, ...)
   }    
-  
+
   #Plot the Chromosome Labels
     if(!is.null(labels.plotter)) {
       labels.plotter(kp, ...)

@@ -44,6 +44,39 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
   
     return(list(x0=x0, x1=x1, y0=y0, y1=y1))  
   }
+  if(karyoplot$plot.type %in% c(3, 5)) {
+    #position the labels centered in the chromosome and in the top margin
+    chr.labels <- karyoplot$chromosomes
+    
+    chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
+    
+    y1 <- setNames(rep(karyoplot$plot$ymax, length(chr.labels)), chr.labels)
+    y0 <- setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin, length(chr.labels)), chr.labels)
+    
+    #use the coordinates change function to get the x positioning
+    ccf <- karyoplot$coord.change.function
+    x0 <- ccf(chr=chr.labels, x=start(karyoplot$genome), data.panel=1)$x
+    x1 <- ccf(chr=chr.labels, x=end(karyoplot$genome), data.panel=1)$x
+    
+    return(list(x0=x0, x1=x1, y0=y0, y1=y1))  
+  }
+  if(karyoplot$plot.type %in% c(4)) {
+    #position the labels centered in the chromosome and in the bottom margin
+    chr.labels <- karyoplot$chromosomes
+    
+    chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
+    
+    y1 <- setNames(rep(karyoplot$plot.params$bottommargin), chr.labels)
+    y0 <- setNames(rep(0, length(chr.labels)), chr.labels)
+    
+    #use the coordinates change function to get the x positioning
+    ccf <- karyoplot$coord.change.function
+    x0 <- ccf(chr=chr.labels, x=start(karyoplot$genome), data.panel=1)$x
+    x1 <- ccf(chr=chr.labels, x=end(karyoplot$genome), data.panel=1)$x
+    
+     
+    return(list(x0=x0, x1=x1, y0=y0, y1=y1))  
+  }
   
   #Else
   stop("Unknown plot type")
