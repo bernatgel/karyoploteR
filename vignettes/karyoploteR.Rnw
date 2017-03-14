@@ -243,11 +243,14 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
     
 \subsection{Types of Plots}
     
-    There are currently 2 plot types available: 
+    There are currently 5 plot types available: 
     
     \begin{description}
-      \item[plot.type=1] A plot with horizontal ideograms and a single data panel on top of them
-      \item[plot.type=2] A plot with horizontal ideograms and two data panels, one above and one below them
+      \item[plot.type=1] A plot with stacked horizontal ideograms  and a single data panel on top of them
+      \item[plot.type=2] A plot with stacked horizontal ideograms and two data panels, one above and one below them
+      \item[plot.type=3] A plot with horizontal ideograms all in one level, and two data panels, one above and one below them
+      \item[plot.type=4] A plot with horizontal ideograms all in one level, and one data panel above them
+      \item[plot.type=5] A plot with horizontal ideograms all in one level, and one data panel below them
     \end{description}
     
     To clearly see where the data panels are and in some cases, to help the readers interpret the data it is possible to add a background to the data panels with \Rfunction{kpDataBackground}. Please take into account that the function draws a solid rectangle and so if any data was already plotted it would be no longer visible.

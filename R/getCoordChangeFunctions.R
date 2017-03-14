@@ -15,7 +15,7 @@ getCoordChangeFunctions <- function(karyoplot)
     genomic2plot <- genomic2plot_1HorizDataAboveIdeogram
     ideoMid <- getIdeogramMidY_1HorizDataAboveIdeogram
     chrHeight <- getChrHeight_1HorizDataAboveIdeogram
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
       if(!is.null(y)) {
         if(is.null(chr)) {
           stop("If y is not NULL, chr must be specified too")
@@ -32,7 +32,7 @@ getCoordChangeFunctions <- function(karyoplot)
     genomic2plot <- genomic2plot_2HorizDataAboveAndBelowIdeogram
     ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
       if(!is.null(y)) {
         if(is.null(chr)) {
           stop("If y is not NULL, chr must be specified too")
@@ -49,7 +49,7 @@ getCoordChangeFunctions <- function(karyoplot)
     genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
       if(!is.null(x)) {
         if(is.null(chr)) {
           stop("If x is not NULL, chr must be specified too")
@@ -66,7 +66,7 @@ getCoordChangeFunctions <- function(karyoplot)
     genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
       if(!is.null(x)) {
         if(is.null(chr)) {
           stop("If x is not NULL, chr must be specified too")
@@ -83,13 +83,13 @@ getCoordChangeFunctions <- function(karyoplot)
     genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
       if(!is.null(x)) {
         if(is.null(chr)) {
           stop("If x is not NULL, chr must be specified too")
         }
         l <- length(chr)
-        if(length(y) != l) {
+        if(length(x) != l) {
           stop("If x is not NULL, it have to have the same length as chr")
         }
       }
@@ -106,35 +106,10 @@ getCoordChangeFunctions <- function(karyoplot)
   }
   
   
-  #Prepare the coord change function
-  
-  coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
-    if(!is.null(y)) {
-      if(is.null(chr)) {
-        stop("If y is not NULL, chr must be specified too")
-      }
-      l <- length(chr)
-      if(length(y) != l) {
-        stop("If y is not NULL, it have to have the same length as chr")
-      }
-    }
-    return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
-  }
-  
+
 
   return(list(
-    coordChangeFunction=function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
-    if(!is.null(y)) {
-      if(is.null(chr)) {
-        stop("If y is not NULL, chr must be specified too")
-      }
-      l <- length(chr)
-      if(length(y) != l) {
-        stop("If y is not NULL, it have to have the same length as chr")
-      }
-    }
-    return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
-  },
+    coordChangeFunction=coordChangeFunction,
     ideogramMid=function(chr) {
       return(ideoMid(chr=chr, genome=genome, plot.params=plot.params))
   },
