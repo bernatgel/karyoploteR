@@ -62,8 +62,8 @@ kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="g
   if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
   
-  xleft <- ccf(x=start(karyoplot$genome), data.panel=data.panel)$x
-  xright <- ccf(x=end(karyoplot$genome), data.panel=data.panel)$x
+  xleft <- ccf(chr=as.character(seqnames(karyoplot$genome)), x=start(karyoplot$genome), data.panel=data.panel)$x
+  xright <- ccf(chr=as.character(seqnames(karyoplot$genome)), x=end(karyoplot$genome), data.panel=data.panel)$x
   ytop <- ccf(chr=as.character(seqnames(karyoplot$genome)), 
               y=rep(r0, length(karyoplot$genome)), data.panel=data.panel)$y
   ybottom <- ccf(chr=as.character(seqnames(karyoplot$genome)),
