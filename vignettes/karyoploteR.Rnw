@@ -256,16 +256,35 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
     To clearly see where the data panels are and in some cases, to help the readers interpret the data it is possible to add a background to the data panels with \Rfunction{kpDataBackground}. Please take into account that the function draws a solid rectangle and so if any data was already plotted it would be no longer visible.
     
     This is plot type 1:
-    <<fig.height=2,fig.width=8>>=
-      kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 1)
+    <<fig.height=4,fig.width=8>>=
+      kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 1)
       kpDataBackground(kp, data.panel = 1)
     @
     
-    And this is plot type 2:
-    <<fig.height=2,fig.width=8>>=
-     kp <- plotKaryotype(chromosomes = c("chr1"), plot.type = 2)
+    This is plot type 2:
+    <<fig.height=4,fig.width=8>>=
+     kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 2)
      kpDataBackground(kp, data.panel = 1)
      kpDataBackground(kp, data.panel = 2)
+    @
+    
+    This is plot type 3:
+    <<fig.height=2,fig.width=8>>=
+     kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 3)
+     kpDataBackground(kp, data.panel = 1)
+     kpDataBackground(kp, data.panel = 2)
+    @
+    
+    This is plot type 4:
+    <<fig.height=2,fig.width=8>>=
+     kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 4)
+     kpDataBackground(kp, data.panel = 1)
+    @
+    
+    And this is plot type 5:
+    <<fig.height=2,fig.width=8>>=
+     kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 5)
+     kpDataBackground(kp, data.panel = 1)
     @
     
     %\subsection{Ideograms and Labels}
@@ -316,7 +335,7 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
     
     
     
-    For example, we can create a plot with a data plot larger than the other and smaller margins:
+    For example, we can create a plot with a data panel larger than the other and smaller margins:
     
     <<fig.height=3,fig.width=8>>=
     plot.params <- getDefaultPlotParams(plot.type=2)

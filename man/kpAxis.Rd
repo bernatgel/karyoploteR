@@ -4,7 +4,7 @@
 \alias{kpAxis}
 \title{kpAxis}
 \usage{
-kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...)
+kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -30,6 +30,8 @@ kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, la
 \item{label.margin}{(numeric) the additional the margin between the labels and ticks. Can be negative. If NULL, the default margin is used. (defaults to NULL)}
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
+
+\item{chromosomes}{(character) To which chromosomes should we add the axis: "first", "last", "auto", "all" or a vector of chromosome names. With auto, the chromosomes will depend on the plot type and side of axis plotting. (defaults to "auto")}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
