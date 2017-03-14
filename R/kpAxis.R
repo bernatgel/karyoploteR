@@ -12,7 +12,7 @@
 #' used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not have
 #' a chr option: axis are always plotted for all chromosomes.
 #' 
-#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, ...)
+#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param ymin    (numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL)
@@ -26,6 +26,7 @@
 #' @param tick.len    (numeric) the length of the ticks to be drawn measured in base pairs. If NULL, tick length is 0.01 times the length in bases of the longest chromosome. (defaults to NULL)
 #' @param label.margin    (numeric) the additional the margin between the labels and ticks. Can be negative. If NULL, the default margin is used. (defaults to NULL)
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
+#' @param chromosomes (character) To which chromosomes should we add the axis: "first", "last", "auto", "all" or a vector of chromosome names. With auto, the chromosomes will depend on the plot type and side of axis plotting. (defaults to "auto")
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #'
 #'    
@@ -62,7 +63,7 @@
 
 kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, 
                    labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, 
-                   data.panel=1, ...) {
+                   data.panel=1, chromosomes="auto", ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -76,12 +77,6 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(side==1) {
-    x <- start(karyoplot$genome)
-  } else {
-    x <- end(karyoplot$genome)
-  }
-  
   if(is.null(tick.len)) tick.len <- 0.01 * max(width(karyoplot$genome))
   if(is.null(tick.pos)) {
     tick.pos <- (((ymax-ymin)/(numticks-1))*(0:(numticks-1)))+ymin
@@ -92,30 +87,58 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(is.null(labels)) labels <- as.character(round(tick.pos, digits = 2))
   if(is.null(label.margin)) label.margin <-  0
   
-  kpSegments(karyoplot, chr=as.character(seqnames(karyoplot$genome)), x0=x, x1=x, y0=ymin,
+  #decide in which chromosomes we will add the axis.
+  if(chromosomes %in% c("first", "last", "auto", "all")) {
+    chrs <- as.character(seqnames(karyoplot$genome))
+    if(chromosomes == "auto") {
+      if(karyoplot$plot.type %in% c(1,2)) {
+        chromosomes <- "all"
+      } else {
+        chromosomes <- ifelse(side==1, "first", "last")
+      }
+    }
+    if(chromosomes=="first") chrs <- chrs[1]
+    if(chromosomes=="last") chrs <- chrs[length(chrs)]
+  } else {
+    if(any(!(chromosomes %in% as.character(seqnames(karyoplot$genome))))) {
+      warning("there are chromosomes not in the current plot: ", chromosomes[which(!(chromosomes %in% as.character(seqnames(karyoplot$genome))))])
+    }
+    chrs <- chromosomes[which(chromosomes %in% as.character(seqnames(karyoplot$genome)))]
+    if(length(chrs)==0) {
+      warning("none of the selected chromosomes are in the current plot. No axis will be plotted.")
+    }
+  }
+  
+  if(side==1) {
+    x <- start(karyoplot$genome[as.character(seqnames(karyoplot$genome)) %in% chrs])
+  } else {
+    x <- end(karyoplot$genome[as.character(seqnames(karyoplot$genome)) %in% chrs])
+  }
+  
+  kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
              y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
   
  
   if(side==1) {
-    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks), 
+    kpSegments(karyoplot, chr=rep(chrs, each=numticks), 
                x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$genome)),
                y1=rep(tick.pos, length(karyoplot$genome)),
                ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
     
-    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+    kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x-tick.len-label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$genome)),
            labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1, pos=2, 
            data.panel=data.panel, ...)  #pos=2 -> left to the given coordinate
   } else {
-    kpSegments(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+    kpSegments(karyoplot, chr=rep(chrs, each=numticks),
                x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$genome)), 
                y1=rep(tick.pos, length(karyoplot$genome)), 
                ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, ...)
     
-    kpText(karyoplot, chr=rep(as.character(seqnames(karyoplot$genome)), each=numticks),
+    kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x+tick.len+label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$genome)),
            labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4, 
