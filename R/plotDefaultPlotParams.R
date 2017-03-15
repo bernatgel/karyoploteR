@@ -9,7 +9,7 @@
 #'  Given a plot.type, this function creates a new karyoplot with lines and arrows showing 
 #'  the meaning and values of the plot.params
 #'  
-#' @usage plotDefaultPlotParams(plot.type=2, ...)
+#' @usage plotDefaultPlotParams(plot.type=2, plot.params=NULL, ...)
 #' 
 #' @param plot.type (numeric) plot the params of this plot type. Currently, only plot types 2 and 3 are accepted. (defaults to 2)
 #' @param plot.params (a plot params object) a plot params object such the one returned by \code{\link{getDefaultPlotParams}}. If specified, it will be used to create the plots.

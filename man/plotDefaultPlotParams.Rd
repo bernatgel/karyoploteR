@@ -4,7 +4,7 @@
 \alias{plotDefaultPlotParams}
 \title{plotDefaultPlotParameters}
 \usage{
-plotDefaultPlotParams(plot.type=2, ...)
+plotDefaultPlotParams(plot.type=2, plot.params=NULL, ...)
 }
 \arguments{
 \item{plot.type}{(numeric) plot the params of this plot type. Currently, only plot types 2 and 3 are accepted. (defaults to 2)}
