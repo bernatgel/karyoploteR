@@ -176,7 +176,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$genome.name <- "custom"
     }
     kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
-    kp$chromosome.lengths <- end(gr.genome)
+    kp$chromosome.lengths <- setNames(end(gr.genome), seqnames(gr.genome))
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
     kp$plot.type <- plot.type

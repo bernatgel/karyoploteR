@@ -326,18 +326,21 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
 
 \subsection{Changing the plotting parameters}
     
-    In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response. To see the available plot params and their default values we can call \Rfunction{plotDefaultPlotParams}, which will create a plot with the representation of the plot parameters:
+    In addition to changing the genomes, chromosomes, and plot types, it's also possible to change and customize the different sizes and margins defining the look of the karyoplot. To do this we need to to provide an object with all the plotting parameters as the \Rcode{plot.params} parameter of \Rfunction{plotKaryotype}. The easiest way to get a valid \Rcode{plot.params} object is calling \Rfunction{getDefaultPlotParams} and modifying the response. To see the available plot params and their default values we can call \Rfunction{plotDefaultPlotParams}, which will create a plot with the representation of the plot parameters. Note that the plotting parameters plot are only implemented for plot types 1, 2 and 3.
     
+    This is for \Rcode{plot.type=2}
     <<fig.height=6,fig.width=8>>=
     plotDefaultPlotParams(plot.type=2, cex=0.6)
     @
     
+    And this is for \Rcode{plot.type=3}
+    <<fig.height=4,fig.width=8>>=
+    plotDefaultPlotParams(plot.type=3, cex=0.6)
+    @
     
+    Or we can change the plot parameters to create different configurations. For example, we can create a plot with a data panel larger than the other and smaller margins:
     
-    
-    For example, we can create a plot with a data panel larger than the other and smaller margins:
-    
-    <<fig.height=3,fig.width=8>>=
+    <<fig.height=4,fig.width=8>>=
     plot.params <- getDefaultPlotParams(plot.type=2)
     plot.params$ideogramheight <- 5
     plot.params$data2height <- 50
@@ -345,25 +348,20 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
     plot.params$bottommargin <- 20
     plot.params$topmargin <- 20
     
-    kp <- plotKaryotype(chromosomes = c("chr1", "chr2"),
-                        plot.type = 2,
-                        plot.params = plot.params
-          ) %>%
-          kpDataBackground(data.panel = 1) %>%
-          kpDataBackground(data.panel = 2, color = "#CCFFDD")
+    plotDefaultPlotParams(plot.type=2, plot.params=plot.params, cex=0.6)
     @
     
-    Or a plot with a smaller single data panel touching the ideogram:
+    Or a plot with a very small data panel above the ideogram almost touching it (for example, to mark the regions of interest) and a bigger data panel below it (for example, to plot the detailed data):
     
-    <<fig.height=2,fig.width=8>>=
-    plot.params <- getDefaultPlotParams(plot.type=1)
-    plot.params$ideogramheight <- 100
-    plot.params$data1height <- 100
-    plot.params$data1inmargin <- 0
+    <<fig.height=4,fig.width=8>>=
+    plot.params <- getDefaultPlotParams(plot.type=3)
+    plot.params$ideogramheight <- 50
+    plot.params$data1height <- 50
+    plot.params$data1inmargin <- 1
+    plot.params$data2height <- 400
     
-    kp <- plotKaryotype(chromosomes = c("chr1", "chr2"), plot.type = 1,
-                        plot.params = plot.params) %>%
-          kpDataBackground(data.panel = 1)
+    plotDefaultPlotParams(plot.type = 3, plot.params=plot.params, cex=0.6)
+    
     @
 
 
@@ -373,9 +371,9 @@ In this section we will see how the different parameters of \Rfunction{plotKaryt
 %
 %==============================================================================
 
-After creating a plot we can add data to it using successive calls to the various data plotting functions. There are two types of data plotting functions: the low levels ones, based on the basic plotting functions from base graphics (\Rfunction{kpPoints}, \Rfunction{kpLines}, etc...) and the higher level ones, that are functions specialized in drawing certain object types such as \Rcode{GRanges} (\Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}). It is perfectly possible to draw new data on top of the alreeady plotted one in order to create combined plots. 
+After creating a plot we can add data to it using successive calls to the various data plotting functions. There are two types of data plotting functions: the low levels ones, based on the basic plotting functions from base graphics (\Rfunction{kpPoints}, \Rfunction{kpLines}, etc...) and the higher level ones, that are functions specialized in drawing certain object types such as \Rcode{GRanges} (\Rfunction{kpPlotRegions}, \Rfunction{kpPlotCoverage}). It is perfectly possible to draw new data on top of the already plotted one in order to create combined plots. 
 
-In addition, it is be possible to create custom plotting functions based on the coordinates change function included in the \Rcode{keryoplot} object.
+In addition, it is be possible to create custom plotting functions based on the coordinates change function included in the \Rcode{karyoplot} object.
 
 \subsection{Common Parameters}
     
