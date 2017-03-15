@@ -75,4 +75,3 @@ kpAxis(kp, data.panel = 2, cex=0.8, numticks = 5, col="#777777")
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpLines}}
 }
-

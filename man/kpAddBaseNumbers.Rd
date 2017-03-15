@@ -54,4 +54,3 @@ kpAddBaseNumbers(kp, tick.dist=10000000, minor.tick.dist=1000000)
 \seealso{
 \code{\link{plotKaryotype}}
 }
-

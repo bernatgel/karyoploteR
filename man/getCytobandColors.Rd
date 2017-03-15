@@ -4,12 +4,12 @@
 \alias{getCytobandColors}
 \title{getCytobandColors}
 \usage{
-getCytobandColors(color.table=NULL, color.schema=c("circos", "biovizbase"))
+getCytobandColors(color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres"))
 }
 \arguments{
 \item{color.table}{(named character vector) if present, it's returned as-is. Useful to specify your own color.tables.}
 
-\item{color.schema}{(character) The name of the color schema to use: \code{circos} or \code{biovizBase}. (defaults to \code{circos})}
+\item{color.schema}{(character) The name of the color schema to use: \code{circos}, \code{biovizBase}, \code{only.centromeres} (everything in gray, except for centromeres in red). (defaults to \code{circos})}
 }
 \value{
 a named character vector with the colors associated to each cytoband name
@@ -32,4 +32,3 @@ getCytobandColors(color.schema="biovizbase")
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{plotCytobands}}
 }
-

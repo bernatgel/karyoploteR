@@ -26,12 +26,12 @@
 #'  More plot types are expected to come in the near future.
 #'  
 #' 
-#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=plotChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, ...)
+#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, ...)
 #' 
 #' @param genome    The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
 #' @param ideogram.plotter    The function to be used to plot the ideograms. Only one function is included with the package, \code{plotCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{plotCytobands})
-#' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{plotChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{plotChromosomeNames})
+#' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})
 #' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). (defaults to "canonical")
 #' @param cytobands    A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)
 #' @param plot.params    An object obtained from \code{\link{getDefaultPlotParams}} and possibly modified, containing the basic plotting parameters. If NULL, the defaults parameters will be used. (defaults to NULL)
@@ -108,7 +108,7 @@
 
 
 plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands,
-                          labels.plotter=plotChromosomeNames, chromosomes="canonical",
+                          labels.plotter=kpAddChromosomeNames, chromosomes="canonical",
                           cytobands=NULL, plot.params=NULL, use.cache=TRUE, ...) {
   
   #check required parameters...
@@ -164,28 +164,31 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
     }
   }
 
-  #Get the Coordinates Change Function to be used in this plot
-  coordChangeFunctions <- getCoordChangeFunctions(plot.type, gr.genome, plot.params)
   
   
   #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
-    kp$coord.change.function <- coordChangeFunctions$coorChangeFunction
-    kp$ideogram.mid <- coordChangeFunctions$ideogramMid
-    kp$chromosome.height <- coordChangeFunctions$chr.height
     if(is.character(genome)) {
       kp$genome.name <- genome
     } else {
       kp$genome.name <- "custom"
     }
     kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
-    kp$chromosome.lengths <- end(gr.genome)
+    kp$chromosome.lengths <- setNames(end(gr.genome), seqnames(gr.genome))
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
+    kp$plot.type <- plot.type
     
-
+    #Get the Coordinates Change Function to be used in this plot
+    #coordChangeFunctions <- getCoordChangeFunctions(plot.type = plot.type, genome = gr.genome, plot.params = plot.params)
+    coordChangeFunctions <- getCoordChangeFunctions(karyoplot=kp)
+    kp$coord.change.function <- coordChangeFunctions$coordChangeFunction
+    kp$ideogram.mid <- coordChangeFunctions$ideogramMid
+    kp$chromosome.height <- coordChangeFunctions$chr.height
+    
+    
   #Remove all margins around the plot to take complete control of the available space
     kp$graphical.par <- list()
     kp$graphical.par$old.par <- graphics::par(no.readonly = TRUE)
@@ -206,12 +209,14 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
-    if(plot.type %in% c(1,2,3)) {
+    if(plot.type %in% c(1,2)) {
       xlim <- c(0, 1)
       ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
     } else {
-      ylim <- c(0, 1)
-      xlim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
+      if(plot.type %in% c(3,4,5)) {
+        xlim <- c(0, 1)
+        ylim <- c(0, pp$bottommargin + kp$chromosome.height + pp$topmargin)
+      }
     }
   
     #create an empty plot
@@ -227,13 +232,13 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=plotCytob
       kp$plot$ymax <- p[4]
  
   kp$graphical.par$new.par <- graphics::par(no.readonly = TRUE) #Remember the parameters used
-  
+
   #Finally, plot the ideograms and labels, if needed
   #And plot the ideogram
   if(!is.null(ideogram.plotter)) {
     ideogram.plotter(kp, ...)
   }    
-  
+
   #Plot the Chromosome Labels
     if(!is.null(labels.plotter)) {
       labels.plotter(kp, ...)

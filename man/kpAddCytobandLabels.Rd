@@ -43,4 +43,3 @@ kpAddCytobandLabels(kp)
 \seealso{
 \code{\link{plotKaryotype}}
 }
-

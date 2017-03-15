@@ -54,4 +54,3 @@ cyto <- getCytobands("panTro4")
 \code{\link{plotKaryotype}}
 }
 \keyword{datasets}
-

@@ -55,4 +55,3 @@ kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=2, cex=0.5)
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpAxis}}
 }
-

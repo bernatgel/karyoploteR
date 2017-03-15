@@ -11,10 +11,10 @@
 #' Circos) and biovizbase (that gets the cytoband colors from the biovizBase Bioconductor 
 #' package). If a color.table is given, it is returned untouched.
 #' 
-#' @usage getCytobandColors(color.table=NULL, color.schema=c("circos", "biovizbase")) 
+#' @usage getCytobandColors(color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres")) 
 #' 
 #' @param color.table   (named character vector) if present, it's returned as-is. Useful to specify your own color.tables.
-#' @param color.schema  (character) The name of the color schema to use: \code{circos} or \code{biovizBase}. (defaults to \code{circos})
+#' @param color.schema  (character) The name of the color schema to use: \code{circos}, \code{biovizBase}, \code{only.centromeres} (everything in gray, except for centromeres in red). (defaults to \code{circos})
 #' 
 #' @return
 #' a named character vector with the colors associated to each cytoband name
@@ -31,7 +31,7 @@
 #' 
 
 
-getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "biovizbase")) {
+getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres")) {
   
   color.schema <- match.arg(color.schema)
   
@@ -51,6 +51,20 @@ getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "bioviz
                          stalk="#647FA4", #repetitive areas
                          acen="#D92F27", #centromeres
                          gvar="#DCDCDC")
+      } else {
+        if(color.schema=="only.centromeres") {
+          color.table <- c(gneg="#C8C8C8",
+                           gpos25="#C8C8C8",
+                           gpos33="#C8C8C8",
+                           gpos50="#C8C8C8",
+                           gpos66="#C8C8C8",
+                           gpos75="#C8C8C8",
+                           gpos100="#C8C8C8",
+                           gpos="#C8C8C8",
+                           stalk="#C8C8C8", #repetitive areas
+                           acen="#D92F27", #centromeres
+                           gvar="#C8C8C8")
+        }
       }
     }
   }

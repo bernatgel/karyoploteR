@@ -78,7 +78,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
       tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1
       tick.labels <- sapply(tick.pos, toLabel)
       
-      xplot <- ccf(chr=chr.name, x=tick.pos)$x
+      xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos)$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
       if(is.null(tick.col)) {
         graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len, ...)
@@ -92,7 +92,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
       minor.num.ticks <- width(chr)/minor.tick.dist 
       minor.tick.pos <- start(chr) + (minor.tick.dist*(0:(minor.num.ticks-1))) - 1
 
-      xplot <- ccf(chr=chr.name, x=minor.tick.pos)$x
+      xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos)$x
       y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
       if(is.null(minor.tick.col)) {
         graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       

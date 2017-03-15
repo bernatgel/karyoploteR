@@ -4,10 +4,12 @@
 \alias{plotDefaultPlotParams}
 \title{plotDefaultPlotParameters}
 \usage{
-plotDefaultPlotParams(plot.type=2, ...)
+plotDefaultPlotParams(plot.type=2, plot.params=NULL, ...)
 }
 \arguments{
-\item{plot.type}{(numeric) plot the params of this plot type. Currently, only plot type 2 is accepted. (defaults to 2)}
+\item{plot.type}{(numeric) plot the params of this plot type. Currently, only plot types 2 and 3 are accepted. (defaults to 2)}
+
+\item{plot.params}{(a plot params object) a plot params object such the one returned by \code{\link{getDefaultPlotParams}}. If specified, it will be used to create the plots.}
 
 \item{...}{The ellipsis operator can be used to pass any additional graphics parameter}
 }
@@ -30,4 +32,3 @@ kp <- plotDefaultPlotParams(plot.type=2)
 \seealso{
 \code{\link{plotKaryotype}}
 }
-
