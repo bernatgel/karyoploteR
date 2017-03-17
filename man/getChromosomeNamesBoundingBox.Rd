@@ -10,7 +10,7 @@ getChromosomeNamesBoundingBox(karyoplot)
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
 }
 \value{
-Returns a list with four elements (x0, x1, y0 and y1), each of them a names
+Returns a list with four elements (x0, x1, y0 and y1), each of them a named
 vector of integers with one coordinatefor every chromosome in the plot.
 }
 \description{

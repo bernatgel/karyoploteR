@@ -45,14 +45,14 @@ getDefaultPlotParams <- function(plot.type) {
   }
   
   if(plot.type == 1) { #Horizontal. Data above the ideogram
-    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=100, bottommargin=100,
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
                         ideogramheight=50, ideogramlateralmargin=0,
                         data1height=200, data1inmargin=20, data1outmargin=20,
                         data1min=0, data1max=1
     )
   } 
   if(plot.type == 2) { #Horizontal. Data above and below the ideogram
-    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=100, bottommargin=100,
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
                         ideogramheight=50, ideogramlateralmargin=0,
                         data1height=200, data1inmargin=20, data1outmargin=20,
                         data1min=0, data1max=1,
