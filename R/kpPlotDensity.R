@@ -36,13 +36,17 @@
 #'  
 #' kp <- plotKaryotype("hg19", plot.type=2, chromosomes="chr1")
 #' 
-#' kp <- kpPlotDensity(kp, data, border="red", col="blue")
+#' kp <- kpPlotDensity(kp, data)
 #' kpAxis(kp, ymin = 0, ymax=kp$latest.plot$computed.values$max.density)
+#' 
+#' kp <- kpPlotDensity(kp, data, data.panel=2, col="#CCCCFF",  ymax=20, lwd=2)
+#' kpAxis(kp, ymin = 0, ymax=20, data.panel=2)
+#'
+#' kp <- kpLines(kp, data=kp$latest.plot$computed.values$windows, y=kp$latest.plot$computed.values$density, col="black", r0=0.5, r1=1, data.panel=2, ymax=20)
 #' 
 #' @export kpPlotDensity
 
 
-# smooth=FALSE,
 kpPlotDensity <- function(karyoplot, data=NULL, window.size=1e6, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotDensity: 'karyoplot' must be a valid 'KaryoPlot' object"))
@@ -61,7 +65,7 @@ kpPlotDensity <- function(karyoplot, data=NULL, window.size=1e6, ymin=NULL, ymax
   }
   
   
-  karyoplot <- kpPlotRibbon(karyoplot, data = windows, y0=0, y1=dens, ymax=ymax, ...)
+  karyoplot <- kpPlotRibbon(karyoplot, data = windows, y0=0, y1=dens, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, ...)
 
   karyoplot$latest.plot <- list(funct="kpPlotDensity", computed.values=list(density=dens, windows=windows, max.density=max(dens)))
 
