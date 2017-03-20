@@ -61,7 +61,7 @@ For detailed documentation on the parameters, see \code{\link{kpRect}}
 \examples{
 
 kp <- plotKaryotype()
-prepareParameters4("TestFunc", kp, data=NULL, chr="chr1", x0=c(10, 20, 30), y=c(0, 1, 2), r0=0, r1=0.5, ymin=0, ymax=2)
+prepareParameters4("TestFunc", kp, data=NULL, chr="chr1", x0=c(10, 20, 30), x1=c(20, 30, 40), y0=c(0, 1, 2), y1=c(0.5, 1.5, 3), r0=0, r1=0.5, ymin=0, ymax=3)
 
  
 }
