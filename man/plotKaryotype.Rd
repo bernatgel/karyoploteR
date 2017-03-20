@@ -4,14 +4,14 @@
 \alias{plotKaryotype}
 \title{plotKaryotype}
 \usage{
-plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=plotCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
+plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 }
 \arguments{
 \item{genome}{The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")}
 
 \item{plot.type}{The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)}
 
-\item{ideogram.plotter}{The function to be used to plot the ideograms. Only one function is included with the package, \code{plotCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{plotCytobands})}
+\item{ideogram.plotter}{The function to be used to plot the ideograms. Only one function is included with the package, \code{kpAddCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{kpAddCytobands})}
 
 \item{labels.plotter}{The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})}
 

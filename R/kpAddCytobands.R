@@ -1,4 +1,4 @@
-#' plotCytobands
+#' kpAddCytobands
 #' 
 #' @description 
 #' 
@@ -13,14 +13,14 @@
 #' @note In general, this function is automatically called by plotKaryotype
 #' and the user never nees to call it. 
 #' 
-## @usage plotCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
-#' @usage plotCytobands(karyoplot, color.table=NULL, ...)
+## @usage kpAddCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
+#' @usage kpAddCytobands(karyoplot, color.table=NULL, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
 ## @param add.cytobands.names  (boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)
 ## @param add.base.numbers  (boolean) whether to add the base numbers to the plot. (defaults to FALSE)
-#' @param ...  any additional parameter to be passed to the functions called from plotCytobands.
+#' @param ...  any additional parameter to be passed to the functions called from kpAddCytobands.
 #' 
 #' @return
 #' invisibly returns the given karyoplot object
@@ -31,14 +31,14 @@
 #'
 #' 
 #' kp <- plotKaryotype(ideogram.plotter = NULL)
-#' plotCytobands(kp)
+#' kpAddCytobands(kp)
 #'  
-#' @export plotCytobands
+#' @export kpAddCytobands
 #' 
 
 
 
-plotCytobands <- function(karyoplot, color.table=NULL, ...) {
+kpAddCytobands <- function(karyoplot, color.table=NULL, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())

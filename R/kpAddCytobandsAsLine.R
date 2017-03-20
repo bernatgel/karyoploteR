@@ -8,20 +8,20 @@
 #' 
 #' Plots the cytobands representing the chromosome structure in a karyoplot. It extracts the 
 #' cytobands from the \code{karyoplot} object it recieves as a parameter. It is possible to 
-#' specify the colors used to plot the cytobands. In contrast to \code{\link{plotCytobands}}
+#' specify the colors used to plot the cytobands. In contrast to \code{\link{kpAddCytobands}}
 #' it represents the chromosomes as a thin line
 #' 
 #' @note In general, this function is automatically called by plotKaryotype
 #' and the user never nees to call it. 
 #' 
-#' @usage kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema=NULL, lwd=3, lend=1, ...)
+#' @usage kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
-#' @param color.schema  (character) The name of the color schema to use. It is directly passed along to \code{\link{getCytobandColors}}. \code{color.table} takes precendence over \code{color.schema}.
+#' @param color.schema  (character: 'only.centromeres', 'circos', 'biovizbase') The name of the color schema to use. It is directly passed along to \code{\link{getCytobandColors}}. \code{color.table} takes precendence over \code{color.schema}. (defaults to 'only.centromeres')
 #' @param lwd (integer) The width of the line used to represent the ideogram (defaults to 3)
 #' @param lend (0, 1 or 2) The type of line end. (defaults to 1, "butt")
-#' @param ...  any additional parameter to be passed to the functions called from plotCytobands.
+#' @param ...  any additional parameter to be passed to the functions called from kpAddCytobands.
 #' 
 #' @return
 #' invisibly returns the given karyoplot object
@@ -32,14 +32,14 @@
 #'
 #' 
 #' kp <- plotKaryotype(ideogram.plotter = NULL)
-#' plotCytobands(kp)
+#' kpAddCytobandsAsLine(kp)
 #'  
 #' @export kpAddCytobandsAsLine
 #' 
 
 
 
-kpAddCytobandsAsLine <- function(karyoplot, color.table=NULL, color.schema=NULL, lwd=3, lend=1, ...) {
+kpAddCytobandsAsLine <- function(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
