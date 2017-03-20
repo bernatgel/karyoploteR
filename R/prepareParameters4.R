@@ -1,8 +1,54 @@
-#Internal
-
-
-#Prepares the plotting parameters for the functions that need 4 params (x0, x1, y0 and y1) (rect...)
-
+#' prepareParameters4
+#' 
+#' @description 
+#' Prepare and normalize the parameters for functions with x0, x1 and y0, y1 parameters
+#'  
+#' @details 
+#' This function prepares and normalizes the parameters for plotting functions  
+#' with x0, x1, y0 and y1 parameters (as opposed to x and y) so functions can
+#' offer a richer interface while internally dealing only with standard and 
+#' simple code. It extracts the 
+#' positions from \Rcode{data} if available and applies the \Rcode{r0} and 
+#' \Rcode{r1} scaling. It returns the ready to plot values in a list with
+#' only \Rcode{chr}, \Rcode{x0}, \Rcode{x1}, \Rcode{y0} and \Rcode{y1}. 
+#' All parameters are interpreted and used as explained in \Rcode{kpRect}. 
+#'  
+#' @note This function is only useful when creating custom plotting functions. 
+#' It is not intended to the general user.
+#' 
+#' @note For detailed documentation on the parameters, see \Rcode{\link{kpRect}}
+#'  
+#' @usage prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...)
+#'  
+#' @param function.name (character) The name of the function calling \Rcode{prepareParameters4}. Only user for error reporting.
+#' @param karyoplot (KaryoPlot) A karyoplot object.
+#' @param data A GRanges
+#' @param chr A character representing the chromosome names.
+#' @param x0 The position in the chromosome in number of bases.
+#' @param x1 The position in the chromosome in number of bases.
+#' @param y0 The value to be plotted.
+#' @param y1 The value to be plotted.
+#' @param ymax The maximum value of y
+#' @param ymin The minimum value of y
+#' @param r0 The start of the range to use for plotting
+#' @param r1 The end of the range to use for plotting
+#' @param data.panel The data panel to use
+#' @param ... Any additional parameter
+#'
+#' @return 
+#' A list with five values: \Rcode{chr}, \Rcode{x0}, \Rcode{x1}, \Rcode{y0} and \Rcode{y1}. Each of them 
+#' a vector of the same length with the normalized values to plot.
+#'
+#'
+#' @seealso \code{\link{kpRect}}
+#' 
+#' @examples
+#' 
+#' prepareParameters4("TestFunc", kp, data=NULL, chr="chr1", x0=c(10, 20, 30), y=c(0, 1, 2), r0=0, r1=0.5, ymin=0, ymax=2)
+#' 
+#'  
+#' @export prepareParameters4
+#' 
 
 
 prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...) {
