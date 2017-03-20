@@ -44,6 +44,7 @@
 #' 
 #' @examples
 #' 
+#' kp <- plotKaryotype()
 #' prepareParameters4("TestFunc", kp, data=NULL, chr="chr1", x0=c(10, 20, 30), y=c(0, 1, 2), r0=0, r1=0.5, ymin=0, ymax=2)
 #' 
 #'  
