@@ -48,6 +48,8 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
+  message("col: ", col, "  border:", border)
+  
   #If y0 is not specified with any of the valid methods, set it to the min of the data.panel
   if(is.null(y0)) {
     if(is.null(data)) {
