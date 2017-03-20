@@ -7,7 +7,7 @@
 prepareParameters2(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1, data.panel, ...)
 }
 \arguments{
-\item{function.name}{(character) The name of the function calling \Rcode{prepareParameters2}. Only user for error reporting.}
+\item{function.name}{(character) The name of the function calling \code{prepareParameters2}. Only user for error reporting.}
 
 \item{karyoplot}{(KaryoPlot) A karyoplot object.}
 
@@ -32,7 +32,7 @@ prepareParameters2(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1
 \item{...}{Any additional parameter}
 }
 \value{
-A list with three values: \Rcode{chr}, \Rcode{x} and \Rcode{y}. Each of them 
+A list with three values: \code{chr}, \code{x} and \code{y}. Each of them 
 a vector of the same length with the normalized values to plot.
 }
 \description{
@@ -43,16 +43,16 @@ This function prepares and normalizes the parameters for plotting functions
 with x and y parameters (as opposed to x0, x1, y0 and y1) so functions can
 offer a richer interface while internally dealing only with standard and 
 simple code. It extracts the 
-positions from \Rcode{data} if available and applies the \Rcode{r0} and 
-\Rcode{r1} scaling. It returns the ready to plot values in a list with
-only \Rcode{chr}, \Rcode{x} and \Rcode{y}. All parameters are interpreted and
- used as explained in \Rcode{kpPoints}.
+positions from \code{data} if available and applies the \code{r0} and 
+\code{r1} scaling. It returns the ready to plot values in a list with
+only \code{chr}, \code{x} and \code{y}. All parameters are interpreted and
+ used as explained in \code{kpPoints}.
 }
 \note{
 This function is only useful when creating custom plotting functions. 
 It is not intended to the general user.
 
-For detailed documentation on the parameters, see \Rcode{\link{kpPoints}}
+For detailed documentation on the parameters, see \code{\link{kpPoints}}
 }
 \examples{
 
