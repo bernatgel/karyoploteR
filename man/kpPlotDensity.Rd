@@ -11,6 +11,8 @@ kpPlotDensity(karyoplot, data=NULL, window.size=1e6, ymin=NULL, ymax=NULL, data.
 
 \item{data}{(a \code{GRanges}) A GRanges object from which the density will be computed.}
 
+\item{window.size}{(numeric) The size of the windows for wich the density is computed. (Defaults to 1e6, one megabase windows)}
+
 \item{ymin}{(numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)}
 
 \item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)}
