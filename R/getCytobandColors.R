@@ -20,7 +20,7 @@
 #' a named character vector with the colors associated to each cytoband name
 #' 
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{plotCytobands}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpAddCytobands}}
 #' 
 #' @examples
 #'  

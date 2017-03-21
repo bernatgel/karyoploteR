@@ -17,7 +17,7 @@
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' 
 #' @return
-#' Returns a list with four elements (x0, x1, y0 and y1), each of them a names
+#' Returns a list with four elements (x0, x1, y0 and y1), each of them a named
 #' vector of integers with one coordinatefor every chromosome in the plot.
 #'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpAddChromosomeNames}}
@@ -50,7 +50,7 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
     
     chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
     
-    y1 <- setNames(rep(karyoplot$plot$ymax, length(chr.labels)), chr.labels)
+    y1 <- setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin/2, length(chr.labels)), chr.labels) #the top half of the top margin is reserved for the main title
     y0 <- setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin, length(chr.labels)), chr.labels)
     
     #use the coordinates change function to get the x positioning

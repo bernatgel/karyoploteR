@@ -4,7 +4,7 @@
 \alias{kpPoints}
 \title{kpPoints}
 \usage{
-kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  pch=16, cex=0.5, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -26,6 +26,10 @@ kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, d
 \item{r0}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
+
+\item{pch}{(numeric) the glyph to represent the points as specified in \code{\link{par}}. (defaults to 16, a solid circle)}
+
+\item{cex}{(numeric) the relative size of the glyphs as defined at \code{\link{par}}. (defaults to 0.5)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
@@ -58,7 +62,7 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   kpLines(kp, data=data.points, col="red")
 
   #Three ways of specifying the exact same data.points
-  kpPoints(kp, data=data.points)
+  kpPoints(kp, data=data.points, cex=0.5)
   kpPoints(kp, data=data.points, y=data.points$y, pch=16, col="#CCCCFF", cex=0.6)
   kpPoints(kp, chr=as.character(seqnames(data.points)), 
            x=(start(data.points)+end(data.points))/2, 
