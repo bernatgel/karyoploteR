@@ -39,8 +39,8 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
     
     y0 <- karyoplot$ideogram.mid(chr=chr.labels) - karyoplot$plot.params$ideogramheight
     y1 <- karyoplot$ideogram.mid(chr=chr.labels) + karyoplot$plot.params$ideogramheight
-    x0 <- setNames(rep(0, length(chr.labels)), chr.labels)
-    x1 <- setNames(rep(karyoplot$plot.params$leftmargin, length(chr.labels)), chr.labels)
+    x0 <- stats::setNames(rep(0, length(chr.labels)), chr.labels)
+    x1 <- stats::setNames(rep(karyoplot$plot.params$leftmargin, length(chr.labels)), chr.labels)
   
     return(list(x0=x0, x1=x1, y0=y0, y1=y1))  
   }
@@ -48,10 +48,10 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
     #position the labels centered in the chromosome and in the top margin
     chr.labels <- karyoplot$chromosomes
     
-    chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
+    chr.lens <- stats::setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
     
-    y1 <- setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin/2, length(chr.labels)), chr.labels) #the top half of the top margin is reserved for the main title
-    y0 <- setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin, length(chr.labels)), chr.labels)
+    y1 <- stats::setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin/2, length(chr.labels)), chr.labels) #the top half of the top margin is reserved for the main title
+    y0 <- stats::setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin, length(chr.labels)), chr.labels)
     
     #use the coordinates change function to get the x positioning
     ccf <- karyoplot$coord.change.function
@@ -64,10 +64,10 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
     #position the labels centered in the chromosome and in the bottom margin
     chr.labels <- karyoplot$chromosomes
     
-    chr.lens <- setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
+    chr.lens <- stats::setNames(as.numeric(end(karyoplot$genome) - start(karyoplot$genome)), chr.labels)
     
-    y1 <- setNames(rep(karyoplot$plot.params$bottommargin, length(chr.labels)), chr.labels)
-    y0 <- setNames(rep(0, length(chr.labels)), chr.labels)
+    y1 <- stats::setNames(rep(karyoplot$plot.params$bottommargin, length(chr.labels)), chr.labels)
+    y0 <- stats::setNames(rep(0, length(chr.labels)), chr.labels)
     
     #use the coordinates change function to get the x positioning
     ccf <- karyoplot$coord.change.function

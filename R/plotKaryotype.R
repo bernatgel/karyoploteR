@@ -103,6 +103,7 @@
 #' @importFrom biovizBase getBioColor
 #' @importFrom biovizBase getIdeogram
 #' @import methods
+#' @importFrom stats setNames
 #' 
 #' @export plotKaryotype
 #' 
@@ -177,7 +178,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
       kp$genome.name <- "custom"
     }
     kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
-    kp$chromosome.lengths <- setNames(end(gr.genome), seqnames(gr.genome))
+    kp$chromosome.lengths <- stats::setNames(end(gr.genome), seqnames(gr.genome))
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
     kp$plot.type <- plot.type
