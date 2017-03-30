@@ -282,10 +282,10 @@ genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL,
   pp <- plot.params
   
   chr.names <- GenomeInfoDb::seqlevels(genome)
-  chrs <- setNames(seq_along(chr.names), chr.names)
-  chr.starts <- setNames(start(genome), chr.names)
-  chr.lens <- setNames(as.numeric(end(genome) - start(genome)), chr.names)
-  previous.chrs <- setNames(Reduce(sum, c(0, chr.lens[-length(chr.lens)]), accumulate = TRUE), chr.names) #For each chromosome, the sum of the lengths of the previous chromosomes
+  chrs <- stats::setNames(seq_along(chr.names), chr.names)
+  chr.starts <- stats::setNames(start(genome), chr.names)
+  chr.lens <- stats::setNames(as.numeric(end(genome) - start(genome)), chr.names)
+  previous.chrs <- stats::setNames(Reduce(sum, c(0, chr.lens[-length(chr.lens)]), accumulate = TRUE), chr.names) #For each chromosome, the sum of the lengths of the previous chromosomes
   all.chr.len <- sum(chr.lens)
   
   genome.width <- 1 - pp$leftmargin - pp$rightmargin - pp$ideogramlateralmargin*length(genome)  #The space allowed for the genome plot

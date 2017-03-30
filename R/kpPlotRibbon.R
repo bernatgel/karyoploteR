@@ -12,9 +12,11 @@
 #' the the actual individual bars. \code{kpPlotRibbon} has three additional parameters
 #' controlling the smoothing of the lines and their colors.
 #' 
-#' @usage 
+#' @usage kpPlotRibbon(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NULL, ...)
 #'  
 #' @inheritParams kpRect 
+#' @param col  (color) The background color to plot. If NULL, it will be a lighter version of 'border' or 'black' if border is null. (Defaults to "gray80")
+#' @param border (color) The color to use to plot the borders of the bars. If NULL, it will be a darker version of 'col'. If NA, no border will be plotted. (Defaults to NULL)
 # @param smooth A boolean indicating if the ribbon should be smoothed (with a spline approximation) before plotting (defaults to FALSE)
 #'     
 #' @return
