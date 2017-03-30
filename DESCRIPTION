@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Karyotype plots with arbitrary data
-Version: 0.99.10
+Version: 0.99.11
 Date: 2017-03-17
 Author: Bernat Gel <bgel@imppc.org>
 Maintainer: Bernat Gel <bgel@imppc.org>
