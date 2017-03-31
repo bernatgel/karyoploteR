@@ -1,10 +1,10 @@
 Package: karyoploteR
 Type: Package
-Title: Karyotype plots with arbitrary data
-Version: 0.99.13
+Title: Plot customizable linear genomes displaying arbitrary data
+Version: 0.99.14
 Date: 2017-03-17
-Author: Bernat Gel <bgel@imppc.org>
-Maintainer: Bernat Gel <bgel@imppc.org>
+Author: Bernat Gel <bgel@igtp.cat>
+Maintainer: Bernat Gel <bgel@igtp.cat>
 Description: karyoploteR creates karyotype plots of arbitrary genomes and offers
     a complete set of functions to plot arbitrary data on them. It mimicks many
     R base graphics functions coupling them with a coordinate change function 
