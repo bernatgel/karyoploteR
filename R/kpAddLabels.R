@@ -33,12 +33,12 @@
 #' #data panel 1
 #' kpDataBackground(kp, r0=0, r1=0.5, col="#FFDDDD")
 #' kpDataBackground(kp, r0=0.5, r1=1, col="#DDFFDD")
-#' kpAddLabels(karyoplot, "Everything", label.margin = 0.1, srt=90, pos=3, cex=0.8)
-#' kpAddLabels(karyoplot, "Red", r0=0, r1=0.5, cex=0.6)
-#' kpAddLabels(karyoplot, "Green", r0=0.5, r1=1, cex=0.6)
+#' kpAddLabels(kp, "Everything", label.margin = 0.1, srt=90, pos=3, cex=0.8)
+#' kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6)
+#' kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6)
 #' #data panel 2
 #' kpDataBackground(kp, col="#DDDDFF", data.panel = 2)
-#' kpAddLabels(karyoplot, "BLUE", data.panel=2)
+#' kpAddLabels(kp, "BLUE", data.panel=2)
 #'  
 #' @export kpAddLabels
 #' 
