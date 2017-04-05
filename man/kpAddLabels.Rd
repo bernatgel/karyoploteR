@@ -4,7 +4,7 @@
 \alias{kpAddLabels}
 \title{kpAddLabels}
 \usage{
-kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0 ...)
+kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
@@ -19,9 +19,9 @@ kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1
 
 \item{data.panel}{(numeric) The identifier of the data panel where the labels are to be added. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
-\item{pos}{(numeric) The standard graphical parameter. See \code{\link{graphics::text}}. (Defaults to 2)}
+\item{pos}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 2)}
 
-\item{offset}{(numeric) The standard graphical parameter. See \code{\link{graphics::text}}. (Defaults to 0)}
+\item{offset}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 0)}
 
 \item{...}{any additional parameter to be passed to the text plotting. All R base graphics params are passed along.}
 }

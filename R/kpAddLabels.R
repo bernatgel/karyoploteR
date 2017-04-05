@@ -8,7 +8,7 @@
 #' 
 #' Given a KaryoPlot object, plot labels on the side of the data panels to help identify the different types of data plotted
 #' 
-#' @usage kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0 ...)
+#' @usage kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param labels   (character) the text on the labels
@@ -16,8 +16,8 @@
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param label.margin    (numeric) the additional the margin between the labels the first base of the chromosome. In plot coordinates. Usual value might be 0.05. Can be negative. (defaults to 0.01)
 #' @param data.panel    (numeric) The identifier of the data panel where the labels are to be added. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
-#' @param pos   (numeric) The standard graphical parameter. See \code{\link{graphics::text}}. (Defaults to 2)
-#' @param offset  (numeric) The standard graphical parameter. See \code{\link{graphics::text}}. (Defaults to 0)
+#' @param pos   (numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 2)
+#' @param offset  (numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 0)
 #' @param ...  any additional parameter to be passed to the text plotting. All R base graphics params are passed along.
 #' 
 #' @return
@@ -43,7 +43,7 @@
 #' @export kpAddLabels
 #' 
 
-kpAddLabels <- function(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, adj=c(0,0.5), offset=0, ...) {
+kpAddLabels <- function(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...) {
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
