@@ -4,7 +4,12 @@
 \alias{kpPlotMarkers}
 \title{kpPlotMarkers}
 \usage{
-kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
+                     adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.01,
+                     marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
+                     ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
+                     line.color="black", label.color="black",
+                     pos=NULL, srt=NULL, offset=NULL, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -15,9 +20,21 @@ kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=
 
 \item{x}{(a numeric vector) A numeric vector with the positions (in base pairs) of the data points in the chromosomes. If \code{data} is not NULL, \code{x} is ignored. (defaults to NULL)}
 
-\item{y}{(a numeric vector) A numeric vector with the values of the data points. If \code{y} is not NULL, it is used instead of any data column in \code{data}. (defaults to NULL)}
+\item{y}{(a numeric vector) A numeric vector with the values of the data points. If \code{y} is not NULL, it is used instead of any data column in \code{data}. (defaults to 0.75)}
 
 \item{labels}{(a character vector) The labels to be plotted. (defaults to NULL)}
+
+\item{adjust.label.position}{(logical) whether to adjust the label positions to avoid label overlapping (defaults to TRUE)}
+
+\item{label.margin}{(numeric) The vertical margin to leave between the ens of the marker line and the marker label. In plot coordinates. (defaults to 0.001)}
+
+\item{max.iter}{(numeric) The maximum number of iterations in the iterative algorithm to adjust the label positioning. (defaults to 150)}
+
+\item{label.dist}{(numeric) The minimum distance between labels to consider them as non-overlapping (defaults to 0.001)}
+
+\item{marker.parts}{(numeruc vector of three elements) The portion of the distance between 0 and y to be filled with a: vertical, diagonal of vertical part of the marker line. (defaults to c(0.8,0.1,0.1), long vertical stem, small diagonal and small vertical on top)}
+
+\item{text.orientation}{("vertical" or "horizontal) How should the text be plotted. Forced values of srt and pos take precedence. (defaults to "vertical")}
 
 \item{ymin}{(numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL)}
 
@@ -29,58 +46,57 @@ kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
+\item{line.color}{(color) The color of marker line. (defaults to "black")}
+
+\item{label.color}{(color) The color of the label (defaults to "black")}
+
+\item{pos}{(1,2,3,4) The standard pos graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)}
+
+\item{srt}{(numeric) The standard srt graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)}
+
+\item{offset}{(numeric) The standard offset graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)}
+
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
 \value{
-Returns the original karyoplot object, unchanged.
+Returns the original karyoplot object with the data computed (adjusted label positioning) stored at \code{karyoplot$latest.plot}
 }
 \description{
-Plots the text given in \code{labels} at the positions defined by chr, x and y along the genome.
+Plots markers on the genome as a line with a label on top.
 }
 \details{
-This is one of the functions from karyoploteR implementing the adaptation to the genome context 
-of basic plot functions
-from R base graphics. Given a set of positions on the genome (chromosome and base), a 
-value (y) for each of them and a label, it plots the label at the position specified by the 
-data point. Data can be provided via a \code{GRanges} object (\code{data}), independent
-parameters for chr, x and y or a combination of both. A number of parameters can be used 
-to define exactly where 
-and how the text is drawn. In addition, via the ellipsis operator (\code{...}), \code{kpPlotMarkers}
-accepts any parameter valid for \code{text} (e.g. \code{cex}, \code{col}, ...)
+This function plots markers on the genome. It implements an interative
+algorithm to avoid ovelapping between the labels of different markers. Since
+labels might be plotted in a different position than the original points, 
+a line with three parts (a vertical, a diagonal and another vertical) is 
+plotted to link the label with the original position. It is possible to plot
+labels in horizontal or vertical text and to specify different colors for the
+marker line and label.
+}
+\note{
+The iterative algorithm is not guaranteed to suceed and might end up
+with overlapping labels if labels are too dense or if too few iterations 
+allowed. With many markers, the algorithm might be slow.
 }
 \examples{
  
-set.seed(1000)
-data.points <- sort(createRandomRegions(nregions=500, mask=NA))
-mcols(data.points) <- data.frame(y=runif(500, min=0, max=1))
 
-kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
-  kpDataBackground(kp, data.panel=1)
-  kpDataBackground(kp, data.panel=2)
+data <- toGRanges(data.frame(c("chr1", "chr1", "chr1"), c(20e6, 21e6, 22e6), c(20.01e6, 21.01e6, 22.01e6), labels=c("GeneA", "GeneB", "GeneC")))
 
-  kpLines(kp, data=data.points, col="red")
+kp <- plotKaryotype("hg19", plot.type=1, chromosomes = "chr1", main="Default markers")
+kpPlotMarkers(kp, data)
 
-  #Three ways of specifying the exact same data.points
-  kpPoints(kp, data=data.points)
-  kpPoints(kp, data=data.points, y=data.points$y, pch=16, col="#CCCCFF", cex=0.6)
-  kpPoints(kp, chr=as.character(seqnames(data.points)), 
-           x=(start(data.points)+end(data.points))/2,
-           y=data.points$y, pch=".", col="black", cex=1)
+kp <- plotKaryotype("hg19", plot.type=2, chromosomes = "chr1", main="Markers Horizontal")
+kpPlotMarkers(kp, data, text.orientation = "horizontal")
+kpPlotMarkers(kp, data, text.orientation = "horizontal", label.dist = 0.02, data.panel=2)
 
-  #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
-  kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
-  kpPlotMarkers(kp, data=data.points, labels=as.character(1:500), r0=0, r1=0.3, data.panel=2, pch=".", cex=3)
-
-  kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
-  kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y), ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
-  #It is also possible to "flip" the data by giving an r0 > r1
-  kpPoints(kp, data=data.points, col="red", y=(data.points$y), r0=1, r1=0.7, data.panel=2, pch=".", cex=2)  
+kp <- plotKaryotype("hg19", plot.type=2, chromosomes = "chr1", main="Different Marker parts")
+kpPlotMarkers(kp, data, text.orientation = "horizontal", marker.parts=c(0, 1, 0), line.color="red")
+kpPlotMarkers(kp, data, text.orientation = "horizontal", marker.parts=c(0.1, 0.2, 0.4), label.dist = 0.02, data.panel=2, label.color="blue")
 
 
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}
-
-\code{\link{kpPlotRegions}}
+\code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}
 }
