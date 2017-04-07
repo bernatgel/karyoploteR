@@ -19,7 +19,7 @@
 #' allowed. With many markers, the algorithm might be slow.
 #'
 #' @usage kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
-#'                      adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.01,
+#'                      adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
 #'                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
 #'                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
 #'                      line.color="black", label.color="black",
@@ -89,13 +89,14 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
-  
-  if("labels" %in% names(mcols(data))) {
-    if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,"labels"], "factor") | is(mcols(data)[,"labels"], "character")))) {
-      labels <- as.character(mcols(data)[,1])
-    }
-    if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,1], "factor") | is(mcols(data)[,1], "character")))) {
-      labels <- as.character(mcols(data)[,1])
+  if(!is.null(data)) {
+    if("labels" %in% names(mcols(data))) {
+      if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,"labels"], "factor") | is(mcols(data)[,"labels"], "character")))) {
+        labels <- as.character(mcols(data)[,1])
+      }
+      if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,1], "factor") | is(mcols(data)[,1], "character")))) {
+        labels <- as.character(mcols(data)[,1])
+      }
     }
   }
   if(is.null(labels)) {
@@ -140,7 +141,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
         if(text.orientation == "horizontal") {
           sw <- strwidth(chr.labels, units = "user") + label.dist
         } else {
-          sw <- strwidth(rep("aa", length(chr.labels)), units = "user") + label.dist
+          sw <- strwidth(rep("M", length(chr.labels)), units = "user") + label.dist
         }
         delta <- strwidth("a", units = "user")/4
         
@@ -243,10 +244,10 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
     if(marker.parts[1]>0) {
       graphics::segments(x0 = xplot, x1=xplot, y0 = y0, y1=y0+my[1]*(yplot-y0), col=line.color, ... )
     }
-    if(m2>0) {
+    if(marker.parts[2]>0) {
       graphics::segments(x0 = xplot, x1=xlabels, y0 = y0+my[1]*(yplot-y0), y1=y0+(my[1]+my[2])*(yplot-y0), col=line.color, ...)
     }
-    if(m3>0) {
+    if(marker.parts[3]>0) {
       graphics::segments(x0 = xlabels, x1=xlabels, y0 = yplot - my[3]*(yplot-y0), y1=yplot, col=line.color, ...)
     }
     

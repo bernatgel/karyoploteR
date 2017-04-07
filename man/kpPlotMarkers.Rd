@@ -5,7 +5,7 @@
 \title{kpPlotMarkers}
 \usage{
 kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
-                     adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.01,
+                     adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
                      line.color="black", label.color="black",
