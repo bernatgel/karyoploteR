@@ -2,3 +2,7 @@ language: r
 r: bioc-devel
 notifications:
   slack: karyoploter:nxeW0OFvmUCWYp5V3eqdBnSi
+r_github_packages:
+  - jimhester/covr
+after_success:
+  - Rscript -e 'covr::codecov()'
