@@ -1,2 +1,4 @@
 language: r
 r: bioc-devel
+notifications:
+  slack: karyoploter:nxeW0OFvmUCWYp5V3eqdBnSi
