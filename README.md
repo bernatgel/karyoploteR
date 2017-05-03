@@ -33,7 +33,7 @@ Bioconductor landing page at [http://bioconductor.org/packages/karyoploteR](http
 
 ## Tutorial and Examples
 
-In addition to the documentation above, a short tutorial and some examples can be found at [https://bernatgel.github.io/karyoploter_examples/](https://bernatgel.github.io/karyoploter_examples/)
+In addition to the documentation above, a short tutorial and some examples can be found at [https://bernatgel.github.io/karyoploter_tutorial/](https://bernatgel.github.io/karyoploter_tutorial/)
 
 
 
