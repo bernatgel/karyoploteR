@@ -1,6 +1,9 @@
+[![Build Status](https://travis-ci.org/bernatgel/karyoploteR.svg?branch=master)](https://travis-ci.org/bernatgel/karyoploteR)
+
 # karyoploteR - An R/Biocondutor package to plot arbitrary data along the genome
 
-[![Build Status](https://travis-ci.org/bernatgel/karyoploteR.svg?branch=master)](https://travis-ci.org/bernatgel/karyoploteR)
+
+![karyoploteR Example](https://raw.githubusercontent.com/bernatgel/karyoploter_examples/master/Examples/Examples/MultipleDataTypes/figure/Figure-1.png "Example of plot created with karyoploteR")
 
 ## Description
 
@@ -14,7 +17,7 @@ level functions to plot a heatmap, the regions in a GenomicRanges object
 or the cumulative coverage of such regions.
 
 Data positioning and track configuration has been inspired by Circos and does
-not explicitely understands the concept of track. Thus, it is possible to freely specify 
+not explicitly understands the concept of track. Thus, it is possible to freely specify 
 where to plot the data and to create plots with multiple independent tracks or
 overlapping representations.
 
@@ -28,9 +31,9 @@ or base numbers as well as creating completely new plotting functions.
 Documentation ([vignette](http://bioconductor.org/packages/devel/bioc/vignettes/karyoploteR/inst/doc/karyoploteR.pdf) and [user manual](http://bioconductor.org/packages/devel/bioc/manuals/karyoploteR/man/karyoploteR.pdf)) is available at the karyoploteR's 
 Bioconductor landing page at [http://bioconductor.org/packages/karyoploteR](http://bioconductor.org/packages/karyoploteR)
 
-## Examples
+## Tutorial and Examples
 
-Some usage examples can be found at [https://github.com/bernatgel/karyoploter_examples](https://github.com/bernatgel/karyoploter_examples)
+In addition to the documentation above, a short tutorial and some examples can be found at [https://bernatgel.github.io/karyoploter_examples/](https://bernatgel.github.io/karyoploter_examples/)
 
-![karyoploteR Example](https://raw.githubusercontent.com/bernatgel/karyoploter_examples/master/Examples/CompleteExamples/MultipleDataTypes/figure/Figure-1.png "Example of plot created with karyoploteR")
+
 
