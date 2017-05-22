@@ -87,7 +87,7 @@ kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, 
   
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
-  graphics::points(x=xplot, y=yplot, pch=pch, ...)   
+  graphics::points(x=xplot, y=yplot, pch=pch, cex=cex, ...)   
   
   invisible(karyoplot)
 }
