@@ -7,6 +7,10 @@
 getVariantsColors(ref, alt, color.table=NULL, color.schema=c("cell21breast"))
 }
 \arguments{
+\item{ref}{(character vector) The reference nucleotides of the variants. It has to have the same length as \code{alt}.}
+
+\item{alt}{(character vector) The alternative nucleotides of the variants. It has to have the same length as \code{ref}}
+
 \item{color.table}{(named character vector) if present, its used to assign colors to the nucleotide substitutions.}
 
 \item{color.schema}{(character) The name of the color schema to use: \code{cell21breast} (the color schema used in "Mutational Processes Molding the Genomes of 21 Breast Cancers" by S. Nik-Zainal, Cell, 2012). (defaults to \code{cell21breast})}

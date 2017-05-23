@@ -12,10 +12,11 @@
 #' between somatic mutations in order to identify regions with an accumulation 
 #' of close mutations.
 #' 
-#' @usage kpPlotRainfall(karyoplot, data=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpPlotRainfall(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the features to be plotted.
+#' @param col (a color vector) The colors to use to draw the points. If the length of the vector is lower than the length of data, it will be recycled. If NULL, points will be plotted in black. (defaults to NULL)
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)

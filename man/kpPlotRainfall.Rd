@@ -4,12 +4,14 @@
 \alias{kpPlotRainfall}
 \title{kpPlotRainfall}
 \usage{
-kpPlotRainfall(karyoplot, data=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...)
+kpPlotRainfall(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
 
 \item{data}{(a \code{GRanges}) A GRanges object with the features to be plotted.}
+
+\item{col}{(a color vector) The colors to use to draw the points. If the length of the vector is lower than the length of data, it will be recycled. If NULL, points will be plotted in black. (defaults to NULL)}
 
 \item{ymin}{(numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)}
 

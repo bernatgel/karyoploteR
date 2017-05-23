@@ -75,6 +75,7 @@
 #'  
 #' @export kpPlotMarkers
 #' @importFrom digest digest
+#' @importFrom graphics strwidth
 
 
 kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
