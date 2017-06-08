@@ -40,7 +40,7 @@ kpAddMainTitle <- function(karyoplot, main=NULL, ...) {
     x <- (bb$x0+bb$x1)/2
     y <- (bb$y0+bb$y1)/2
     
-    graphics::text(x=x, y=y, labels=, main, cex=0.8, ...)
+    graphics::text(x=x, y=y, labels=main, ...)
     
   }
   

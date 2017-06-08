@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.1.2
+Version: 1.1.4
 Date: 2017-05-03
 Author: Bernat Gel <bgel@igtp.cat>
 Maintainer: Bernat Gel <bgel@igtp.cat>
@@ -22,12 +22,14 @@ Imports:
     GenomicRanges,
     Rsamtools,
     stats,
+    graphics,
     memoise,
     rtracklayer,
     GenomeInfoDb,
     S4Vectors,
     biovizBase,
-    digest
+    digest,
+    bezier
 Suggests:
     BiocStyle,
     knitr,
