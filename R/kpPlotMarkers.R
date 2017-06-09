@@ -75,6 +75,7 @@
 #'  
 #' @export kpPlotMarkers
 #' @importFrom digest digest
+#' @importFrom graphics strwidth
 
 
 kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
@@ -92,7 +93,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   if(!is.null(data)) {
     if("labels" %in% names(mcols(data))) {
       if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,"labels"], "factor") | is(mcols(data)[,"labels"], "character")))) {
-        labels <- as.character(mcols(data)[,1])
+        labels <- as.character(mcols(data)[,"labels"])
       }
       if(is.null(labels) & (!is.null(data) & (is(mcols(data)[,1], "factor") | is(mcols(data)[,1], "character")))) {
         labels <- as.character(mcols(data)[,1])

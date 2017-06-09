@@ -89,7 +89,7 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
     if(is.null(border) & !is.null(col) & !is.na(col)) {
       border=darker(col, amount = 100)
     }
-    if(is.null(col) & !is.null(border) & !is.na(col)) {
+    if(is.null(col) & !is.null(border) & !is.na(border)) {
       col=lighter(border)
     }
     if(is.na(col) & is.null(border)) {

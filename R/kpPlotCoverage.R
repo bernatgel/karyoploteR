@@ -13,14 +13,14 @@
 #'  functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
 #'  independent numeric vectors and the function only takes in the expected object types.
 #'
-#' @usage kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax=NULL, ...)
+#' @usage kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object from wich the coverage will be computed or a \code{SimpleRleList} result of computing the coverage.
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param col    (color) The background color of the regions. (defaults to blue)
+#' @param col    (color) The background color of the regions. (defaults to "#0e87eb")
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum coverage is used. (defaults to NULL)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
@@ -68,7 +68,7 @@
 #'@export kpPlotCoverage
 
 
-kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax=NULL, ...) {
+kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, ...) {
   #Check parameters
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")

@@ -4,7 +4,7 @@
 \alias{kpPlotCoverage}
 \title{kpCoverage}
 \usage{
-kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax=NULL, ...)
+kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -17,7 +17,7 @@ kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="blue", ymax
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
-\item{col}{(color) The background color of the regions. (defaults to blue)}
+\item{col}{(color) The background color of the regions. (defaults to "#0e87eb")}
 
 \item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum coverage is used. (defaults to NULL)}
 
