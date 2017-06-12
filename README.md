@@ -35,5 +35,19 @@ Bioconductor landing page at [http://bioconductor.org/packages/karyoploteR](http
 
 In addition to the documentation above, a short tutorial and some examples can be found at [https://bernatgel.github.io/karyoploter_tutorial/](https://bernatgel.github.io/karyoploter_tutorial/)
 
+## <a name="Citing"></a>Citing karyoploteR
+
+karyoploteR has been developed by **Bernat Gel** [<i class="fa fa-envelope" aria-hidden="true"></i>](mailto:bgel@igtp.cat)
+[<i class="fa fa-twitter" aria-hidden="true"></i>](https://twitter.com/bernatgel) 
+[<i class="fa fa-github" aria-hidden="true"></i>](https://github.com/bernatgel)
+  and   **Eduard Serra** [<i class="fa fa-envelope" aria-hidden="true"></i>](mailto:eserra@igtp.cat) at [IGTP](http://www.germanstrias.org/)
+Hereditary Cancer Group.
+
+If you use karyoploteR in your research, please cite the [Bioinformatics paper](https://academic.oup.com/bioinformatics/article/3857734/karyoploteR-an-R-Bioconductor-package-to-plot) describing it:
+
+Bernat Gel & Eduard Serra. (2017). *karyoploteR: an R/Bioconductor package to plot customizable genomes displaying arbitrary data*. Bioinformatics, 31–33. [doi:10.1093/bioinformatics/btx346](https://doi.org/10.1093/bioinformatics/btx346)
+
+
+
 
 
