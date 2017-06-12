@@ -37,10 +37,7 @@ In addition to the documentation above, a short tutorial and some examples can b
 
 ## <a name="Citing"></a>Citing karyoploteR
 
-karyoploteR has been developed by **Bernat Gel** [<i class="fa fa-envelope" aria-hidden="true"></i>](mailto:bgel@igtp.cat)
-[<i class="fa fa-twitter" aria-hidden="true"></i>](https://twitter.com/bernatgel) 
-[<i class="fa fa-github" aria-hidden="true"></i>](https://github.com/bernatgel)
-  and   **Eduard Serra** [<i class="fa fa-envelope" aria-hidden="true"></i>](mailto:eserra@igtp.cat) at [IGTP](http://www.germanstrias.org/)
+karyoploteR has been developed by [Bernat Gel](https://twitter.com/bernatgel) and [Eduard Serra](mailto:eserra@igtp.cat) at [IGTP](http://www.germanstrias.org/)
 Hereditary Cancer Group.
 
 If you use karyoploteR in your research, please cite the [Bioinformatics paper](https://academic.oup.com/bioinformatics/article/3857734/karyoploteR-an-R-Bioconductor-package-to-plot) describing it:
