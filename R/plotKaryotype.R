@@ -162,7 +162,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
         cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome), pruning.mode="coarse")
       }
     } else {
-      message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
+      #message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
     }
   }
 
