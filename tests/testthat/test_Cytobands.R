@@ -30,8 +30,7 @@ test_that("getCytobands returns the expected cytobands", {
   expect_silent(getCytobands(genome=NULL))
   
   #Check with invalid genomes
-  #FIXIT
-  #Should not fail with error, but message and return empty object:  expect_message(getCytobands(genome="INVALID_GENOME"))
+  #FIXIT: The error should be trapped by tryCatch and not propagate! expect_message(getCytobands(genome="INVALID_GENOME"))
   
   
 })
@@ -47,7 +46,7 @@ test_that("kpAddCytobands does not error. Not checking correct plotting.", {
     
   #with only some chromosomes
   kp <- plotKaryotype(chromosomes = "chr2")
-  #FIXIT: expect_silent(kpAddCytobandLabels(kp))
+  expect_silent(kpAddCytobandLabels(kp))
   expect_silent(kpAddCytobandLabels(kp, force.all = TRUE, cex = 1, srt=90))
   
   
@@ -55,6 +54,11 @@ test_that("kpAddCytobands does not error. Not checking correct plotting.", {
   custom.genome <- toGRanges(data.frame(chr="A", start=0, end=1000))
   kp <- plotKaryotype(genome=custom.genome)
   expect_silent(kpAddCytobandLabels(kp))
+  
+  #Bug in kpAddCytobands: fails if plot.type  %in% 3,4,5
+  kp <- plotKaryotype(plot.type = 4)
+  expect_silent(kpAddCytobandLabels(kp))
+  
   
   
 })
