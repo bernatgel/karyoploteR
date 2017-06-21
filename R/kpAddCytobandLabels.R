@@ -48,7 +48,6 @@ kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE,  ...) {
   
   ccf <- karyoplot$coord.change.function
   pp <- karyoplot$plot.params
-  mids <- karyoplot$ideogram.mid
       
   if(!is.null(karyoplot$cytobands)) {
     if(length(karyoplot$cytobands)>0) { #If there are cytobands to plot, plot them
@@ -56,7 +55,7 @@ kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE,  ...) {
       labels <- karyoplot$cytobands$name
       bands.chr <- as.character(seqnames(karyoplot$cytobands))
       
-      ylabel <- mids(bands.chr)
+      ylabel <- karyoplot$ideogram.mid(bands.chr)
       
       bandxleft <- ccf(x=start(karyoplot$cytobands), chr=bands.chr)$x
       bandxright <- ccf(x=end(karyoplot$cytobands), chr=bands.chr)$x
