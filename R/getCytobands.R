@@ -82,8 +82,7 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
     # toGRanges(cytobands)    
     },
     error = function(e) {
-      message("Error when retrieving from UCSC the Cytobands for ", genome,
-              ". Returning no cytobands.", e)
+      message("Message: Failed to retrieve cytobands for ", genome, " from UCSC. Returning no cytobands.", e)
       return(GRanges())
     }
   )

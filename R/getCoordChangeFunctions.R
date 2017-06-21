@@ -264,7 +264,8 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
 getIdeogramMidY_3HorizAllChromosomesInOneLine <- function(chr, genome, plot.params) {
   pp <- plot.params
   chr.height <- getChrHeight_3HorizAllChromosomesInOneLine(pp)
-  return(pp$bottommargin + pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2)
+  ypos <- pp$bottommargin + pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2
+  return(setNames(rep(ypos, length(chr)), chr))
 }
 
 getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
