@@ -52,7 +52,7 @@
 #' 
 
 
-prepareParameters2 <- function(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...) {
+prepareParameters2 <- function(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
     
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
