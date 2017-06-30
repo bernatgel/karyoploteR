@@ -56,27 +56,37 @@ prepareParameters2 <- function(function.name, karyoplot, data, chr, x, y, ymax, 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
     
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
-  if(is.null(r0) | is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1) | is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(is.null(ymin) | is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(ymax) | is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  if(is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  
   
   if(!is.null(data)) {
-    chr <- as.character(seqnames(data))
-    x <- start(data) + (end(data) - start(data))/2 #Get the midpoints of the regions
-    
-    if(is.null(y)) {
-      if("y" %in% names(mcols(data))) {
-        y <- data$y
-      } else {
-        if("value" %in% names(mcols(data))) {
-          y <- data$value
+    if(!is.na(data)) {
+      chr <- as.character(seqnames(data))
+      x <- start(data) + (end(data) - start(data))/2 #Get the midpoints of the regions
+      
+      if(is.null(y)) {
+        if("y" %in% names(mcols(data))) {
+          y <- data$y
         } else {
-          stop("No y value specified. Parameter y or a column named 'y' or 'value' in data must be provided")  
+          if("value" %in% names(mcols(data))) {
+            y <- data$value
+          } else {
+            stop("No y value specified. Parameter y or a column named 'y' or 'value' in data must be provided")  
+          }
         }
-      }
-    } 
+      } 
+    }
   } 
   
   if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")

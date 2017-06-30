@@ -59,29 +59,39 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
-  if(is.null(r0) | is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1) | is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(is.null(ymin) | is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(ymax) | is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(!is.null(data) & !is.na(data)) {
-    chr <- as.character(seqnames(data))
-    x0 <- start(data)
-    x1 <- end(data)
-    
-    if(is.null(y0)) {
-      if("y0" %in% names(mcols(data))) {
-        y0 <- data$y0
-      } else {
-        stop("No y0 value specified. Parameter y0 or a column named 'y0' in data must be provided")
+  if(is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  
+  
+  if(!is.null(data)) {
+    if(!is.na(data)) {
+      chr <- as.character(seqnames(data))
+      x0 <- start(data)
+      x1 <- end(data)
+      
+      if(is.null(y0)) {
+        if("y0" %in% names(mcols(data))) {
+          y0 <- data$y0
+        } else {
+          stop("No y0 value specified. Parameter y0 or a column named 'y0' in data must be provided")
+        }
       }
-    }
-    if(is.null(y1)) {
-      if("y1" %in% names(mcols(data))) {
-        y1 <- data$y1
-      } else {
-        stop("No y1 value specified. Parameter y1 or a column named 'y1' in data must be provided")
+      if(is.null(y1)) {
+        if("y1" %in% names(mcols(data))) {
+          y1 <- data$y1
+        } else {
+          stop("No y1 value specified. Parameter y1 or a column named 'y1' in data must be provided")
+        }
       }
     }
   } 
