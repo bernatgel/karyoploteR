@@ -4,7 +4,7 @@
 \alias{prepareParameters4}
 \title{prepareParameters4}
 \usage{
-prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...)
+prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...)
 }
 \arguments{
 \item{function.name}{(character) The name of the function calling \code{prepareParameters4}. Only user for error reporting.}
@@ -33,6 +33,8 @@ prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ym
 
 \item{data.panel}{The data panel to use}
 
+\item{filter.data}{A boolean indicating if data should be filtered so only data in visible chromosomes is kept. (defaults to TRUE, filter data)}
+
 \item{...}{Any additional parameter}
 }
 \value{
@@ -50,7 +52,9 @@ simple code. It extracts the
 positions from \code{data} if available and applies the \code{r0} and 
 \code{r1} scaling. It returns the ready to plot values in a list with
 only \code{chr}, \code{x0}, \code{x1}, \code{y0} and \code{y1}. 
-All parameters are interpreted and used as explained in \code{kpRect}.
+All parameters are interpreted and used as explained in \code{\link{kpRect}}.
+It also filters out any data points corresponding to chromosomes not present
+in the current karyoplot.
 }
 \note{
 This function is only useful when creating custom plotting functions. 

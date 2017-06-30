@@ -11,14 +11,16 @@
 #' positions from \code{data} if available and applies the \code{r0} and 
 #' \code{r1} scaling. It returns the ready to plot values in a list with
 #' only \code{chr}, \code{x0}, \code{x1}, \code{y0} and \code{y1}. 
-#' All parameters are interpreted and used as explained in \code{kpRect}. 
+#' All parameters are interpreted and used as explained in \code{\link{kpRect}}.
+#' It also filters out any data points corresponding to chromosomes not present
+#' in the current karyoplot.
 #'  
 #' @note This function is only useful when creating custom plotting functions. 
 #' It is not intended to the general user.
 #' 
 #' @note For detailed documentation on the parameters, see \code{\link{kpRect}}
 #'  
-#' @usage prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...)
+#' @usage prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...)
 #'  
 #' @param function.name (character) The name of the function calling \code{prepareParameters4}. Only user for error reporting.
 #' @param karyoplot (KaryoPlot) A karyoplot object.
@@ -33,6 +35,7 @@
 #' @param r0 The start of the range to use for plotting
 #' @param r1 The end of the range to use for plotting
 #' @param data.panel The data panel to use
+#' @param filter.data A boolean indicating if data should be filtered so only data in visible chromosomes is kept. (defaults to TRUE, filter data)
 #' @param ... Any additional parameter
 #'
 #' @return 
@@ -52,7 +55,7 @@
 #' 
 
 
-prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, ...) {
+prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
   #if null, get the r0 and r1
@@ -99,6 +102,16 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
   #scale y to fit in the [r0, r1] range
   y0 <- (y0*(r1-r0))+r0
   y1 <- (y1*(r1-r0))+r0
+  
+  if(filter.data) {
+    in.visible.chrs <- chr %in% karyoplot$chromosomes
+    chr <- chr[in.visible.chrs]
+    x0 <- x0[in.visible.chrs]
+    x1 <- x1[in.visible.chrs]
+    y0 <- y0[in.visible.chrs]
+    y1 <- y1[in.visible.chrs]
+  }
+  
   
   return(list(chr=chr, x0=x0, x1=x1, y0=y0, y1=y1))
   
