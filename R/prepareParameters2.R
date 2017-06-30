@@ -81,6 +81,9 @@ prepareParameters2 <- function(function.name, karyoplot, data, chr, x, y, ymax, 
   
   if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
   
+  #transform chr to a character
+  chr <- as.character(chr)
+  
   #Recicle any values as needed
   chr <- recycle.first(chr, x, y)
   x <- recycle.first(x, chr, y)

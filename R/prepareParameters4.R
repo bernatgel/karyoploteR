@@ -62,6 +62,9 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
+  if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
   if(!is.null(data)) {
     chr <- as.character(seqnames(data))
     x0 <- start(data)
@@ -85,8 +88,8 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
     
   if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
   
-  if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  #transform chr to a character
+  chr <- as.character(chr)
   
   #Recicle any values as needed
   chr <- recycle.first(chr, x0, x1, y0, y1)
