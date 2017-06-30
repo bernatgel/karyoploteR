@@ -58,14 +58,14 @@
 prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
-  #if null, get the r0 and r1
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
+  if(is.null(r0) | is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(r1) | is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  if(is.null(ymin) | is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  if(is.null(ymax) | is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(!is.null(data)) {
+  if(!is.null(data) & !is.na(data)) {
     chr <- as.character(seqnames(data))
     x0 <- start(data)
     x1 <- end(data)
@@ -86,7 +86,11 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
     }
   } 
     
-  if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
+  if(is.null(chr) | is.na(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
+  if(is.null(x0) | is.na(x0)) stop("x0 must be specified, either by the 'x0' parameter or by providing a 'data' object")
+  if(is.null(y0) | is.na(y0)) stop("y0 must be specified, either by the 'y0' parameter or by providing a 'data' object with a column named 'y0'")
+  if(is.null(x1) | is.na(x1)) stop("x1 must be specified, either by the 'x1' parameter or by providing a 'data' object")
+  if(is.null(y1) | is.na(y1)) stop("y1 must be specified, either by the 'y1' parameter or by providing a 'data' object with a column named 'y1'")
   
   #transform chr to a character
   chr <- as.character(chr)
