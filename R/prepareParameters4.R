@@ -104,15 +104,15 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
   } 
     
   if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
-  if(any(is.na(chr))) stop("chr cannot be NA")   
+  #if(any(is.na(chr))) stop("chr cannot be NA")   
   if(is.null(x0)) stop("x0 must be specified, either by the 'x0' parameter or by providing a 'data' object")
-  if(any(is.na(x0))) stop("x0 cannot be NA")   
+  #if(any(is.na(x0))) stop("x0 cannot be NA")   
   if(is.null(y0)) stop("y0 must be specified, either by the 'y0' parameter or by providing a 'data' object with a column named 'y0'")
-  if(any(is.na(y0))) stop("y0 cannot be NA")   
+  #if(any(is.na(y0))) stop("y0 cannot be NA")   
   if(is.null(x1)) stop("x1 must be specified, either by the 'x1' parameter or by providing a 'data' object")
-  if(any(is.na(x1))) stop("x1 cannot be NA")   
+  #if(any(is.na(x1))) stop("x1 cannot be NA")   
   if(is.null(y1)) stop("y1 must be specified, either by the 'y1' parameter or by providing a 'data' object with a column named 'y1'")
-  if(any(is.na(y1))) stop("y1 cannot be NA")   
+  #if(any(is.na(y1))) stop("y1 cannot be NA")   
   
   #transform chr to a character
   chr <- as.character(chr)

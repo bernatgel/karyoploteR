@@ -31,7 +31,7 @@ test_that("prepareParameters handles missing parameters", {
   expect_silent(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=dd$chr, x=dd$start, y=dd$y0, r0=NA, r1=1, ymin=0, ymax=1))
   expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=dd$chr, x=dd$start, y=NA, r0=0, r1=1, ymin=0, ymax=1))
   expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=dd$chr, x=NA, y=dd$y0, r0=0, r1=1, ymin=0, ymax=1))
-  expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=NA, x=dd$start, y=dd$y0, r0=0, r1=1, ymin=0, ymax=1))
+  expect_silent(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=NA, x=dd$start, y=dd$y0, r0=0, r1=1, ymin=0, ymax=1))
   expect_silent(prepareParameters2(function.name = "Test", karyoplot=kp, data=NA, chr=dd$chr, x=dd$start, y=dd$y0, r0=0, r1=1, ymin=0, ymax=1))
   
   expect_silent(prepareParameters2(function.name = "Test", karyoplot=kp, data=NULL, chr=dd$chr, x=dd$start, y=dd$y0, r0=0, r1=1, ymin=0, ymax=NULL))
@@ -62,37 +62,39 @@ test_that("prepareParameters has correct argument precedence", {
     #chr
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr2", "chr3"))
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", "chr1"), r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr1", "chr1"))
-    expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr1"))
+    expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1, filter.data = FALSE)$chr, c("chr1", "chr1", NA))
     #x
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$x, c(1, 150, 5500))
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, x=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$x, c(1,2,3))
-    expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, x=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, x=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$x, c(1,2,NA))
     #y
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$y, c(-1, 0, 1))
     expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, y=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$y, c(1,2,3))
-    expect_error(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, y=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters2(function.name = "Test", karyoplot=kp, data=dd.gr, y=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$y, c(1,2,NA))
     
   #PrepareParameters4
     #chr
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr2", "chr3"))
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", "chr1"), r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr1", "chr1"))
-    expect_error(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1)$chr, c("chr1", "chr1"))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, chr=c("chr1", "chr1", NA), r0=0, r1=1, ymin=0, ymax=1, filter.data = FALSE)$chr, c("chr1", "chr1", NA))
     #x0
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$x0, c(1, 100, 1000))
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x0=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$x0, c(1,2,3))
-    expect_error(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x0=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x0=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$x0, c(1,2,NA))
     #x1
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$x1, c(1, 200, 10000))
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x1=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$x1, c(1,2,3))
-    expect_error(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x1=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, x1=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$x1, c(1,2,NA))
     #y0
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$y0, c(-1, 0, 1))
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y0=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$y0, c(1,2,3))
-    expect_error(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y0=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y0=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$y0, c(1,2,NA))
     #y1
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, r0=0, r1=1, ymin=0, ymax=1)$y1, c(0,1,2))
     expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y1=c(1,2,3), r0=0, r1=1, ymin=0, ymax=1)$y1, c(1,2,3))
-    expect_error(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y1=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1))
+    expect_equal(prepareParameters4(function.name = "Test", karyoplot=kp, data=dd.gr, y1=c(1,2,NA), r0=0, r1=1, ymin=0, ymax=1)$y1, c(1,2,NA))
     
 })
 
