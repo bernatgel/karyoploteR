@@ -11,6 +11,7 @@
 #' positions from \code{data} if available and applies the \code{r0} and 
 #' \code{r1} scaling. It returns the ready to plot values in a list with
 #' only \code{chr}, \code{x0}, \code{x1}, \code{y0} and \code{y1}. 
+#' Individual parameters (\code{chr}, \code{x0}, \code{x1}, \code{y0} and 
 #' All parameters are interpreted and used as explained in \code{\link{kpRect}}.
 #' It also filters out any data points corresponding to chromosomes not present
 #' in the current karyoplot.
@@ -20,7 +21,7 @@
 #' 
 #' @note For detailed documentation on the parameters, see \code{\link{kpRect}}
 #'  
-#' @usage prepareParameters4(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...)
+#' @usage prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...)
 #'  
 #' @param function.name (character) The name of the function calling \code{prepareParameters4}. Only user for error reporting.
 #' @param karyoplot (KaryoPlot) A karyoplot object.
@@ -55,7 +56,7 @@
 #' 
 
 
-prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, y1, ymax, ymin, r0, r1, data.panel=1, filter.data=TRUE, ...) {
+prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
@@ -74,19 +75,25 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
   
   
   if(!is.null(data)) {
-    if(!is.na(data)) {
-      chr <- as.character(seqnames(data))
-      x0 <- start(data)
-      x1 <- end(data)
+    if(all(!is.na(data))) {
+      if(is.null(chr) || all(is.na(chr))) {
+        chr <- as.character(seqnames(data))
+      }
+      if(is.null(x0) || all(is.na(x0))) {
+        x0 <- start(data)
+      }
+      if(is.null(x1) || all(is.na(x1))) {
+        x1 <- end(data)
+      }
       
-      if(is.null(y0)) {
+      if(is.null(y0) || all(is.na(y0))) {
         if("y0" %in% names(mcols(data))) {
           y0 <- data$y0
         } else {
           stop("No y0 value specified. Parameter y0 or a column named 'y0' in data must be provided")
         }
       }
-      if(is.null(y1)) {
+      if(is.null(y1) || all(is.na(y1))) {
         if("y1" %in% names(mcols(data))) {
           y1 <- data$y1
         } else {
@@ -109,13 +116,22 @@ prepareParameters4 <- function(function.name, karyoplot, data, chr, x0, x1, y0, 
   
   #transform chr to a character
   chr <- as.character(chr)
+
+  #Check the classes
+  if(!base::is.character(chr)) stop("chr must be a character vector")   
+  if(!base::is.numeric(x0)) stop("x0 must be a numeric vector")
+  if(!base::is.numeric(x1)) stop("x1 must be a numeric vector")
+  if(!base::is.numeric(y0)) stop("y0 must be a numeric vector")
+  if(!base::is.numeric(y1)) stop("y1 must be a numeric vector")   
   
+    
   #Recicle any values as needed
   chr <- recycle.first(chr, x0, x1, y0, y1)
   x0 <- recycle.first(x0, chr, x1, y0, y1)
   x1 <- recycle.first(x1, chr, x0, y0, y1)
   y0 <- recycle.first(y0, chr, x0, x1, y1)
   y1 <- recycle.first(y1, chr, x0, x1, y0)
+
   
   #Scale it with ymin and ymax
   y0 <- (y0 - ymin)/(ymax - ymin)
