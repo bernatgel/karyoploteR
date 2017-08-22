@@ -153,6 +153,12 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     # else Do not filter the chromosomes. If the genome is completely specified (not a character).
   }
   
+  #Check the genome has no problems (repeated chromosomes, etc...)
+  chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
+  if(any(duplicated(chr.names))) {
+    stop(paste0("There are duplicate chromosome names in the genome. Chromosome names must be unique. Chromosome names are: ", paste0(chr.names, collapse = ", ")))
+  }
+  
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
     if(is.character(genome)) {
