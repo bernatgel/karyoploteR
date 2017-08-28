@@ -14,10 +14,11 @@
 #' and the user never nees to call it. 
 #' 
 ## @usage kpAddCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
-#' @usage kpAddCytobands(karyoplot, color.table=NULL, ...)
+#' @usage kpAddCytobands(karyoplot, color.table=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)
 ## @param add.cytobands.names  (boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)
 ## @param add.base.numbers  (boolean) whether to add the base numbers to the plot. (defaults to FALSE)
 #' @param ...  any additional parameter to be passed to the functions called from kpAddCytobands.
@@ -38,7 +39,7 @@
 
 
 
-kpAddCytobands <- function(karyoplot, color.table=NULL, ...) {
+kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -70,7 +71,17 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, ...) {
     
   #col <- do.call(c, color.table[cyto$gieStain])
   col <- color.table[as.character(cyto$gieStain)]
-    
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      #get the plot coordinates of the cytobands drawing area
+      clip.xleft <- ccf(x=start(kp$plot.region), chr=as.character(seqnames(kp$plot.region)))$x
+      clip.xright <- ccf(x=end(kp$plot.region), chr=as.character(seqnames(kp$plot.region)))$x
+      clip.ybottom <- ybottom + 10 #add a small margin to allow for the width of the lines
+      clip.ytop <- ytop + 10
+      clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
+    }
+  }
   graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
 
   

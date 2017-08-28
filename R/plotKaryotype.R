@@ -217,9 +217,11 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     #If zoom is NULL, set the plot.region to the whole genome. If it's not null, set it to the zoom region
     if(is.null(zoom)) {
       kp$plot.region <- kp$genome
+      kp$zoom <- FALSE
     } else {
       kp$plot.region <- zoom
       names(kp$plot.region) <- as.character(seqnames(kp$plot.region))
+      kp$zoom <- TRUE
     }
     
     
