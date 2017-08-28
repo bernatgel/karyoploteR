@@ -4,7 +4,7 @@
 \alias{kpPlotLinks}
 \title{kpPlotLinks}
 \usage{
-kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, ...)
+kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -31,6 +31,8 @@ kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0
 
 \item{border}{(color) The border color of the links. If NULL and col is specified, it defaults to a darker version of col.}
 
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)}
+
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
 \value{
@@ -47,6 +49,14 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
  and therefore both objects need to have the same length. Specifying a region
  as negative strand, will "flip" it, so the the start of a region can be 
  linked to the end of its pair.
+}
+\note{
+For a link to be plotted BOTH ends must be visible in the karyoplot. In 
+  particular, if a chromosome is not included in the plot (due to not
+  being specified in \code{chromosomes}, for example) any link with an end
+  on it will NOT be plotted. The same is true for zoomed in plots, where only
+  intrachromosomal links will be visible. No warning or message will be
+  generated.
 }
 \examples{
  

@@ -9,7 +9,7 @@ kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL,
                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
                      line.color="black", label.color="black",
-                     pos=NULL, srt=NULL, offset=NULL, ...)
+                     pos=NULL, srt=NULL, offset=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -55,6 +55,8 @@ kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL,
 \item{srt}{(numeric) The standard srt graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)}
 
 \item{offset}{(numeric) The standard offset graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)}
+
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }

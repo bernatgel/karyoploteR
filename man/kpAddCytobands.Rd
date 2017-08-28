@@ -4,12 +4,14 @@
 \alias{kpAddCytobands}
 \title{kpAddCytobands}
 \usage{
-kpAddCytobands(karyoplot, color.table=NULL, ...)
+kpAddCytobands(karyoplot, color.table=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
 
 \item{color.table}{(named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)}
+
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{any additional parameter to be passed to the functions called from kpAddCytobands.}
 }

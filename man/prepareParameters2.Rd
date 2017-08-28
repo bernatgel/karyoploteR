@@ -4,7 +4,7 @@
 \alias{prepareParameters2}
 \title{prepareParameters2}
 \usage{
-prepareParameters2(function.name, karyoplot, data, chr, x, y, ymax, ymin, r0, r1, data.panel, filter.data=TRUE, ...)
+prepareParameters2(function.name, karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...)
 }
 \arguments{
 \item{function.name}{(character) The name of the function calling \code{prepareParameters2}. Only user for error reporting.}
@@ -47,9 +47,11 @@ offer a richer interface while internally dealing only with standard and
 simple code. It extracts the 
 positions from \code{data} if available and applies the \code{r0} and 
 \code{r1} scaling. It returns the ready to plot values in a list with
-only \code{chr}, \code{x} and \code{y}. All parameters are interpreted and
- used as explained in \code{\link{kpPoints}}. It also filters out any data 
- points corresponding to chromosomes not present in the current karyoplot.
+only \code{chr}, \code{x} and \code{y}. Individual parameters (\code{chr},
+\code{x} and \code{y}) take precedence over \code{data}. All parameters are 
+interpreted and used as explained in \code{\link{kpPoints}}. It also filters
+out any data points corresponding to chromosomes not present in the current 
+karyoplot.
 }
 \note{
 This function is only useful when creating custom plotting functions. 

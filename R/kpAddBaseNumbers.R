@@ -82,7 +82,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
       #if zoomed in, keep only the ticks in the plot region
       if(karyoplot$zoom==TRUE) {
         if(clipping==TRUE) {
-          tick.pos <- tick.pos[tick.pos >= start(kp$plot.region) & tick.pos<= end(kp$plot.region)]
+          tick.pos <- tick.pos[tick.pos >= start(karyoplot$plot.region) & tick.pos<= end(karyoplot$plot.region)]
         }
       }
       
@@ -102,6 +102,13 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
       minor.num.ticks <- width(chr)/minor.tick.dist 
       minor.tick.pos <- start(chr) + (minor.tick.dist*(0:(minor.num.ticks-1))) - 1
 
+      #if zoomed in, keep only the ticks in the plot region
+      if(karyoplot$zoom==TRUE) {
+        if(clipping==TRUE) {
+        minor.tick.pos <- minor.tick.pos[minor.tick.pos >= start(karyoplot$plot.region) & minor.tick.pos<= end(karyoplot$plot.region)]
+        }
+      }
+      
       xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos)$x
       y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
       if(is.null(minor.tick.col)) {

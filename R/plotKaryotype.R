@@ -103,6 +103,7 @@
 #' @importFrom rtracklayer ucscTableQuery
 #' @importFrom biovizBase getBioColor
 #' @importFrom biovizBase getIdeogram
+#' @importFrom IRanges overlapsAny
 #' @import methods
 #' @importFrom stats setNames
 #' 
@@ -153,7 +154,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     #If zoom is set, change the chromosome parameter to the name of the chomosome
     #we are zooming it, so everything is automatically filtered out.
     if(!is.null(zoom)) {
-      if(!overlapsAny(zoom, gr.genome)) {
+      if(!IRanges::overlapsAny(zoom, gr.genome)) {
         stop("You are trying to set the zoom to a region not part of the current genome.")
       } else {
         chromosomes <- as.character(GenomeInfoDb::seqnames(zoom))
