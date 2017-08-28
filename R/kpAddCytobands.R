@@ -75,8 +75,8 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   if(karyoplot$zoom==TRUE) {
     if(clipping==TRUE) {
       #get the plot coordinates of the cytobands drawing area
-      clip.xleft <- ccf(x=start(kp$plot.region), chr=as.character(seqnames(kp$plot.region)))$x
-      clip.xright <- ccf(x=end(kp$plot.region), chr=as.character(seqnames(kp$plot.region)))$x
+      clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+      clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
       clip.ybottom <- ybottom - 10 #add a small margin to allow for the width of the lines
       clip.ytop <- ytop + 10
       clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
