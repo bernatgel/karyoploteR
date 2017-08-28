@@ -148,7 +148,7 @@ genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.
   max.chr.len <- max(end(genome)) - min(start(genome))
     
   if(!is.null(x)) {
-    x.plot <- pp$leftmargin + (x/max.chr.len)*genome.width
+    x.plot <- pp$leftmargin + ((x-start(genome[chr]))/max.chr.len)*genome.width
   } else{
     x.plot <- NULL
   }

@@ -159,6 +159,9 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     stop(paste0("There are duplicate chromosome names in the genome. Chromosome names must be unique. Chromosome names are: ", paste0(chr.names, collapse = ", ")))
   }
   
+  #Use the chromosome names as the names of the genome GRanges
+  names(gr.genome) <- chr.names
+  
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
     if(is.character(genome)) {
