@@ -13,8 +13,17 @@
 #'  and therefore both objects need to have the same length. Specifying a region
 #'  as negative strand, will "flip" it, so the the start of a region can be 
 #'  linked to the end of its pair.
+#'  
+#' @note 
+#'   For a link to be plotted BOTH ends must be visible in the karyoplot. In 
+#'   particular, if a chromosome is not included in the plot (due to not
+#'   being specified in \code{chromosomes}, for example) any link with an end
+#'   on it will NOT be plotted. The same is true for zoomed in plots, where only
+#'   intrachromosomal links will be visible. No warning or message will be
+#'   generated.
+#' 
 #'
-#' @usage kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, ...)
+#' @usage kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with link start regions. If data2 is NULL, mcols(data) should be a bed-like structure with "link.chr", "link.start", "link.end" and optionally a "link.strand" columns. The first thee columns can have any name and the strand information will be extracted from the first column with "strand" in its name.
@@ -28,6 +37,7 @@
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)
 #' @param col    (color) The background color of the links. If NULL and border is specified, it defaults to a lighter version of border.
 #' @param border  (color) The border color of the links. If NULL and col is specified, it defaults to a darker version of col.
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #' 
@@ -67,7 +77,7 @@
 #'@export kpPlotLinks
 
 
-kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, ...) {
+kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...) {
   #Check parameters
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -188,6 +198,12 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
       }
     }
     
+    if(karyoplot$zoom==TRUE) {
+      if(clipping==TRUE) {
+        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+      }
+    }
     graphics::polygon(x = c(bezier_points_1[,1], rev(bezier_points_2[,1])), y=c(bezier_points_1[,2], rev(bezier_points_2[,2])), col=col, border=NA, ...)
     graphics::lines(bezier_points_1, col=border, ...)
     graphics::lines(bezier_points_2, col=border, ...)

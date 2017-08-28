@@ -23,7 +23,7 @@
 #'                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
 #'                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
 #'                      line.color="black", label.color="black",
-#'                      pos=NULL, srt=NULL, offset=NULL, ...)
+#'                      pos=NULL, srt=NULL, offset=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the data. If \code{data} is present, \code{chr} will be set to \code{seqnames(data)} and \code{x} to the midpoints of the rages in data. If no parameter \code{y} is specified and \code{data} has a column named \code{y} or \code{value} this column will be used to define the \code{y} value of each data point. (defaults to NULL)
@@ -47,6 +47,7 @@
 #' @param pos (1,2,3,4) The standard pos graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
 #' @param srt  (numeric) The standard srt graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
 #' @param offset  (numeric) The standard offset graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ... The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #'
 #' @return
@@ -77,13 +78,14 @@
 #' @importFrom digest digest
 #' @importFrom graphics strwidth
 
+#TODO: Adjust the positioning algorithm when zoom is active so labels do not fall out of the plot.region
 
 kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
                    adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
                    marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
                    ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
                    line.color="black", label.color="black",
-                   pos=NULL, srt=NULL, offset=NULL, ...) {
+                   pos=NULL, srt=NULL, offset=NULL, clipping=TRUE, ...) {
   
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   text.orientation <- match.arg(text.orientation, c("horizontal", "vertical"))
@@ -201,6 +203,12 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   }
   #Finished repositioning labels
 
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
   
   #Plot the labels
   #detect if the data.panel is an inverted one

@@ -11,7 +11,7 @@
 #'  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
 #'  independent numeric vectors and the function only takes in \code{GRanges}.
 #'
-#' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, ...)
+#' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
@@ -24,6 +24,7 @@
 #' @param avoid.overlapping    (boolean) Whether overlapping regions should be drawn as stacks (TRUE) on drawing one occluding the other in a single layer (FALSE). (defaults to TRUE)
 #' @param num.layers    (numeric) The number of layers the plotting space should be divided into to allow for plotting overlapping regions. The lotting region will be divided into this many pieces regardless if any overlapping regions actually exist. If NULL, the maximum number of regions overlapping a single point in the genome. (defaults to NULL)
 #' @param layer.margin    (numeric) The blank space left between layers of regions. (defaults to 0.05)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #'  
@@ -74,7 +75,7 @@
 
 kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", 
                           border=NULL, avoid.overlapping=TRUE, num.layers=NULL,
-                          layer.margin=0.05, ...) {
+                          layer.margin=0.05, clipping=TRUE, ...) {
   #karyoplot
     if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
     if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
@@ -123,7 +124,7 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="
     
     
   kpRect(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, ymin=0, ymax=1, 
-         r0=r0, r1=r1, data.panel=data.panel, col=col, border=border, ... )
+         r0=r0, r1=r1, data.panel=data.panel, col=col, border=border, clipping=clipping, ... )
   
   invisible(karyoplot)
 }

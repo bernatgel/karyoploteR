@@ -12,7 +12,7 @@
 #' between somatic mutations in order to identify regions with an accumulation 
 #' of close mutations.
 #' 
-#' @usage kpPlotRainfall(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpPlotRainfall(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the features to be plotted.
@@ -22,6 +22,7 @@
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. (defaults to 7, (equivalent to 10Mb between consecutive features))
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. In particular \code{col} and \code{border} can be used to set the colors used.
 #'   
 #' @return
@@ -42,7 +43,7 @@
 #'  
 #' @export kpPlotRainfall
 
-kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, ...) {
+kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotRainfall: 'karyoplot' must be a valid 'KaryoPlot' object"))
   if(!methods::is(data, "GRanges")) stop(paste0("In kpPlotRainfall: 'data' must be a valid 'GRanges' object"))
@@ -74,7 +75,7 @@ kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, da
     feat.dist <- ss - c(1,ss[1:length(ss)-1])
     feat.dist <- log10(feat.dist)
     distances[[chr]] <- feat.dist
-    kpPoints(karyoplot, chr=chr, x=ss, y=feat.dist, col=data.per.chr[[chr]]$col, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, ...)
+    kpPoints(karyoplot, chr=chr, x=ss, y=feat.dist, col=data.per.chr[[chr]]$col, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
   }
   
   karyoplot$latest.plot <- list(funct="kpPlotRainfall", computed.values=list(distances=distances))

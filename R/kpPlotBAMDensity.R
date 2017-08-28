@@ -11,7 +11,7 @@
 #' a every window. It uses \code{\link{Rsamtools}} to efficiently access the
 #' BAM file. The BAM file must be indexed.
 #' 
-#' @usage kpPlotBAMDensity(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA, ...)
+#' @usage kpPlotBAMDensity(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA,  clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{BamFile} or character) The path to a bam file (must be indexed) or a \code{BamFile} object.
@@ -24,6 +24,7 @@
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)
 #' @param col  (color) The background color to plot. If NULL, it will be a lighter version of 'border' or 'black' if border is null. (Defaults to "gray80")
 #' @param border (color) The color to use to plot the borders of the bars. If NULL, it will be a darker version of 'col'. If NA, no border will be plotted. (Defaults to NULL)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. In particular \code{col} and \code{border} can be used to set the colors used.
 #'   
 #' @return
@@ -63,7 +64,7 @@
 #' @importFrom Rsamtools BamFile countBam idxstatsBam ScanBamParam
 
 
-kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA, ...) {
+kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA, clipping=TRUE,...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotBAMDensity: 'karyoplot' must be a valid 'KaryoPlot' object"))
   if(is.character("data")) {
@@ -100,7 +101,7 @@ kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FA
     border <- "black"
   }
   
-  karyoplot <- kpBars(karyoplot, data=windows, y0=0, y1=dens,ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, border=border, col=col, ...)
+  karyoplot <- kpBars(karyoplot, data=windows, y0=0, y1=dens,ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, border=border, col=col, clipping=clipping, ...)
   
   karyoplot$latest.plot <- list(funct="kpPlotBAMDensity", computed.values=list(density=dens, windows=windows, max.density=max(dens)))
 

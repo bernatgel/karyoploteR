@@ -16,7 +16,7 @@
 #' In addition, via the ellipsis operator (\code{...}), \code{kpSegments} accepts any parameter 
 #' valid for \code{segments} (e.g. \code{code}, \code{lwd}, \code{lty}, \code{col}, ...)
 #'
-#' @usage kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) 
+#' @usage kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  clipping=TRUE, ...) 
 #' 
 #' @inheritParams kpRect 
 #' 
@@ -50,7 +50,7 @@
 
 
 kpArrows <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL,
-                     ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  ...) {
+                     ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -65,6 +65,13 @@ kpArrows <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, 
   x1plot <- ccf(chr=pp$chr, x=pp$x1, data.panel=data.panel)$x
   y0plot <- ccf(chr=pp$chr, y=pp$y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
   
   graphics::arrows(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
   invisible(karyoplot) 

@@ -16,7 +16,7 @@
 #' and how the text is drawn. In addition, via the ellipsis operator (\code{...}), \code{kpText}
 #' accepts any parameter valid for \code{text} (e.g. \code{cex}, \code{col}, ...)
 #'
-#' @usage kpText(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpText(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 #' 
 #' @param labels    (a character vector) The labels to be plotted. (defaults to NULL)
 #' @inheritParams kpPoints
@@ -63,7 +63,7 @@
 
 
 kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL,
-                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -74,6 +74,14 @@ kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL,
     
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
+  
   graphics::text(x=xplot, y=yplot, labels=labels, ...)      
   
   invisible(karyoplot)
