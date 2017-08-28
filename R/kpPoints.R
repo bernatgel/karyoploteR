@@ -91,8 +91,8 @@ kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, 
   
   if(karyoplot$zoom==TRUE) {
     if(clipping==TRUE) {
-      dpc <- karyoplot$getDataPanelCoords(data.panel)
-      clip(x1 = dpc$xleft, x2 = dpc$xright, y1 = dpc$ybottom, y2=dpc$ytop)
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
     }
   }
   graphics::points(x=xplot, y=yplot, pch=pch, cex=cex, ...)   
