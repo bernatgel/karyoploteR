@@ -26,13 +26,14 @@
 #'  More plot types are expected to come in the near future.
 #'  
 #' 
-#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
+#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", zoom=NULL, cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 #' 
 #' @param genome    The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
 #' @param ideogram.plotter    The function to be used to plot the ideograms. Only one function is included with the package, \code{kpAddCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{kpAddCytobands})
 #' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})
 #' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). (defaults to "canonical")
+#' @param zoom   A GRanges object specifiyng a single region to zoom in. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})
 #' @param cytobands    A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)
 #' @param plot.params    An object obtained from \code{\link{getDefaultPlotParams}} and possibly modified, containing the basic plotting parameters. If NULL, the defaults parameters will be used. (defaults to NULL)
 #' @param use.cache    \code{karyoploteR} has a small cache with the chromosome names and lengths and the cytobands for a handful of organisms so it's not needed to retrieve them from databses or \code{BSGenomes} objects. Set this parameter to FALSE to ignore the cache. (defaults to TRUE, use the cache)
@@ -111,13 +112,24 @@
 
 plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands,
                           labels.plotter=kpAddChromosomeNames, chromosomes="canonical",
-                          cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...) {
+                          zoom=NULL, cytobands=NULL, plot.params=NULL,
+                          use.cache=TRUE, main=NULL, ...) {
   
   #check required parameters...
+  
+  #zoom
+  if(!is.null(zoom)) {
+    if(!methods::is(zoom, "GRanges")) stop("'zoom' must be NULL or a GRanges object")
+    if(length(zoom)>1) {
+      warning("The zoom parameter has more than one region. Only the first one will be used.")
+      zoom <- zoom [1]
+    }
+  }
   
   if(is.null(plot.params)) {
     plot.params <- getDefaultPlotParams(plot.type)
   }
+  
   
   #Prepare the genome and filter the chromosomes as required
   #Get the genome
@@ -138,20 +150,30 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
   
   #And filter it
-  if(!is.null(chromosomes) && chromosomes != "all") {
-    if(is.character(genome)) {
-      tryCatch(expr={
-        if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal"))) {
-          gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
-        } else {
-          gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
-        }
-      }, error=function(e) {
-        message("There was an error when filtering the chromosomes. Using the unfiltered genome. \n", e)
-      })     
+    #If zoom is set, change the chromosome parameter to the name of the chomosome
+    #we are zooming it, so everything is automatically filtered out.
+    if(!is.null(zoom)) {
+      if(!overlapsAny(zoom, gr.genome)) {
+        stop("You are trying to set the zoom to a region not part of the current genome.")
+      } else {
+        chromosomes <- as.character(GenomeInfoDb::seqnames(zoom))
+      }
     }
-    # else Do not filter the chromosomes. If the genome is completely specified (not a character).
-  }
+    
+    if(!is.null(chromosomes) && chromosomes != "all") {
+      if(is.character(genome)) {
+        tryCatch(expr={
+          if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal"))) {
+            gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
+          } else {
+            gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
+          }
+        }, error=function(e) {
+          message("There was an error when filtering the chromosomes. Using the unfiltered genome. \n", e)
+        })     
+      }
+      # else Do not filter the chromosomes. If the genome is completely specified (not a character).
+    }
   
   #Check the genome has no problems (repeated chromosomes, etc...)
   chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
@@ -176,7 +198,6 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
 
   
-  
   #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
@@ -191,6 +212,17 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
     kp$plot.type <- plot.type
+    
+    
+    #If zoom is NULL, set the plot.region to the whole genome. If it's not null, set it to the zoom region
+    if(is.null(zoom)) {
+      kp$plot.region <- kp$genome
+    } else {
+      kp$plot.region <- zoom
+      names(kp$plot.region) <- as.character(seqnames(kp$plot.region))
+    }
+    
+    
     
     #Get the Coordinates Change Function to be used in this plot
     #coordChangeFunctions <- getCoordChangeFunctions(plot.type = plot.type, genome = gr.genome, plot.params = plot.params)

@@ -8,7 +8,7 @@ getCoordChangeFunctions <- function(karyoplot)
 {
  
   plot.params <- karyoplot$plot.params
-  genome <- karyoplot$genome
+  genome <- karyoplot$plot.region
   plot.type <- karyoplot$plot.type
   
   if(plot.type == 1) {
