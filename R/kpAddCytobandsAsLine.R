@@ -12,15 +12,16 @@
 #' it represents the chromosomes as a thin line
 #' 
 #' @note In general, this function is automatically called by plotKaryotype
-#' and the user never nees to call it. 
+#' and the user never needs to call it. 
 #' 
-#' @usage kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, ...)
+#' @usage kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
 #' @param color.schema  (character: 'only.centromeres', 'circos', 'biovizbase') The name of the color schema to use. It is directly passed along to \code{\link{getCytobandColors}}. \code{color.table} takes precendence over \code{color.schema}. (defaults to 'only.centromeres')
 #' @param lwd (integer) The width of the line used to represent the ideogram (defaults to 3)
 #' @param lend (0, 1 or 2) The type of line end. (defaults to 1, "butt")
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...  any additional parameter to be passed to the functions called from kpAddCytobands.
 #' 
 #' @return
@@ -39,7 +40,7 @@
 
 
 
-kpAddCytobandsAsLine <- function(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, ...) {
+kpAddCytobandsAsLine <- function(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, clipping=TRUE, ...) {
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -71,7 +72,17 @@ kpAddCytobandsAsLine <- function(karyoplot, color.table=NULL, color.schema='only
   xright <- ccf(x=end(cyto), chr=as.character(seqnames(cyto)))$x
     
   col <- color.table[as.character(cyto$gieStain)]
-    
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      #get the plot coordinates of the cytobands drawing area
+      clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+      clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+      clip.ybottom <- ybottom - 10 #add a small margin to allow for the width of the lines
+      clip.ytop <- ytop + 10
+      graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
+    }
+  }
   graphics::segments(x0 = xleft, x1=xright, y0=ybottom, y1=ytop, col=col, lwd=lwd, lend=lend)      
 
   
