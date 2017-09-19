@@ -106,13 +106,15 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
     stop("labels is NULL and no valid labels found in data")
   }
   
+  #Important to set filter.data to FALSE so we can keep each marker linked to its label.
+  #If some markers were filtered out for being in other chromosomes than the plotted ones
+  #we wouldn't know what marked goes with each label
   pp <- prepareParameters2("kpPlotMarkers", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y,
-                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, filter.data = FALSE, ...)
   ccf <- karyoplot$coord.change.function
   
   #Filter the data so we only have the data in the plot.region
   valid <- which(overlapsAny(GRanges(pp$chr, IRanges(pp$x, pp$x)), karyoplot$plot.region))
-  
   if(length(valid)==0) { #If there are no markers in the plot region, just return
     karyoplot$latest.plot <- list(funct="kpPlotMarkers", computed.values=list(label.position=integer(0)))
     return(invisible(karyoplot))
@@ -253,7 +255,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   
   #and plot them
     #Determine the y of the value y=0 to start the marker there
-      pp2 <- prepareParameters2("kpPlotMarkers", karyoplot=karyoplot, data=NULL, chr=pp$chr, x=pp$x, y=0, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+      pp2 <- prepareParameters2("kpPlotMarkers", karyoplot=karyoplot, data=NULL, chr=pp$chr, x=pp$x, y=0, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, filter.data = FALSE, ...)
       y0 <-  ccf(chr=pp2$chr[valid][ord], y=pp2$y[valid][ord], data.panel=data.panel)$y
     #markers
     if(marker.parts[1]>0) {
