@@ -115,7 +115,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   
   if(length(valid)==0) { #If there are no markers in the plot region, just return
     karyoplot$latest.plot <- list(funct="kpPlotMarkers", computed.values=list(label.position=integer(0)))
-    invisible(karyoplot)
+    return(invisible(karyoplot))
   }
   
   valid.chr <- pp$chr[valid]
