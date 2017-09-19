@@ -110,8 +110,14 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
                            ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
-  #Filter the data so we only have the data in the visible chromosomes
-  valid <- pp$chr %in% karyoplot$chromosomes
+  #Filter the data so we only have the data in the plot.region
+  valid <- which(overlapsAny(GRanges(pp$chr, IRanges(pp$x, pp$x)), karyoplot$plot.region))
+  
+  if(length(valid)==0) { #If there are no markers in the plot region, just return
+    karyoplot$latest.plot <- list(funct="kpPlotMarkers", computed.values=list(label.position=integer(0)))
+    invisible(karyoplot)
+  }
+  
   valid.chr <- pp$chr[valid]
   valid.x <- pp$x[valid]
   valid.y <- pp$y[valid]
