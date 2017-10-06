@@ -32,7 +32,7 @@
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
 #' @param ideogram.plotter    The function to be used to plot the ideograms. Only one function is included with the package, \code{kpAddCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{kpAddCytobands})
 #' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})
-#' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). (defaults to "canonical")
+#' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical for named genomes and no filtering for custom genomes. (defaults to "auto")
 #' @param cytobands    A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)
 #' @param plot.params    An object obtained from \code{\link{getDefaultPlotParams}} and possibly modified, containing the basic plotting parameters. If NULL, the defaults parameters will be used. (defaults to NULL)
 #' @param use.cache    \code{karyoploteR} has a small cache with the chromosome names and lengths and the cytobands for a handful of organisms so it's not needed to retrieve them from databses or \code{BSGenomes} objects. Set this parameter to FALSE to ignore the cache. (defaults to TRUE, use the cache)
@@ -110,7 +110,7 @@
 
 
 plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands,
-                          labels.plotter=kpAddChromosomeNames, chromosomes="canonical",
+                          labels.plotter=kpAddChromosomeNames, chromosomes="auto",
                           cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...) {
   
   #check required parameters...
@@ -139,20 +139,40 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   
   #And filter it
   if(!is.null(chromosomes) && chromosomes != "all") {
-    if(is.character(genome)) {
-      tryCatch(expr={
-        if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal"))) {
-          gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)
-        } else {
-          gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)
+    
+    if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal", "auto"))) {
+      if(is.character(genome)) {
+        if(chromosomes=="auto") chromosomes <- "canonical"   #Set it to canonical to perform the actual filtering
+        tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)},
+                 error=function(e) {
+                      message("WARNING: There was an error when filtering the chromosomes and selecting only ", chromosomes, " chromosomes.  Falling back to using the unfiltered genome. \n", e)
+                 })
+      } else {
+        if(chromosomes != "auto") { #If set to 'auto', say nothing about the filtering. The user has actually not requested any filtering on their GRanges.
+          message("NOTE: It is only possible to filter chromosomes using named ",
+                  "chromosome classes (i.e. 'canonical', 'autosomal') when the genome ",
+                  "is specified by name (i.e. 'hg19', 'mm10'). Please, either ",
+                  "use a genome specified by name or explicitly select the ",
+                  "chromosomes to plot (i.e. chromosomes=c('chr1', 'chr2') ). ",
+                  " Falling back to using the unfiltered genome.")
         }
-      }, error=function(e) {
-        message("There was an error when filtering the chromosomes. Using the unfiltered genome. \n", e)
-      })     
+      }
+    } else {
+      if(!all(chromosomes %in% as.character(seqnames(gr.genome)))) {
+        message("NOTE: Not all requested chromosomes are part of the genome. Trying to filter as requested. ",
+                "   * Requested Chromosomes: ", paste0(chromosomes, collapse = ", "),
+                "   * Chromosomes in the genome: ", paste0(as.character(seqnames(gr.genome)), collapse = ", ")
+                )
+      }
+      tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)},
+               error=function(e) {
+                  message("WARNING: There was an error when filtering the chromosomes. Falling back to using the unfiltered genome. \n", e)
+               }
+              )
     }
-    # else Do not filter the chromosomes. If the genome is completely specified (not a character).
   }
-  
+
+ 
   #Check the genome has no problems (repeated chromosomes, etc...)
   chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
   if(any(duplicated(chr.names))) {
