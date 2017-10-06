@@ -4,7 +4,7 @@
 \alias{plotKaryotype}
 \title{plotKaryotype}
 \usage{
-plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
+plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 }
 \arguments{
 \item{genome}{The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")}
@@ -15,7 +15,7 @@ plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, label
 
 \item{labels.plotter}{The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})}
 
-\item{chromosomes}{The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). (defaults to "canonical")}
+\item{chromosomes}{The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical for named genomes and no filtering for custom genomes. (defaults to "auto")}
 
 \item{cytobands}{A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)}
 

@@ -26,7 +26,7 @@
 #'  More plot types are expected to come in the near future.
 #'  
 #' 
-#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="canonical", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
+#' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 #' 
 #' @param genome    The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
