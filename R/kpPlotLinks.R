@@ -37,7 +37,7 @@
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)
 #' @param col    (color) The background color of the links. If NULL and border is specified, it defaults to a lighter version of border.
 #' @param border  (color) The border color of the links. If NULL and col is specified, it defaults to a darker version of col.
-#' @param clipping  (boolean) If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #' 
@@ -204,7 +204,6 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
         graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
       }
     }
-    
     graphics::polygon(x = c(bezier_points_1[,1], rev(bezier_points_2[,1])), y=c(bezier_points_1[,2], rev(bezier_points_2[,2])), col=col, border=NA, ...)
     graphics::lines(bezier_points_1, col=border, ...)
     graphics::lines(bezier_points_2, col=border, ...)

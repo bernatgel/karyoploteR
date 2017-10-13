@@ -79,11 +79,12 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
     in.chr <- which(pp$chr==current.chr)
     xplot <- ccf(chr=pp$chr[in.chr], x=pp$x[in.chr], data.panel=data.panel)$x
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    if(karyoplot$zoom==TRUE) {
+      if(clipping==TRUE) {
+        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+      }
     }
-    
     graphics::lines(x=xplot, y=yplot, ...)      
   })
   
