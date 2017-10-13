@@ -57,7 +57,7 @@ As you can see, the `plotKaryotype` returns a `KaryoPlot` object that has to be 
 For example, to create a plot of the mouse genome with data above the ideograms we would use this:
 
 ```{r}
-  kp <- plotKaryotype(genome="mm10", plot.type=1, main="The mm10 genome")
+  kp <- plotKaryotype(genome="mm10", plot.type=1, main="The mm10 genome", cex=0.6)
 ```
 
 And to plot the first thee chromosomes of the hg19 human genome assembly with data above and below them:
@@ -312,6 +312,100 @@ plotDefaultPlotParams(plot.type = 3, plot.params=plot.params, cex=0.6)
 
 ```
 
+## Zooming: plotting small parts of the genome
+
+In addition to plotting the whole genome, it is possible to use karyoploteR 
+to plot a single small region, zooming in into it and not plotting the rest of
+the genome.
+
+**IMPORTANT:** It is not possible to zoom into multiple regions in a single plot. 
+Each zoomed plot can only represent a single region.
+
+To activate this feature, we only need to specify the region to zoom in 
+passing a GRanges object in the `zoom` parameter of the `plotKaryotype` 
+function. This will create a new plot showing only the region in `zoom` and
+with the number of data panels derived from `plot.type`.
+
+For example, this is a standard plot of chromosome 1 with some random data:
+
+```{r}
+  data.points <- data.frame(chr="chr1", pos=(1:240)*1e6, value=rnorm(240, 0.5, 0.1))
+  kp <- plotKaryotype(plot.type = 4, chromosomes = "chr1")
+  kpDataBackground(kp, data.panel = 1)
+  kpAddBaseNumbers(kp)
+  kpPoints(kp, chr = data.points$chr, x=data.points$pos, y=data.points$value, col=rainbow(240))
+```
+
+And we can zoom into the region between 180-240Mb to see it with more detail.
+
+```{r}
+  detail.region <- toGRanges(data.frame("chr1", 180e6, 240e6))
+  data.points <- data.frame(chr="chr1", pos=(1:240)*1e6, value=rnorm(240, 0.5, 0.1))
+  kp <- plotKaryotype(plot.type = 4, zoom=detail.region)
+  kpDataBackground(kp, data.panel = 1)
+  kpAddBaseNumbers(kp)
+  kpPoints(kp, chr = data.points$chr, x=data.points$pos, y=data.points$value, col=rainbow(240))
+```
+
+
+## Clipping and cutting the object representation
+
+When zooming, by default any data representation is clipped to the visible part 
+of the data panel. That is, only the part of the data representations inside 
+the data panel is drawn and anything falling out of it is cutted out.
+
+It is possible to change this behaviour by setting the `clipping` parameter to 
+`FALSE`. 
+
+As an example, we can create a plot with a big point and a couple of arrows: one
+ending above the limit of the data panel and the other one totally contained in
+the data panal.
+
+```{r}
+  kp <- plotKaryotype(plot.type = 4, chromosomes = "chr1")
+  kpDataBackground(kp, data.panel = 1)
+  kpAddBaseNumbers(kp)
+  kpPoints(kp, chr = "chr1", x=180e6, y=0.5, pch=16, cex=8, col="#FAC67A", clipping=TRUE)
+  kpArrows(kp, chr = "chr1", x0 = 50e6, x1=170e6, y0=0.2, y1=1.1)
+  kpArrows(kp, chr = "chr1", x0 = 160e6, x1=240e6, y0=0.9, y1=0.5)
+```
+
+We can see the two complete arrows and the point.
+
+However, when we zoom in closer to the point, we end up with only parts of the 
+arrows and the point.
+
+
+```{r}
+  detail.region <- toGRanges(data.frame("chr1", 135e6, 180e6))
+  kp <- plotKaryotype(plot.type = 4, zoom = detail.region)
+  kpDataBackground(kp, data.panel = 1)
+  kpAddBaseNumbers(kp)
+  kpPoints(kp, chr = "chr1", x=180e6, y=0.5, pch=16, cex=8, col="#FAC67A")
+  kpArrows(kp, chr = "chr1", x0 = 50e6, x1=170e6, y0=0.2, y1=1.1)
+  kpArrows(kp, chr = "chr1", x0 = 160e6, x1=240e6, y0=0.9, y1=0.5)
+```
+
+Note that while the point of the arrow is within the detail region it gets clipped 
+because zooming activates the clipping.
+
+We can disable clipping of individual elements using the `clipping` parameter. 
+For example, we can disable it for the arrows and leave it active for the point.
+
+
+```{r}
+  detail.region <- toGRanges(data.frame("chr1", 135e6, 180e6))
+  kp <- plotKaryotype(plot.type = 4, zoom = detail.region)
+  kpDataBackground(kp, data.panel = 1)
+  kpAddBaseNumbers(kp)
+  kpPoints(kp, chr = "chr1", x=180e6, y=0.5, pch=16, cex=8, col="#FAC67A")
+  kpArrows(kp, chr = "chr1", x0 = 50e6, x1=170e6, y0=0.2, y1=1.1, clipping=FALSE)
+  kpArrows(kp, chr = "chr1", x0 = 160e6, x1=240e6, y0=0.9, y1=0.5, clipping=FALSE)
+```
+
+Notice the the downward pointing arrow is still clipped, but this is only because
+it end out of the actual image.
+
 
 # Adding Data
 
@@ -329,7 +423,11 @@ All plotting functions share a set of common parameters that define where and ho
 
 `data.panel` states in which data panel (if there's more than one available) the data will be plotted. The data panel identifier depends on the `plot.type`.
 
+`clipping` states whether data representation could span out of the data panel
+or if it should be cut at the data panel boundary (`clipping=TRUE`, default).
+
 In addition, all plotting functions accept the applicable standard R graphic parameters (`lwd`, `col`, `cex`, ...)
+
 
 ## Basic Plotting Functions
 
@@ -363,7 +461,8 @@ Another possibility is to create a `GRanges` object with the data, with `chr`, `
 ``` 
     
     
-These are the available basic plotting functions: 
+These are the available basic plotting functions (more detailed information and 
+extended examples can be found at [karyoploteR's tutorial and examples page](https://bernatgel.github.io/karyoploter_tutorial/#Examples)): 
 
   * **kpAbline** Draws horizontal and vertical lines spanning the whole avaliable space
   * **kpArrows** Draws arrows. Using the  `code` parameter, it's possible to specify where the arrowhead should be placed.
@@ -459,9 +558,16 @@ Higher level functions are designed to plot specific data types and objects and 
     
 These are the currently available high-level plotting functions:
 
-
   * **kpPlotRegions** Accepts a `GRanges` object and plots the regions as solid rectangles. If there are overlapping regions, it automatically detect them and plot them in a stacked way. 
   * **kpPlotCoverage** Accepts a `Granges` object and plots the coverage level over the genome as a histogram-like bar plot.
+  * **kpPlotDensity** Accepts a `GRanges` object and computes its density over set size windows. It is possible to change the window size to change the smoothing effect.
+  * **kpPlotBAMDensity** Accepts a BAM file and computes the read density along the genome. The density is computed directly from the BAM file
+  * **kpPlotMarkers** Given a set of genomic positions and labels, creates sticks and texts markers naming the positions. Useful for genes and other named genomic elements. Includes a simple positioning algorithm that will attempt to avoid the overlapping of text labels.
+  * **kpPlotRainfall** Given a set of variants, creates a raifall plot depicting the distance between each variant and the next one. Useful to identify _kataegis_, regions with an accumulation of variants.
+  * **kpPlotRibbon** Plots a variable width line. Useful to show confidence intervals and similar objects.
+  * **kpPlotLinks** Plots links between different regions of the genome, either in the same of different chromosomes.
+  
+  Extended information regarding these functions and additional real-life examples can be found at the [karyoploteR's tutorial and examples page](https://bernatgel.github.io/karyoploter_tutorial/#Examples)
 
 
 # Compatibility with `r BiocStyle::Biocpkg("magrittr")`
