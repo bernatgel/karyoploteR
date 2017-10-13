@@ -17,7 +17,7 @@
 #' (e.g. \code{lwd}, \code{lty}, \code{col}, ...) The lines are drawn in a per chromosome 
 #' basis, so it is not possible to draw lines encompassing more than one chromosome.
 #'
-#' @usage kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 #' 
 #' @inheritParams kpPoints 
 #' 
@@ -66,7 +66,7 @@
 
 
 kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, ...) {
+                    data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -79,7 +79,16 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
     in.chr <- which(pp$chr==current.chr)
     xplot <- ccf(chr=pp$chr[in.chr], x=pp$x[in.chr], data.panel=data.panel)$x
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
+    if(karyoplot$zoom==TRUE) {
+      if(clipping==TRUE) {
+        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+      }
+    }
     graphics::lines(x=xplot, y=yplot, ...)      
   })
+  
+  
+  
   invisible(karyoplot)
 }

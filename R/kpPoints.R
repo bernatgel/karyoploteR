@@ -15,7 +15,7 @@
 #' and how the points are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpPoints}
 #' accepts any parameter valid for \code{points} (e.g. \code{pch}, \code{cex}, \code{col}, ...)
 #'
-#' @usage kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  pch=16, cex=0.5, ...)
+#' @usage kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  clipping=TRUE, pch=16, cex=0.5, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the data. If \code{data} is present, \code{chr} will be set to \code{seqnames(data)} and \code{x} to the midpoints of the rages in data. If no parameter \code{y} is specified and \code{data} has a column named \code{y} or \code{value} this column will be used to define the \code{y} value of each data point. (defaults to NULL)
@@ -27,6 +27,7 @@
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param pch    (numeric) the glyph to represent the points as specified in \code{\link{par}}. (defaults to 16, a solid circle)
 #' @param cex    (numeric) the relative size of the glyphs as defined at \code{\link{par}}. (defaults to 0.5)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
@@ -76,7 +77,7 @@
 
 
 kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, 
-                     data.panel=1, r0=NULL, r1=NULL, pch=16, cex=0.5, ...) {
+                     data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, pch=16, cex=0.5, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -87,6 +88,13 @@ kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, 
   
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
   graphics::points(x=xplot, y=yplot, pch=pch, cex=cex, ...)   
   
   invisible(karyoplot)

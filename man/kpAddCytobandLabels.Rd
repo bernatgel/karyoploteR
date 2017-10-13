@@ -4,7 +4,7 @@
 \alias{kpAddCytobandLabels}
 \title{kpAddCytobandLabels}
 \usage{
-kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, ...)
+kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}}
@@ -12,6 +12,8 @@ kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, ...)
 \item{cex}{(numeric) The cex parameter for the cytoband labels}
 
 \item{force.all}{(boolean) If true, all cytoband labels are plotted, even if they do not fit into the cytobands (Defaults to FALSE)}
+
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, the name will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the labels may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.}
 }

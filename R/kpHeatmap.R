@@ -11,7 +11,7 @@
 #' note that \code{kpHeatmap} will not extend the regions in any way, so if regions are not 
 #' contiguous, they will appear as a series of rectangles and not as a continuous plot.
 #' 
-#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), ...)
+#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), clipping=TRUE, ...)
 #'  
 #' @inheritParams kpPoints
 #' @param x0 (numeric) the position (in base pairs) where the data region starts
@@ -49,7 +49,7 @@
 
 kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, 
                       ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, 
-                      colors=c("blue", "white", "yellow"), ...) {
+                      colors=c("blue", "white", "yellow"), clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -103,6 +103,13 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL,
   x1plot <- ccf(chr=chr, x=x1, data.panel=data.panel)$x
   yminplot <- ccf(chr=chr, y=rep_len(r0, length(chr)), data.panel=data.panel)$y
   ymaxplot <- ccf(chr=chr, y=rep_len(r1, length(chr)), data.panel=data.panel)$y
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
   
   graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot,
                  col=grDevices::rgb(cr(y), max=255), border=NA, ...)

@@ -10,13 +10,14 @@
 #'  It can either delimit the whole plotting area or part of it so different data plotting
 #'  regions can be seen. 
 #' 
-#' @usage kpDataBackground(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", ...)
+#' @usage kpDataBackground(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param color    (color) a valid color specification
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data background will be not drawn out of the drawing area (i.e. in margins, etc) even if it overflows the visible drawing area. If FALSE, the data background representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #'
 #'    
@@ -49,7 +50,7 @@
 #' 
 #' @export kpDataBackground
 
-kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", ...) {
+kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   karyoplot$beginKpPlot()
@@ -68,6 +69,14 @@ kpDataBackground <- function(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="g
               y=rep(r0, length(karyoplot$genome)), data.panel=data.panel)$y
   ybottom <- ccf(chr=as.character(seqnames(karyoplot$genome)),
                  y=rep(r1, length(karyoplot$genome)), data.panel=data.panel)$y
+  
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
+    }
+  }
+  
   graphics::rect(xleft=xleft, xright=xright, ytop=ytop, ybottom=ybottom, col=color, border=FALSE, ...)
  
   invisible(karyoplot)

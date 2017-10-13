@@ -8,7 +8,7 @@ getCoordChangeFunctions <- function(karyoplot)
 {
  
   plot.params <- karyoplot$plot.params
-  genome <- karyoplot$genome
+  genome <- karyoplot$plot.region
   plot.type <- karyoplot$plot.type
   
   if(plot.type == 1) {
@@ -148,7 +148,7 @@ genomic2plot_1HorizDataAboveIdeogram <- function(chr=NULL, x=NULL, y=NULL, data.
   max.chr.len <- max(end(genome)) - min(start(genome))
     
   if(!is.null(x)) {
-    x.plot <- pp$leftmargin + (x/max.chr.len)*genome.width
+    x.plot <- pp$leftmargin + ((x-start(genome[chr]))/max.chr.len)*genome.width
   } else{
     x.plot <- NULL
   }
@@ -215,7 +215,7 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
   max.chr.len <- max(end(genome) - start(genome))
   
   if(!is.null(x)) {
-    x.plot <- pp$leftmargin + (x/max.chr.len)*genome.width
+    x.plot <- pp$leftmargin + ((x-start(genome[chr]))/max.chr.len)*genome.width
   } else{
     x.plot <- NULL
   }

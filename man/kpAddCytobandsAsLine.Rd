@@ -4,7 +4,7 @@
 \alias{kpAddCytobandsAsLine}
 \title{kpAddCytobandsAsLine}
 \usage{
-kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, ...)
+kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres', lwd=3, lend=1, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
@@ -16,6 +16,8 @@ kpAddCytobandsAsLine(karyoplot, color.table=NULL, color.schema='only.centromeres
 \item{lwd}{(integer) The width of the line used to represent the ideogram (defaults to 3)}
 
 \item{lend}{(0, 1 or 2) The type of line end. (defaults to 1, "butt")}
+
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{any additional parameter to be passed to the functions called from kpAddCytobands.}
 }
@@ -33,7 +35,7 @@ it represents the chromosomes as a thin line
 }
 \note{
 In general, this function is automatically called by plotKaryotype
-and the user never nees to call it.
+and the user never needs to call it.
 }
 \examples{
 

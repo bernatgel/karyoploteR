@@ -10,7 +10,7 @@
 #' \code{\link{kpRect}} except that if \code{y0} is missing, it's automatically set 
 #' to \code{ymin} so all bars start from the base of the plotting region.
 #' 
-#' @usage kpBars(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...)
+#' @usage kpBars(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 #'  
 #' @inheritParams kpRect 
 #'     
@@ -51,7 +51,7 @@
 
 
 kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=NULL,
-                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, ...) {
+                   ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpBars: 'karyoplot' must be a valid 'KaryoPlot' object"))
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -69,6 +69,7 @@ kpBars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y1=NULL, y0=N
   }
   
   invisible(kpRect(karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1,
-                   ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...))
+                   ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, 
+                   clipping=clipping, ...))
   
 }

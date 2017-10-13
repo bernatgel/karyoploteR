@@ -12,11 +12,12 @@
 #' cases (such as when plotting a complete genome with default parameters) it is 
 #' possible that no labels at all are added.
 #' 
-#' @usage kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, ...)
+#' @usage kpAddCytobandLabels(karyoplot, cex=0.5, force.all=FALSE, clipping=TRUE, ...)
 #' 
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param cex  (numeric) The cex parameter for the cytoband labels
 #' @param force.all  (boolean) If true, all cytoband labels are plotted, even if they do not fit into the cytobands (Defaults to FALSE)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the name will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the labels may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...  Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.
 #' 
 #' @return
@@ -39,7 +40,7 @@
 #' @export kpAddCytobandLabels
 #' 
 
-kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE,  ...) {
+kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   karyoplot$beginKpPlot()
@@ -71,6 +72,16 @@ kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE,  ...) {
       }    
       
       if(any(do.fit)) {
+        if(karyoplot$zoom==TRUE) {
+          if(clipping==TRUE) {
+            #get the plot coordinates of the cytobands drawing area
+            clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+            clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+            clip.ybottom <- karyoplot$plot$ymin #We do not want to clip the text above or below the ideograms
+            clip.ytop <- karyoplot$plot$ymax
+            graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
+          }
+        }
         graphics::text(x=bandmids[do.fit], y=ylabel[do.fit], labels=labels[do.fit], cex=cex, ...)
       }
       

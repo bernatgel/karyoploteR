@@ -4,7 +4,7 @@
 \alias{kpDataBackground}
 \title{kpDataBackground}
 \usage{
-kpDataBackground(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", ...)
+kpDataBackground(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -16,6 +16,8 @@ kpDataBackground(karyoplot, r0=NULL, r1=NULL, data.panel=1, color="gray90", ...)
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
 \item{color}{(color) a valid color specification}
+
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, the data background will be not drawn out of the drawing area (i.e. in margins, etc) even if it overflows the visible drawing area. If FALSE, the data background representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
