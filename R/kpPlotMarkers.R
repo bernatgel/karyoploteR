@@ -77,6 +77,7 @@
 #' @export kpPlotMarkers
 #' @importFrom digest digest
 #' @importFrom graphics strwidth
+#' @importFrom IRanges IRanges
 
 #TODO: Adjust the positioning algorithm when zoom is active so labels do not fall out of the plot.region
 
