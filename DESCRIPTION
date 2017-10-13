@@ -39,6 +39,6 @@ Suggests:
     BSgenome.Hsapiens.UCSC.hg19,
     pasillaBamSubset
 VignetteBuilder: knitr
-biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport
+biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport, OneChannel
 NeedsCompilation: no
 RoxygenNote: 6.0.1
