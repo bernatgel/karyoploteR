@@ -47,7 +47,7 @@
 #' @param pos (1,2,3,4) The standard pos graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
 #' @param srt  (numeric) The standard srt graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
 #' @param offset  (numeric) The standard offset graphical parameter. If NULL, it's automatically set depending on "text.orientation". (defaults to NULL)
-#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
+#' @param clipping  (boolean) If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ... The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #'
 #' @return
@@ -212,11 +212,9 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   }
   #Finished repositioning labels
 
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
+  if(clipping==TRUE) {
+    dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+    graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
   }
   
   #Plot the labels

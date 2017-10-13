@@ -104,11 +104,9 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL,
   yminplot <- ccf(chr=chr, y=rep_len(r0, length(chr)), data.panel=data.panel)$y
   ymaxplot <- ccf(chr=chr, y=rep_len(r1, length(chr)), data.panel=data.panel)$y
   
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
+  if(clipping==TRUE) {
+    dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+    graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
   }
   
   graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot,

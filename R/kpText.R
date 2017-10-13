@@ -75,13 +75,11 @@ kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL,
   xplot <- ccf(chr=pp$chr, x=pp$x, data.panel=data.panel)$x
   yplot <- ccf(chr=pp$chr, y=pp$y, data.panel=data.panel)$y
   
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
+  if(clipping==TRUE) {
+    dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+    graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
   }
-  
+
   graphics::text(x=xplot, y=yplot, labels=labels, ...)      
   
   invisible(karyoplot)

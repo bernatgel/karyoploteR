@@ -96,11 +96,9 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
       border <- "black"
     }
     
-    if(karyoplot$zoom==TRUE) {
-      if(clipping==TRUE) {
-        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-      }
+    if(clipping==TRUE) {
+      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
     }
     
     graphics::polygon(x=c(x.chr, rev(x.chr)), y=c(y0.chr, rev(y1.chr)), col=col, border=NA, ...)

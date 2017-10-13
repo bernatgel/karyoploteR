@@ -66,11 +66,9 @@ kpArrows <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, 
   y0plot <- ccf(chr=pp$chr, y=pp$y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
   
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
+  if(clipping==TRUE) {
+    dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
+    graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
   }
   
   graphics::arrows(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
