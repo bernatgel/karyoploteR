@@ -75,7 +75,13 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
     }
   }
   
-  graphics::segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters2
+  dots <- filterParams(list(...), pp$filter, pp$original.length)
+  
+  #And call the base plotting function with both the standard parameters and the modified dots parameters
+  params <- c(list(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot), dots)
+  do.call(graphics::segments, params)
+  #graphics::segments(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...) #OLD, without param filtering
   
   invisible(karyoplot)
 }

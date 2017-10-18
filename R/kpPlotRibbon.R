@@ -77,13 +77,11 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
   
   for(chr.name in karyoplot$chromosomes) {
     
-    
     in.chr <- pp$chr==chr.name
     chr.chr <- pp$chr[in.chr]
     x.chr <- xplot[in.chr]
     y0.chr <- y0plot[in.chr]
     y1.chr <- y1plot[in.chr]
-    
     
     #Specify the missing colors if possible
     if(is.null(border) & !is.null(col) & !is.na(col)) {
@@ -102,6 +100,8 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
         graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
       }
     }
+    
+    
     
     graphics::polygon(x=c(x.chr, rev(x.chr)), y=c(y0.chr, rev(y1.chr)), col=col, border=NA, ...)
     # if(smooth==TRUE) {

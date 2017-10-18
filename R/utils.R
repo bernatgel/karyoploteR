@@ -19,6 +19,59 @@ recycle.first <- function(...){
   return(rep_len(dotList[[1]], length.out=max.length))
 }
 
+
+
+
+#' filterParams
+#' 
+#' @description 
+#' Given a list, select just only the valid.elements from each member. Also 
+#' works with vectors instead of lists
+#' 
+#' @details 
+#' This function is used in filtering the graphical parameters when plotting
+#' only a part of the genome. For each element of the list, if it has the 
+#' exact specified length, filters it using the 'valid.elements' parameter.
+#' 
+#' @usage filterParams(p, valid.elements, orig.length)
+#' 
+#' @param p a list or a single vector
+#' @param valid.elements a boolean vector with the elements to keep
+#' @param orig.length the length of the elements on which to apply the filtering
+#' 
+#' @return
+#' p with some members filtered
+#' 
+#' 
+#' @examples
+#'  
+#' a <- 1:10
+#' b <- 3:5
+#' c <- 2
+#' 
+#' filterParams(list(a,b,c), c(rep(TRUE,5), rep(FALSE,5)), 10)
+#' filterParams(a, c(rep(TRUE,5), rep(FALSE,5)), 10)
+#'  
+#' @export filterParams
+#' 
+filterParams <- function(p, valid.elements, orig.length) {
+  if(methods::is(p, "list")) { #If p is a list, filter each element independently
+    for(i in seq_len(length(p))) {
+      if(length(p[[i]])==orig.length) {
+        p[[i]] <- p[[i]][valid.elements]
+      }
+    }
+  } else { #else, filter p as a single element
+    if(length(p)==orig.length) {
+      p <- p[valid.elements]
+    }
+  }
+  return(p)
+}
+
+
+
+
 ############  Colors  ###############
 #' lighter
 #' 

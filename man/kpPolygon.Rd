@@ -48,6 +48,13 @@ to define exactly where and how the polygon is drawn. In addition, via the ellip
 (\code{...}), \code{kpPolygon} accepts any parameter valid for \code{polygon} 
 (e.g. \code{border}, \code{density}, \code{fillOddEven}, ...)
 }
+\note{
+IMPORTANT: \code{kpPolygon} allows the creation of polygons 
+encompassing multilple chromosomes. In some cases, when plotting only some
+of the chromosomes or when zooming, the default data filtering automatically 
+discards some points before plotting, altering the polygon shape. See example
+below.
+}
 \examples{
  
 set.seed(1000)
@@ -67,6 +74,14 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
   }
   
   
+#Effect of data filtering
+  
+dp <- toGRanges(data.frame(rep(paste0("chr", (1:2)), 3), 10e6*1:6, 10e6*1:6+5e5, y=c(0,0,1,1,0,0)))
+kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+kpPolygon(kp, dp)
+
+kp <- plotKaryotype(chromosomes=c("chr2"))
+kpPolygon(kp, dp)
 
  
 }

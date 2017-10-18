@@ -73,6 +73,12 @@ kpArrows <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, 
     }
   }
   
-  graphics::arrows(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters4
+  dots <- filterParams(list(...), pp$filter, pp$original.length)
+  
+  #And call the base plotting function with both the standard parameters and the modified dots parameters
+  params <- c(list(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot), dots)
+  do.call(graphics::arrows, params)
+  #graphics::arrows(x0=x0plot, x1=x1plot, y0=y0plot, y1=y1plot, ...)
   invisible(karyoplot) 
 }

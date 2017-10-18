@@ -95,7 +95,22 @@ kpPoints <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, 
       graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
     }
   }
-  graphics::points(x=xplot, y=yplot, pch=pch, cex=cex, ...)   
+  
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters2
+  #Filter only the arguments (explicit or from the ellipsis (...)) that match the original number of data points.
+  #WARNING: This will solve the filtering problem when the user provides a value
+  #for every data point or a single value for all of them, but will give unexpected
+  #results when partially recycling parameters
+  dots <- filterParams(list(...), pp$filter, pp$original.length)
+  pch <- filterParams(pch, pp$filter, pp$original.length)
+  cex <- filterParams(cex, pp$filter, pp$original.length)
+  
+  
+  #And call the base plotting function with both the standard parameters and the modified dots parameters
+  params <- c(list(x=xplot, y=yplot, pch=pch, cex=cex), dots)
+  do.call(graphics::points, params)
+  #graphics::points(x=xplot, y=yplot, pch=pch, cex=cex, ...)  
   
   invisible(karyoplot)
 }
+

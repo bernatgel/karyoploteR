@@ -24,6 +24,13 @@
 #' 
 #' Returns the original karyoplot object, unchanged. 
 #'  
+#'  
+#' @note IMPORTANT: \code{kpPolygon} allows the creation of polygons 
+#' encompassing multilple chromosomes. In some cases, when plotting only some
+#' of the chromosomes or when zooming, the default data filtering automatically 
+#' discards some points before plotting, altering the polygon shape. See example
+#' below.
+#'  
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpPoints}}
 #' @seealso \code{\link{kpPlotRegions}}
 #' 
@@ -47,6 +54,14 @@
 #'   }
 #'   
 #'   
+#' #Effect of data filtering
+#'   
+#' dp <- toGRanges(data.frame(rep(paste0("chr", (1:2)), 3), 10e6*1:6, 10e6*1:6+5e5, y=c(0,0,1,1,0,0)))
+#' kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+#' kpPolygon(kp, dp)
+#' 
+#' kp <- plotKaryotype(chromosomes=c("chr2"))
+#' kpPolygon(kp, dp)
 #' 
 #'  
 #' @export kpPolygon

@@ -133,6 +133,9 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
   y1 <- recycle.first(y1, chr, x0, x1, y0)
 
   
+  original.length <- length(chr) #this is only required for the return object
+  
+  
   #Scale it with ymin and ymax
   y0 <- (y0 - ymin)/(ymax - ymin)
   y1 <- (y1 - ymin)/(ymax - ymin)
@@ -148,9 +151,10 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
     x1 <- x1[in.visible.chrs]
     y0 <- y0[in.visible.chrs]
     y1 <- y1[in.visible.chrs]
+  } else {
+    in.visible.chrs <- rep(TRUE, original.length)
   }
   
-  
-  return(list(chr=chr, x0=x0, x1=x1, y0=y0, y1=y1))
+  return(list(chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, filter=in.visible.chrs, original.length=original.length))
   
 }

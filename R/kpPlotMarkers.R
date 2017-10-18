@@ -126,12 +126,23 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   valid.y <- pp$y[valid]
   valid.labels <- labels[valid]
   
+  #Filter out the additional parameters, either explicit or in the ellipsis (...)
+  #so they are kept in sync with the 
+  dots <- filterParams(list(...), valid, length(pp$chr))
+  label.color <- filterParams(label.color, valid, length(pp$chr))
+  line.color <- filterParams(line.color, valid, length(pp$chr))
+  pos <- filterParams(pos, valid, length(pp$chr))
+  offset <- filterParams(offset, valid, length(pp$chr))
+  
+  
   #Sort everything by chr and start
-  ord <- order(valid.chr, valid.x)
+  ord <- order(valid.chr, valid.x) #Will be problematic with non UCSC genes? the chr order?
   valid.chr <- valid.chr[ord]
   valid.x <- valid.x[ord]
   valid.y <- valid.y[ord]
   valid.labels <- valid.labels[ord]
+  #TODO: Should reorder other parameters? only if the same length as data.points
+  
   
   #Transform to plot coordinates  
   xplot <- ccf(chr=valid.chr, x=valid.x, data.panel=data.panel)$x
@@ -223,6 +234,8 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   #detect if the data.panel is an inverted one
   is.inverted <- ccf(chr=karyoplot$chromosomes[1], y=0, data.panel=data.panel)$y > ccf(chr=karyoplot$chromosomes[1], y=1, data.panel=data.panel)$y
   if(text.orientation == "horizontal") {
+    srt <- ifelse(is.null(srt), 0, srt)
+    offset <- ifelse(is.null(offset), 0, offset)
     if(is.inverted==FALSE) {
       pos <- ifelse(is.null(pos), 3, pos)
       label.y <- yplot+label.margin
@@ -230,7 +243,9 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
       pos <- ifelse(is.null(pos), 1, pos)
       label.y <- yplot-label.margin
     }
-    graphics::text(x=xlabels, y=label.y, labels=valid.labels, pos=pos, col=label.color, ...)
+    params <- c(list(x=xlabels, y=label.y, labels=valid.labels, pos=pos, srt=srt, offset=offset, col=label.color), dots)
+    do.call(graphics::text, params)
+    #graphics::text(x=xlabels, y=label.y, labels=valid.labels, pos=pos, col=label.color, ...)
   } else {
     srt <- ifelse(is.null(srt), 90, srt)
     offset <- ifelse(is.null(offset), 0, offset)
@@ -241,7 +256,9 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
       pos <- ifelse(is.null(pos), 2, pos)
       label.y <- yplot-label.margin
     }
-    graphics::text(x=xlabels, y=label.y, labels=valid.labels, pos=pos, srt=srt, offset=offset, col=label.color, ...)
+    params <- c(list(x=xlabels, y=label.y, labels=valid.labels, pos=pos, srt=srt, offset=offset, col=label.color), dots)
+    do.call(graphics::text, params)
+    #graphics::text(x=xlabels, y=label.y, labels=valid.labels, pos=pos, srt=srt, offset=offset, col=label.color, ...)
 
   }
   #and plot the markers
@@ -260,13 +277,19 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
       y0 <-  ccf(chr=pp2$chr[valid][ord], y=pp2$y[valid][ord], data.panel=data.panel)$y
     #markers
     if(marker.parts[1]>0) {
-      graphics::segments(x0 = xplot, x1=xplot, y0 = y0, y1=y0+my[1]*(yplot-y0), col=line.color, ... )
+      params <- c(list(x0 = xplot, x1=xplot, y0 = y0, y1=y0+my[1]*(yplot-y0), col=line.color), dots)
+      do.call(graphics::segments, params)
+      #graphics::segments(x0 = xplot, x1=xplot, y0 = y0, y1=y0+my[1]*(yplot-y0), col=line.color, ... )
     }
     if(marker.parts[2]>0) {
-      graphics::segments(x0 = xplot, x1=xlabels, y0 = y0+my[1]*(yplot-y0), y1=y0+(my[1]+my[2])*(yplot-y0), col=line.color, ...)
+      params <- c(list(x0 = xplot, x1=xlabels, y0 = y0+my[1]*(yplot-y0), y1=y0+(my[1]+my[2])*(yplot-y0), col=line.color), dots)
+      do.call(graphics::segments, params)
+      #graphics::segments(x0 = xplot, x1=xlabels, y0 = y0+my[1]*(yplot-y0), y1=y0+(my[1]+my[2])*(yplot-y0), col=line.color, ...)
     }
     if(marker.parts[3]>0) {
-      graphics::segments(x0 = xlabels, x1=xlabels, y0 = yplot - my[3]*(yplot-y0), y1=yplot, col=line.color, ...)
+      params <- c(list(x0 = xlabels, x1=xlabels, y0 = yplot - my[3]*(yplot-y0), y1=yplot, col=line.color), dots)
+      do.call(graphics::segments, params)
+      #graphics::segments(x0 = xlabels, x1=xlabels, y0 = yplot - my[3]*(yplot-y0), y1=yplot, col=line.color, ...)
     }
     
   karyoplot$latest.plot <- list(funct="kpPlotMarkers", computed.values=list(label.position=xlabels))

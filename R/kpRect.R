@@ -86,7 +86,15 @@ kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=N
       graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
     }
   }
-  graphics::rect(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot, ...)
+  
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters2
+  dots <- filterParams(list(...), pp$filter, pp$original.length)
+  
+  #And call the base plotting function with both the standard parameters and the modified dots parameters
+  params <- c(list(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot), dots)
+  do.call(graphics::rect, params)
+  
+  #graphics::rect(xleft=x0plot, xright=x1plot, ytop=y1plot, ybottom=y0plot, ...)
   
   invisible(karyoplot)
 }

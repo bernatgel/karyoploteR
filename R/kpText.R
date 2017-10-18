@@ -82,7 +82,14 @@ kpText <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, labels=NULL,
     }
   }
   
-  graphics::text(x=xplot, y=yplot, labels=labels, ...)      
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters2
+  dots <- filterParams(list(...), pp$filter, pp$original.length)
+  labels <- filterParams(labels, pp$filter, pp$original.length)
+  
+  #And call the base plotting function with both the standard parameters and the modified dots parameters
+  params <- c(list(x=xplot, y=yplot, labels=labels), dots)
+  do.call(graphics::text, params)
+  #graphics::text(x=xplot, y=yplot, labels=labels, ...)      
   
   invisible(karyoplot)
 }
