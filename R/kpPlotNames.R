@@ -41,7 +41,8 @@
 #'  kpPlotNames(kp, data=regs, labels=c("R1", "R2", "R3"))
 #'  kpPlotNames(kp, data=regs, labels=c("R1", "R2", "R3"), position="top", cex=2)    
 #'  kpPlotNames(kp, data=regs, labels=c("R1", "", "R3"), position="right", col="red")
-#'  kpPlotNames(kp, data=regs, labels="bottom", position="bottom", col=rainbow(3))        
+#'  kpPlotNames(kp, data=regs, labels="bottom", position="bottom", col=rainbow(3))
+#'  kpPlotNames(kp, data=regs, labels="o", position="center", col=rainbow(3), cex=1)                
 #'  
 #'@export kpPlotNames
 
@@ -71,7 +72,8 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
     left=kpText(karyoplot, chr=pp$chr, x=pp$x0, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=2, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
     right=kpText(karyoplot, chr=pp$chr, x=pp$x1, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=4, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
     top=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y1, labels=labels, pos=3,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
-    bottom=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0, labels=labels, pos=1,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
+    bottom=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0, labels=labels, pos=1,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
+    center=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
   )  
 
   invisible(karyoplot)
