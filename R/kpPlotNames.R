@@ -50,6 +50,7 @@
 kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, 
                           labels=NULL, position="left",
                           ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) {
+
   
   #karyoplot
     if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -57,9 +58,10 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
   #position
     if(is.null(position)) stop("The parameter 'position' is required")
     if(!(position %in% c("left", "right", "top", "bottom", "center"))) stop("Invalid specification for parameter position: ", position)
-  
+
+  #Note: we use r0=0 and r1=1 (and ymin=0 and ymax=1) so we only use data input normalization (data, chr, etc...) but not normalization of r0, ymins, etc...  
   pp <- prepareParameters4("kpPlotNames", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
-                           y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
+                           y0=y0, y1=y1, ymin=0, ymax=1, r0=0, r1=1, 
                            data.panel=data.panel, ...)
   
   #if there's nothing to plot, return
@@ -67,6 +69,12 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
     invisible(karyoplot)
   }
   
+  message("r0: ", r0, "      r1: ", r1)
+  message("ymin: ", ymin, "     ymax: ", ymax)
+  
+  # kpRect(karyoplot, chr=pp$chr, x0=pp$x0, x1=pp$x1, y0=pp$y0, y1=pp$y1, col="#FFAAAAAA", ymin=ymin, ymax=ymax, r0=0, r1=1, clipping=clipping, data.panel=data.panel, ... )
+  # kpAbline(karyoplot, h=pp$y0+(pp$y1-pp$y0)/2, ymin=ymin, ymax=ymax, r0=0, r1=1, clipping=clipping, data.panel=data.panel, ...)
+  # #
   #Now decide how to plot (with respect to the rectangles), and call kpText with the appropiate parameters
   switch(position,  
     left=kpText(karyoplot, chr=pp$chr, x=pp$x0, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=2, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
