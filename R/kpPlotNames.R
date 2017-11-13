@@ -69,12 +69,6 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
     invisible(karyoplot)
   }
   
-  message("r0: ", r0, "      r1: ", r1)
-  message("ymin: ", ymin, "     ymax: ", ymax)
-  
-  # kpRect(karyoplot, chr=pp$chr, x0=pp$x0, x1=pp$x1, y0=pp$y0, y1=pp$y1, col="#FFAAAAAA", ymin=ymin, ymax=ymax, r0=0, r1=1, clipping=clipping, data.panel=data.panel, ... )
-  # kpAbline(karyoplot, h=pp$y0+(pp$y1-pp$y0)/2, ymin=ymin, ymax=ymax, r0=0, r1=1, clipping=clipping, data.panel=data.panel, ...)
-  # #
   #Now decide how to plot (with respect to the rectangles), and call kpText with the appropiate parameters
   switch(position,  
     left=kpText(karyoplot, chr=pp$chr, x=pp$x0, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=2, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
