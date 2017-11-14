@@ -37,46 +37,77 @@
 #' 
 #' @examples
 #'  
-#'  
+#' #Build the data objet expected by transcripts
+#' 
+#' transcripts <- c(toGRanges("chr1", 100, 1000),
+#'                  toGRanges("chr1", 1500, 3000))
+#' names(transcripts) <- c("T1", "T2")
+#' strand(transcripts) <- c("+", "-")
+#' 
+#' coding.exons <- list("T1"=c(toGRanges("chr1", 200, 300),
+#'                             toGRanges("chr1", 500, 800),
+#'                             toGRanges("chr1", 900, 950)),
+#'                      "T2"=c(toGRanges("chr1", 2200, 2300),
+#'                             toGRanges("chr1", 2500, 2510),
+#'                             toGRanges("chr1", 2700, 2800)))
+#' 
+#' 
+#' non.coding.exons <- list("T1"=c(toGRanges("chr1", 100, 199),
+#'                                 toGRanges("chr1", 951, 1000)),
+#'                          "T2"=c(toGRanges("chr1", 1500, 1700),
+#'                                 toGRanges("chr1", 1900, 1950),
+#'                                 toGRanges("chr1", 2100, 2199),
+#'                                 toGRanges("chr1", 2801, 3000)))
+#' 
+#' data <- list(transcripts=transcripts, coding.exons=coding.exons, non.coding.exons=non.coding.exons)
+#' 
+#' #Create a simple example plot
+#' karyoplot <- plotKaryotype(zoom=toGRanges("chr1", 0, 3200))
+#' kpAddBaseNumbers(karyoplot, tick.dist = 400)
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0, r1=0.1)
+#' 
+#' 
+#' #Create a plot with different variants of the transcripts
+#' karyoplot <- plotKaryotype(zoom=toGRanges("chr1", 0, 3200))
+#' kpAddBaseNumbers(karyoplot, tick.dist = 400)
+#' #Standard
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0, r1=0.1)
+#' #Customize colors
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.11, r1=0.21, transcript.name.position = "right", non.coding.exons.col = "#888888", non.coding.exons.border.col = "#888888", marks.col="#CC6666", transcript.name.col="#CC6666")
+#' #Change vertical position and transcript height
+#' kpPlotTranscripts(karyoplot, data=data, y0=c(0, 0.4), y1=c(0.2, 1), r0=0.25, r1=0.8, add.transcript.names = TRUE, transcript.name.position = "left", add.strand.marks = TRUE, clipping=FALSE)
+#' #Change detail level, colors and transcript names
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.9, r1=1, detail.level = 1, add.transcript.names = TRUE, transcript.name.position = "top", add.strand.marks = TRUE, clipping=FALSE, col="blue", marks.col="white", transcript.names=list(T1="Transcript 1", T2="Transcript 2"))
+#'
+#' #Create a plot with different variants of the strand marks
+#' karyoplot <- plotKaryotype(zoom=toGRanges("chr1", 0, 3200))
+#' kpAddBaseNumbers(karyoplot, tick.dist = 400)
+#' #Standard
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0, r1=0.1)
+#' #No marks
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.15, r1=0.25, add.strand.marks=FALSE)
+#' #Change the strand marks height
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.3, r1=0.4, mark.height=1)
+#' #Change the mark width
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.45, r1=0.55, mark.width=2)
+#' #Change the mark distance
+#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.6, r1=0.7, mark.distance=1.5)
+#'
 #'  
 #'  
 #'@export kpPlotTranscripts
 
 
-transcripts <- c(toGRanges("chr1", 100, 1000),
-                 toGRanges("chr1", 1500, 3000))
-names(transcripts) <- c("T1", "T2")
-strand(transcripts) <- c("+", "-")
 
-coding.exons <- list("T1"=c(toGRanges("chr1", 200, 300),
-                          toGRanges("chr1", 500, 800),
-                          toGRanges("chr1", 900, 950)),
-                     "T2"=c(toGRanges("chr1", 2200, 2300),
-                          toGRanges("chr1", 2500, 2510),
-                          toGRanges("chr1", 2700, 2800)))
-
-
-non.coding.exons <- list("T1"=c(toGRanges("chr1", 100, 199),
-                              toGRanges("chr1", 951, 1000)),
-                     "T2"=c(toGRanges("chr1", 1500, 1700),
-                          toGRanges("chr1", 1900, 1950),
-                          toGRanges("chr1", 2100, 2199),
-                          toGRanges("chr1", 2801, 3000)))
-
-
-data <- list(transcripts=transcripts, coding.exons=coding.exons, non.coding.exons=non.coding.exons)
-
-karyoplot <- plotKaryotype(zoom=toGRanges("chr1", 0, 3200))
-kpAddBaseNumbers(karyoplot, tick.dist = 400)
 
 kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exons.height=0.5, 
                               detail.level=2,
-                              add.strand.marks=TRUE, mark.height=NULL, mark.width=NULL, mark.distance=5,
+                              add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
                               add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=1,
                               col="black", coding.exons.col=NULL, coding.exons.border.col=NULL, 
                               non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
                               introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
-                              ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...)
+                              ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) {
   
 
   #karyoplot
@@ -85,7 +116,10 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
   #data
     if(missing(data)) stop("The parameter 'data' is required")
     #TODO: Check data is valid
-  #TODO: Check detail.level is 1 or 2
+  #detail.level
+    if(is.null(detail.level)) detail.level <- 2
+    if(!(detail.level %in% c(1,2))) warning("Detail level must be 1 (only boxes) or 2 (whole transcript structure). Setting it to 2.")
+  
      
   #if null, get the r0 and r1
   if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
@@ -110,136 +144,124 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
   y1 <- rep(y1, length.out=length(data$transcripts))
 
 
-  #If needed, compute the sizes of the strand marks
-  if(add.strand.marks) {
-    #if params are null, make the strand marks with 1/4 of the transcript height
-    if(is.null(mark.height)) {
-      mark.height <- 0.25
-    }
-    if(is.null(mark.width)) {
-      #Try to make the marks roughly the same witdh as height IN THE FINAL PLOT irrespective of aspect ration!
-      #we need to compute the height of the marker in plot coordinates and
-      #then find out the number of bases needed to get the same distance 
-      #in the x axis
-      #TODO: Could it work with the computed aspect ratio as in https://stat.ethz.ch/pipermail/r-help/2005-October/080598.html
-      
-      pp <- prepareParameters2(karyoplot = karyoplot, chr=karyoplot$chromosomes[1], data = NULL, x =0, y = c(0, mark.height), ymin = 0, ymax=1, r0=r0, r1=r1, data.panel=data.panel)
-      mark.height.in.plot <- karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], y=pp$y[2])$y -
-        karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], y=pp$y[1])$y
-      plot.region.in.plot <- karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], x=end(karyoplot$plot.region))$x - 
-        karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], x=start(karyoplot$plot.region))$x
-      total.height <- karyoplot$plot$ymax - karyoplot$plot$ymin
-      total.width <- karyoplot$plot$xmax - karyoplot$plot$xmin  
-      
-      mark.h <- mark.height.in.plot/total.height
-      mark.width <- width(karyoplot$plot.region)*(mark.h * total.width)/2
-    }
-  }
-
   
   #And start plotting
   for(nt in seq_len(length(data$transcripts))) {
     transcript <- data$transcripts[nt]
+    chr <- as.character(seqnames(transcript))
     t.y0 <- y0[nt]
     t.y1 <- y1[nt]
     mid.transcript <- t.y0 + (t.y1-t.y0)/2
-    strand <- as.character(strand(transcript)[1])
+    transcript.height <- t.y1-t.y0
+     
+    
   
     if(detail.level==1) { #plot only boxes
       kpRect(karyoplot, data=transcript, y0=t.y0, y1=t.y1, col=col, border=col, ymax=ymax, ymin=ymin, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
       
-      if(add.strand.marks) {
-        if(width(transcript)>2*mark.width) {
-          
-          num.marks <- max((width(transcript) - mark.width)%/%(mark.width*mark.distance), 0)
-          mark.starts <- start(transcript)+mark.width+mark.width*mark.distance*(c(0, seq_len(num.marks-1)))   
-          if(strand!="-") {
-            kpSegments(karyoplot, chr=seqnames(transcript), x0=mark.starts+mark.width, x1=mark.starts, y0=mid.transcript, y1=mid.transcript+(mark.height/2), col=marks.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel)
-            kpSegments(karyoplot, chr=seqnames(transcript), x0=mark.starts+mark.width, x1=mark.starts, y0=mid.transcript, y1=mid.transcript-(mark.height/2), col=marks.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel)
-          } else {
-            kpSegments(karyoplot, chr=seqnames(transcript), x0=mark.starts, x1=mark.starts+mark.width, y0=mid.transcript, y1=mid.transcript+(mark.height/2), col=marks.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel)
-            kpSegments(karyoplot, chr=seqnames(transcript), x0=mark.starts, x1=mark.starts+mark.width, y0=mid.transcript, y1=mid.transcript-(mark.height/2), col=marks.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel)
-          }
-          #NOTE: If transcripts have strand "*", should we just NOT plot any mark even if asked?
-        }
+      if(add.strand.marks==TRUE) {
+        addStrandMarks(karyoplot, transcript, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, mark.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel)
+      
       }
-    } elsif(detail.level==2) {
+    } else if(detail.level==2) {
       coding.exons <- data$coding.exons[[names(transcript)]]
       non.coding.exons <- data$non.coding.exons[[names(transcript)]]
       
-      #coding exons
-      kpRect(karyoplot, data=coding.exons, y0=t.y0, y1=t.y1, col=coding.exons.col, border=coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      #Plot introns, non coding exons and coding exons in that order so overlapping margins do not enter the larger figures
+
+      #introns
+      introns <- setdiff(transcript, c(coding.exons, non.coding.exons, ignore.mcols=TRUE), ignore.strand=TRUE)
+      strand(introns) <- strand(transcript)
+      kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
       
+      if(add.strand.marks==TRUE) {
+        addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, mark.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel)
+      }
+      
+            
       #non-coding exons 
       nc.y0 <- mid.transcript-(t.y1-t.y0)*non.coding.exons.height/2
       nc.y1 <- mid.transcript+(t.y1-t.y0)*non.coding.exons.height/2
       
       kpRect(karyoplot, data=non.coding.exons, y0=nc.y0, y1=nc.y1, col=non.coding.exons.col, border=non.coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
       
-      #introns
-      introns <- subtractRegions(transcript, c(coding.exons, non.coding.exons, ignore.mcols=TRUE))
-      kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
-                 
+      #coding exons
+      kpRect(karyoplot, data=coding.exons, y0=t.y0, y1=t.y1, col=coding.exons.col, border=coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
       
-      
-      
-        
-    }
-    
-  }
-      
-  
-   
-    if(strand.marks) {
-      #if params are null, make the strand marks with 1/4 of the transcript height, width similar or equal to the height, separation, 4 heights. Never overlapping an exons even partially.
-      if(is.null(mark.height)) {
-        mark.height <- 0.25
-      }
-      if(is.null(mark.width)) {
-        #we need to compute the height of the marker in plot coordinates and
-        #then find out the number of bases needed to get the same distance 
-        #in the x axis
-        pp <- prepareParameters2(karyoplot = karyoplot, chr=karyoplot$chromosomes[1], data = NULL, x =0, y = c(0, mark.height), ymin = 0, ymax=1, r0=r0, r1=r1, data.panel=data.panel)
-        mark.height.in.plot <- karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], y=pp$y[2])$y -
-          karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], y=pp$y[1])$y
-        plot.region.in.plot <- karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], x=end(karyoplot$plot.region))$x - 
-          karyoplot$coord.change.function(chr=karyoplot$chromosomes[1], x=start(karyoplot$plot.region))$x
-        total.height <- karyoplot$plot$ymax - karyoplot$plot$ymin
-        total.width <- karyoplot$plot$xmax - karyoplot$plot$xmin  
-        
-        mark.h <- mark.height.in.plot/total.height
-        mark.width <- width(karyoplot$plot.region)*(mark.h * total.width)/2
-      }
-      
-      #now, find the `positions for the mark starts
-      introns.with.mark <- introns[width(introns)>2*mark.width]
-      marks.per.intron <- (width(introns.with.mark)-mark.width)%/%(mark.width*mark.distance)
-      for(i in seq_len(length(introns.with.mark))) {
-        mark.starts <- start(introns.with.mark[i])+mark.width+mark.width*mark.distance*(c(0, seq_len(marks.per.intron[i])))   
-        strand <- as.character(strand(transcript)[1])
-        if(strand=="+") {
-          kpSegments(karyoplot, chr=seqnames(introns.with.mark[i]), x0=mark.starts+mark.width, x1=mark.starts, y0=0.5, y1=0.5+(mark.height/2), col=marks.col, r0=r0, r1=r1, data.panel=data.panel)
-          kpSegments(karyoplot, chr=seqnames(introns.with.mark[i]), x0=mark.starts+mark.width, x1=mark.starts, y0=0.5, y1=0.5-(mark.height/2), col=marks.col, r0=r0, r1=r1, data.panel=data.panel)
-        } else {
-          kpSegments(karyoplot, chr=seqnames(introns.with.mark[i]), x0=mark.starts, x1=mark.starts+mark.width, y0=0.5, y1=0.5+(mark.height/2), col=marks.col, r0=r0, r1=r1, data.panel=data.panel)
-          kpSegments(karyoplot, chr=seqnames(introns.with.mark[i]), x0=mark.starts, x1=mark.starts+mark.width, y0=0.5, y1=0.5-(mark.height/2), col=marks.col, r0=r0, r1=r1, data.panel=data.panel)
-        }
-      }
     }
     
     #plot the transcript name
-    if(!is.null(transcript.name)) {
-      kpPlotNames()
+    if(add.transcript.names==TRUE) {
+      if(!is.null(transcript.names)) {
+        transcript.labels <- transcript.names[names(transcript)]
+      } else {
+        transcript.labels <- names(transcript)
+      }
+      kpPlotNames(karyoplot, data = transcript, y0 = t.y0, y1=t.y1, labels = transcript.labels, position = transcript.name.position, cex=transcript.name.cex, col=transcript.name.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, clipping=clipping, data.panel = data.panel)
     }
   }    
   
-  
-  
-  
-  
-  
-  
   invisible(karyoplot)
+}
+
+
+addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
+                           mark.height, mark.width=NULL, mark.distance=NULL, mark.col=NULL,
+                           r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL) {
+  #Assume all regs are in the same chromosome
+  chr <- as.character(seqnames(regs))[1]
+  
+  #Transform mid.transcript and transcript.height to account for r0/r1, ymin, ymax, etc..
+  pp <- prepareParameters2(karyoplot, function.name = "addStrandMarks", data = NULL,
+                           chr = rep(chr, 3), x=c(0,0,0), y=c(mid.transcript, 0, transcript.height),
+                           r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel = data.panel)
+  mid.transcript <- pp$y[1]
+  transcript.height <- abs(pp$y[2]-pp$y[3])
+  
+  
+  #This function works in plot coordinates, to allow for aspect ratio corrections
+  ccf <- karyoplot$coord.change.function
+  
+  #strand marks height
+  t.mark.height <- transcript.height*mark.height/2
+  plot.mark.height <- diff(ccf(chr = c(chr, chr), x=0, y=c(0, t.mark.height))$y)
+  
+  #Compute the mark.width relative to the mark.height. 
+  #Adjust for the aspcet ratio of the plot coordinates (in points)
+  asp.usr <- diff(par("usr")[1:2])/diff(par("usr")[3:4])
+  #Adjust for the aspect ratio of the canvas (in "inches")
+  asp.pin <- par("pin")[2]/par("pin")[1]
+  
+  plot.mark.width <- plot.mark.height*asp.usr*asp.pin*mark.width
+
+  
+  for(nr in seq_len(length(regs))) {
+    reg <- regs[nr]
+    strand <- as.character(strand(reg)[1])
+    if(strand=="*") {
+      #NOTE: If transcripts have strand "*", should we just NOT plot any mark
+      return()
+    }
+    
+    #Now, given the regions, determine if how many marks we should plot and where
+    plot.coords <- ccf(chr=c(chr, chr), x=c(start(reg), end(reg)), y=c(mid.transcript, mid.transcript))
+    
+    reg.width <- diff(plot.coords$x)
+    if(reg.width > 1.4*plot.mark.width) {
+      num.marks <- (reg.width-plot.mark.width)%/%(plot.mark.width*mark.distance)+1
+      left.margin <- (reg.width-((num.marks-1)*plot.mark.width*mark.distance)-plot.mark.width)/2
+      mark.starts <- plot.coords$x[1]+left.margin+plot.mark.width/2+plot.mark.width*mark.distance*c(0:(num.marks-1))
+      
+      
+      if(strand=="-") {
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]+plot.mark.height, col=mark.col)
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]-plot.mark.height, col=mark.col)
+      } else {
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]+plot.mark.height, y1=plot.coords$y[1], col=mark.col)
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]-plot.mark.height, y1=plot.coords$y[1], col=mark.col)
+      }
+    }
+  }
 }
 
 
