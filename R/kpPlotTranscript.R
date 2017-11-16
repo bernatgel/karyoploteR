@@ -7,13 +7,71 @@
 #' 
 #' @details 
 #'  
-#'  This is one of the high-level, or specialized, plotting functions of ç
+#'  This is one of the high-level, or specialized, plotting functions of
 #'  karyoploteR. It takes a list with the transcripts, coding and non-coding 
 #'  exons and creates a traditional boxes and line representation of the
-#'  transcripts. Optionally it can add little arrows along the introns to 
-#'  show the transcript strand.
+#'  transcripts. With y0 and y1, it is possible to specify a different vertical 
+#'  position and different height for each transcript. 
+#'  It can add little arrows,
+#'  strand marks, along the introns to show the transcript strand. The marks 
+#'  appearance can be customized using 4 different parameters specifying the 
+#'  height (relative to the height of the transcript), width of each mark 
+#'  (relative to the height), distance between marks (relative to the width) and
+#'  color of the marks. Marks are centered on the space they have available and
+#'  if the available space to too tight for a single mark, no mark will be 
+#'  plotted. The direction of the marks is based on the transcript strand as
+#'  specified in \code{data$transcripts} object.
+#'  Two detail levels are available: \code{detail.level=1} will represent 
+#'  transcripts as solid boxes (optionally with strand marks along the whole
+#'  transcript); \code{detail.level=2} will represent the internal structure of 
+#'  the transcripts -coding and non coding exons, introns, and optionally the
+#'  strand marks only in the introns.
+#'  
+#' @note IMPORTANT: The direction of the strand marks is taken from the strand
+#' information in the \code{data$transcripts} object. If transcripts have no
+#' strand information there (they have \code{strand="*"}), no marks will be 
+#' drawn.
 #' 
-#' @usage kpPlotTranscripts(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
+#' 
+#' 
+#' @usage kpPlotTranscripts(karyoplot, data, y0=NULL, y1=NULL, non.coding.exons.height=0.5, 
+#' detail.level=2,
+#' add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
+#' add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=1,
+#' col="black", coding.exons.col=NULL, coding.exons.border.col=NULL, 
+#' non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
+#' introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
+#' ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
+#' 
+#' @param karyoplot 
+#' @param data 
+#' @param y0=NULL 
+#' @param y1=NULL 
+#' @param non.coding.exons.height=0.5 
+#' @param detail.level=2
+#' @param add.strand.marks=TRUE 
+#' @param mark.height=0.20 
+#' @param mark.width=1 
+#' @param mark.distance=4
+#' @param add.transcript.names=TRUE 
+#' @param transcript.names=NULL 
+#' @param transcript.name.position="left" 
+#' @param transcript.name.cex=1,
+#' @param col="black" 
+#' @param coding.exons.col=NULL 
+#' @param coding.exons.border.col=NULL
+#' @param non.coding.exons.col=NULL 
+#' @param non.coding.exons.border.col=NULL 
+#' @param introns.col=NULL 
+#' @param marks.col=NULL 
+#' @param transcript.name.col=NULL
+#' @param ymax=NULL 
+#' @param ymin=NULL 
+#' @param r0=NULL 
+#' @param r1=NULL 
+#' @param data.panel=1 
+#' @param clipping=TRUE 
+#' @param ...
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
