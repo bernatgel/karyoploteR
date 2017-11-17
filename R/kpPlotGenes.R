@@ -74,8 +74,9 @@
 
 
 kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts.structure=TRUE,
+                        avoid.overlapping=TRUE,
                         gene.margin=0.3, gene.col="black",
-                        add.gene.name=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col="black",
+                        add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col="black",
                         transcript.margin=0.5, transcript.col="black", 
                         add.transcript.name=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col="black",
                         data.panel=1, r0=NULL, r1=NULL, col="black", 
@@ -96,7 +97,7 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
   #If data is a TxDb object, build a list from it with the expected format
   if(methods::is(data, "TxDb")) {
     data <- tryCatch(makeDataFromTxDb(karyoplot, data, plot.transcripts, plot.transcripts.structure),
-                     error=function(e) {"Error: There was an error extracting the information from the TxDb object."})
+                     error=function(e) {stop("Error: There was an error extracting the information from the TxDb object.")})
   }
   
   #if there's nothing to plot, return
@@ -117,22 +118,31 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
   
   total.height <- 1
   
+  data$genes <- c(data$genes, data$genes[1])
+  
+  
   if(plot.transcripts==FALSE) {
-    #Plot only the genes, with one rectangle per gene
-    genes.for.coverage <- data$genes
-    strand(genes.for.coverage) <- "*"
-    bins <- disjointBins(genes.for.coverage)
-    num.layers <- max(bins)
-    layer.height <- total.height/num.layers
-    gene.height <- layer.height/(1+gene.margin)
-    y0 <- layer.height * (bins-1)
-    y1 <- y0 + gene.height
-    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col)
-    if(add.gene.name==TRUE) {
-      gene.labels <- ifelse(!is.null(gene.names), gene.names[names(data$genes)], names(data$genes))
-      plotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, data.panel=data.panel)
+    #Plot only the genes, with one rectangle per gene. Automatically position genes so they do not overlap
+    if(avoid.overlapping==TRUE) {
+      genes.for.coverage <- data$genes
+      strand(genes.for.coverage) <- "*"
+      bins <- disjointBins(genes.for.coverage)
+      num.layers <- max(bins)
+      layer.height <- total.height/num.layers
+      gene.height <- layer.height/(1+gene.margin)
+      y0 <- layer.height * (bins-1)
+      y1 <- y0 + gene.height
+    } else {
+      y0 <- 0
+      y1 <- 1 - gene.margin
+    }
+    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+    if(add.gene.names==TRUE) {
+      gene.labels <- getGeneNames(genes=data$genes, gene.names=gene.names)
+      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel)
     }
     #TODO: Store the position of the genes in the latest.plot slot
+    
   } else { #if plot.transcripts==TRUE
     #Compute the position of each transcript (and the height dedicated to each gene depending on the numbre of transcripts)
   
@@ -146,82 +156,55 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
     transcript.height <- bin.height/(1+transcript.margin)
     
     #Once done, plot every transcript separately 
-    #and position them using the binning functionality of Bioconductor
+    #and position them using the disjoint binning functionality of Bioconductor
     bins <- disjointBins(genes.for.coverage)
     names(bins) <- names(genes.for.coverage)
     
+    #Initialize various counters
     col.num <- 1
     last.gene <- ""
     last.gene.y0 <- 0
     last.gene.y1 <- 0
-    
     transcript.in.gene <- 1
     for(nt in seq_len(length(bins))) {
       bin <- bins[nt]
       message(bin)
-      if(last.gene != names(bin)) {
+      if(last.gene != names(bin)) { #if we are starting a new gene, finish the last one, if necessary, and restart counters
         #Plot the gene label if needed
-        if(last.gene.y0 != last.gene.y1) {
-          gene.labels <- ifelse(!is.null(gene.names), gene.names[last.gene], last.gene)
-          plotNames(karyoplot, data=data$genes[last.gene], y0=last.gene.y0, y1=last.gene.y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, data.panel=data.panel)
-          #TODO: Store the y0, y1 position of the gene into the latest plot object
+        if(add.gene.names==TRUE) {
+          if(last.gene.y0 != last.gene.y1) { #if it's not the first gene
+            gg <- data$genes[last.gene]
+            gene.labels <- getGeneNames(genes=gg, gene.names=gene.names)
+            kpPlotNames(karyoplot, data=gg, y0=last.gene.y0, y1=last.gene.y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+            #TODO: Store the y0, y1 position of the gene into the latest plot object
+          }
         }
         last.gene.y0 <- last.gene.y1
         #update the counters and flags
         transcript.in.gene <- 1
         last.gene <- names(bin)
-        col.num <- col.num+1
-        tcol <- cols[col.num]
-        message("new col: ", tcol)
-        
       } else {
         transcript.in.gene <- transcript.in.gene + 1
       }
       
+      #Start plotting
       transcript <- data$transcripts[[names(bin)]][transcript.in.gene]
+      names(transcript) <- transcript$tx_id #Does it work with all txdbs??
+      t.name <- getTranscriptNames(transcript, transcript.names)
       
       transcript.y0 <- bin.height*(bin-1)
       transcript.y1 <- transcript.y0 + transcript.height
       last.gene.y1 <- transcript.y1 #store the latest transcript y1 to later plot the gene.name if needed
       
-      if(plot.transcripts.structure==FALSE) {
-        kpRect(karyoplot, data=transcript, y0=transcript.y0, y1=transcript.y1, col=tcol, r0=r0, r1=r1, data.panel=data.panel)
-        
-        if(add.transcript.name==TRUE) {
-          if(!is.null(transcript.names)) {
-            transcript.labels <- transcript.names[transcript$tx_id]
-          } else {
-            transcript.labels <- transcript$tx_id
-          }
-          message(transcript.y0)
-          plotNames(karyoplot, data=transcript, y0=transcript.y0, y1=transcript.y1, labels=transcript.labels, position=transcript.name.position, col=transcript.name.col, cex=transcript.name.cex, r0=r0, r1=r1, data.panel=data.panel)
-        }
-        
-      } else { #if plot.transcript.structure==TRUE
-        coding.exons <- data$coding.exons[[as.character(transcript$tx_id)]]
-        non.coding.exons <- data$non.coding.exons[[as.character(transcript$tx_id)]]
-        plotTranscript(karyoplot, transcript = transcript, 
-                       coding.exons = coding.exons, non.coding.exons = non.coding.exons, 
-                       r0=transcript.y0, r1=transcript.y1, col=tcol)
-      }
-    }
+      detail.level <- ifelse(plot.transcripts.structure==TRUE, 2, 1)
       
-      #t.exons <- unlist(all.exons[transcript$tx_id])
-      
-      
-      transcript.r0 <- bin.height*(bin-1)
-      transcript.r1 <- transcript.r0 + transcript.height
-      
-      #kpRect(kp, transcript, y0=0, y1=1, r0=transcript.r0, r1=transcript.r1, col=col)  
-      
-      plotTranscript(kp, transcript = transcript, coding.exons = coding.exons, non.coding.exons = non.coding.exons, 
-                     strand = as.character(strand(transcript))[1],
-                     transcript.name.col="#666666", non.coding.exons.height = 0.5, strand.marks = FALSE, 
-                     mark.height = NULL, mark.width = NULL, mark.distance = 4, transcript.name = transcript$tx_name, transcript.name.position = "left", transcript.name.cex = 1, transcript.name.offset = 0, coding.exons.col = tcol, non.coding.exons.col = tcol, marks.col = tcol, introns.col=tcol,
-                     r0=transcript.r0, r1=transcript.r1, data.panel=1)
+      #Efficiency note: AFAIK, the copy-on-modify ability of R should avoid the overhead of copying data$coding.exons and data$non.coding.exons. Maybe should check
+      kpPlotTranscripts(karyoplot, data=list(transcripts=transcript, coding.exons=data$coding.exons, non.coding.exons=data$non.coding.exons), y0 = transcript.y0, y1=transcript.y1, detail.level = detail.level, r0=r0, r1=r1)
+                          
       
     }
-    
+      
+  
     
     
     
@@ -289,23 +272,21 @@ isValidData <- function(...) {
 }
 
 
-#plot names of genes or transcripts (given the rectangle they are labelling)
-plotNames <- function(karyoplot, data, y0, y1, labels, position, col, cex, r0, r1, data.panel) {
-  if(position=="left") {
-    message("y=", (y1-y0)/2)
-    kpText(karyoplot, chr=as.character(seqnames(data)), x=start(data), y=y0+(y1-y0)/2,  labels=labels, pos=2, cex=cex, col=col, r0=r0, r=r1, data.panel)
-  }
-  if(position=="right") {
-    kpText(karyoplot, chr=as.character(seqnames(data)), x=end(data), y=y0+(y1-y0)/2,  labels=labels, pos=4, cex=cex, col=col, r0=r0, r=r1, data.panel)
-  }
-  if(position=="top") {
-    kpText(karyoplot, chr=as.character(seqnames(data)), x=start(data)+width(data)/2, y=y1,  labels=labels, pos=3, cex=cex, col=col, r0=r0, r=r1, data.panel)
-  }
-  if(position=="bottom") {
-    kpText(karyoplot, chr=as.character(seqnames(data)), x=start(data)+width(data)/2, y=y0,  labels=labels, pos=1, cex=cex, col=col, r0=r0, r=r1, data.panel)
+
+
+
+getGeneNames <- function(genes, gene.names) {
+  if(!is.null(gene.names)) {
+    return(gene.names[names(genes)])
+  } else {
+    return(names(genes))
   }
 }
 
-
-
-
+getTranscriptNames <- function(transcripts, transcript.names) {
+  if(!is.null(transcript.names)) {
+    return(transcript.names[names(transcripts)])
+  } else {
+    return(names(transcript))
+  }
+}
