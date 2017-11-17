@@ -74,7 +74,6 @@
 
 
 kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts.structure=TRUE,
-                        avoid.overlapping=TRUE,
                         gene.margin=0.3, gene.col="black",
                         add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col="black",
                         transcript.margin=0.5, transcript.col="black", 
@@ -118,7 +117,9 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
   
   total.height <- 1
   
-  data$genes <- c(data$genes, data$genes[1])
+  
+  gene.pos <- list()
+  transcript.pos <- list()
   
   
   if(plot.transcripts==FALSE) {
@@ -161,26 +162,11 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
     names(bins) <- names(genes.for.coverage)
     
     #Initialize various counters
-    col.num <- 1
     last.gene <- ""
-    last.gene.y0 <- 0
-    last.gene.y1 <- 0
     transcript.in.gene <- 1
     for(nt in seq_len(length(bins))) {
       bin <- bins[nt]
-      message(bin)
       if(last.gene != names(bin)) { #if we are starting a new gene, finish the last one, if necessary, and restart counters
-        #Plot the gene label if needed
-        if(add.gene.names==TRUE) {
-          if(last.gene.y0 != last.gene.y1) { #if it's not the first gene
-            gg <- data$genes[last.gene]
-            gene.labels <- getGeneNames(genes=gg, gene.names=gene.names)
-            kpPlotNames(karyoplot, data=gg, y0=last.gene.y0, y1=last.gene.y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
-            #TODO: Store the y0, y1 position of the gene into the latest plot object
-          }
-        }
-        last.gene.y0 <- last.gene.y1
-        #update the counters and flags
         transcript.in.gene <- 1
         last.gene <- names(bin)
       } else {
@@ -194,45 +180,39 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
       
       transcript.y0 <- bin.height*(bin-1)
       transcript.y1 <- transcript.y0 + transcript.height
-      last.gene.y1 <- transcript.y1 #store the latest transcript y1 to later plot the gene.name if needed
+      
+      transcript.pos[[t.name]] <- list(y0=setNames(transcript.y0, NULL), y1=setNames(transcript.y1, NULL))
       
       detail.level <- ifelse(plot.transcripts.structure==TRUE, 2, 1)
       
       #Efficiency note: AFAIK, the copy-on-modify ability of R should avoid the overhead of copying data$coding.exons and data$non.coding.exons. Maybe should check
       kpPlotTranscripts(karyoplot, data=list(transcripts=transcript, coding.exons=data$coding.exons, non.coding.exons=data$non.coding.exons), y0 = transcript.y0, y1=transcript.y1, detail.level = detail.level, r0=r0, r1=r1)
                           
-      
     }
-      
-  
     
-    
-    
-    karyoplot <- plotKaryotype(genome="hg19", zoom=zoom)
-    kpAddBaseNumbers(karyoplot, tick.dist = 100e3)
-    
-    
-    
-    
-    
-    
-    if(plot.transcripts.structure==FALSE) { #Plot the transcripts as boxes
-      
+    #Compute the position of the genes  
+    for(g in names(data$genes)) {
+      #get the vertical position of all transcripts of that gene
+      tpos <- data.frame(do.call(rbind, transcript.pos[as.character(data$transcripts[[g]]$tx_id)]))
+      gene.pos[[g]] <- list(y0=min(unlist(tpos[,1])), y1=max(unlist(tpos[,2])))
     }
-  }
+    
+
+    #Finally, plot the gene names if needed
+    if(add.gene.names) {
+      gene.labels <- getGeneNames(data$genes, gene.names)
+      y0 <- unlist(do.call(rbind, gene.pos[names(data$genes)])[,1])
+      y1 <- unlist(do.call(rbind, gene.pos[names(data$genes)])[,2])
+      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, col=gene.name.col, cex=gene.name.cex, position = gene.name.position, r0 = r0, r1=r1, clipping=clipping, data.panel=data.panel)
+    }
+  } #END if plot.transcripts==TRUE
   
   
- 
-  
-  
-  karyoplot <- plotKaryotype(genome="hg19", zoom=zoom)
-  #kpAddBaseNumbers(kp, tick.dist = 5e3)
-  
-  
-  
-  
-  
-  
+  karyoplot$latest.plot <- list(funct="kpPlotGenes", 
+                                computed.values=list(gene.vertical.position=gene.pos, 
+                                                     transcript.vertical.position=transcript.pos)
+  )
+
   invisible(karyoplot)
 }
 
