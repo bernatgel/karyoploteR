@@ -43,11 +43,11 @@
 #' introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
 #' ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
 #' 
-#' @param karyoplot 
-#' @param data 
-#' @param y0=NULL 
-#' @param y1=NULL 
-#' @param non.coding.exons.height=0.5 
+#' @param karyoplot (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
+#' @param data  (a \code{list}) data must be a list with an element called 'transcripts' with a \code{GRanges} with all transcripts to be plotted. Additionally, to plot the transcript structure it needs two other elements, 'coding.exons' and 'non.coding.exons', each a list with an element for every transcript with \code{GRanges} objects representing the transcript exons. An example of the data structure needed can be seen in the function examples.
+#' @param y0  (numeric) The bottom of the transcripts in the y axis. It can have a different value for each transcript and values will be recycled if needed. If null, it will be set to the minimum y value in the data.panel, usually 0. (Defaults to NULL)
+#' @param y1  (numeric) The top of the transcripts in the y axis. It can have a different value for each transcript and values will be recycled if needed. If null, it will be set to the maximum y value in the data.panel, usually 1. (Defaults to NULL)
+#' @param non.coding.exons.height  (numeric) The height of the non.coding exons relative to the transcript height. For example, if 0.5, non-coding exons will have a height half the size of the coding ones. (default 0.5) 
 #' @param detail.level=2
 #' @param add.strand.marks=TRUE 
 #' @param mark.height=0.20 
@@ -73,8 +73,8 @@
 #' @param clipping=TRUE 
 #' @param ...
 #' 
-#' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
-#' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
+#' @param karyoplot    
+#' @param data    
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
@@ -129,7 +129,7 @@
 #' karyoplot <- plotKaryotype(zoom=toGRanges("chr1", 0, 3200))
 #' kpAddBaseNumbers(karyoplot, tick.dist = 400)
 #' #Standard
-#' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0, r1=0.1)
+#' kpPlotTranscripts(karyoplot, data=data, r0=0, r1=0.1)
 #' #Customize colors
 #' kpPlotTranscripts(karyoplot, data=data, y0=0, y1=1, r0=0.11, r1=0.21, transcript.name.position = "right", non.coding.exons.col = "#888888", non.coding.exons.border.col = "#888888", marks.col="#CC6666", transcript.name.col="#CC6666")
 #' #Change vertical position and transcript height
@@ -229,9 +229,14 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
 
       #introns
       introns <- setdiff(transcript, c(coding.exons, non.coding.exons, ignore.mcols=TRUE), ignore.strand=TRUE)
+      #since the strand marks are plotted sith direct calls to base R, if clipping is TRUE, cut them with the plotting region
+      if(clipping==TRUE) {
+        introns <- intersect(introns, karyoplot$plot.region)
+      }
       strand(introns) <- strand(transcript)
+
       kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
-      
+
       if(add.strand.marks==TRUE) {
         addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, mark.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel)
       }
