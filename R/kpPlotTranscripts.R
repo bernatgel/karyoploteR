@@ -264,15 +264,18 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
 addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
                            mark.height, mark.width=NULL, mark.distance=NULL, marks.col=NULL,
                            r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
+  #if there are no regions to add marks to, simply return
+  if(length(regs)==0) return()
   
-  st <- as.character(strand(regs)[1])
   #since the strand marks are plotted sith direct calls to base R, if clipping is TRUE, cut them with the plotting region
+  #intersect removes with ignore.strand==TRUE removes the strand, so get it before
+  st <- as.character(strand(regs)[1])
   if(clipping==TRUE) {
     regs <- intersect(regs, karyoplot$plot.region, ignore.strand=TRUE)
     strand(regs) <- st 
   }
   
-  #if there are no regions to add marks to, simply return
+  #if after clipping there are no regions to add marks to, simply return
   if(length(regs)==0) return()
   #if the marks would be invisible (height=0, simply return)
   if(mark.height==0) return()
