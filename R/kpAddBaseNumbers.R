@@ -11,11 +11,12 @@
 #' independent x axis. It is possible to control the number and position of the tick
 #' marks and labels
 #' 
-#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
+#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases
 #' @param tick.len  (numeric) The length of the major tick marks in plot coordinates
+#' @param add.units (boolean) Add the units (Mb, Kb...) to the tick labels. Defaults to FALSE.
 #' @param minor.ticks (boolean) Whether to add unlabeled minor ticks between the major ticks
 #' @param minor.tick.dist   (numeric) The distance between the minor ticks in bases
 #' @param minor.tick.len   (numeric) The length of the minor tick marks in plot coordinates
@@ -46,7 +47,8 @@
 #' 
 
 
-kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ticks=TRUE, 
+kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE,
+                             minor.ticks=TRUE, 
                             minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, 
                             tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...) {
   
@@ -60,10 +62,15 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
   mids <- karyoplot$ideogram.mid
   
   
-  toLabel <- function(n) {
-    if(abs(n) < 1000) return(as.character(n))
-    if(abs(n) < 1000000) return(paste0(as.character(round(n/10)/100), "")) #Kb
-    return(paste0(as.character(round(n/10000)/100), "")) #Mb
+  toLabel <- function(n, add.units) {
+    if(add.units==TRUE) {
+      units <- c("b", "Kb", "Mb")
+    } else {
+      units <- c("", "", "")
+    }
+    if(abs(n) < 1000) return(paste0(as.character(n), units[1]))
+    if(abs(n) < 1000000) return(paste0(as.character(round(n/10)/100), units[2])) #Kb
+    return(paste0(as.character(round(n/10000)/100), units[3])) #Mb
   }
   
   old.scipen <- options("scipen")
@@ -76,17 +83,19 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
 
     chr <- karyoplot$genome[chr.name]
     #Major ticks
-      num.ticks <- width(chr)/tick.dist + 1
-      tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1
-      
-      #if zoomed in, keep only the ticks in the plot region
-      if(karyoplot$zoom==TRUE) {
-        if(clipping==TRUE) {
-          tick.pos <- tick.pos[tick.pos >= start(karyoplot$plot.region) & tick.pos<= end(karyoplot$plot.region)]
-        }
+    num.ticks <- width(chr)/tick.dist + 1
+  
+    tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1
+    
+    #if zoomed in, keep only the ticks in the plot region
+    if(karyoplot$zoom==TRUE) {
+      if(clipping==TRUE) {
+        tick.pos <- tick.pos[tick.pos >= start(karyoplot$plot.region) & tick.pos<= end(karyoplot$plot.region)]
       }
-      
-      tick.labels <- sapply(tick.pos, toLabel)
+    }
+    
+    if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
+      tick.labels <- sapply(tick.pos, toLabel, add.units=add.units)
       
       xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos)$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
@@ -96,27 +105,27 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, minor.ti
         graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len, col=tick.col, ...)
       }
       graphics::text(x=xplot, y=y0plot-tick.len, labels=tick.labels, pos=1, cex=cex, offset=0.1, ...)
-    
+    }
     #Minor ticks
     if(minor.ticks) {
       minor.num.ticks <- width(chr)/minor.tick.dist 
       minor.tick.pos <- start(chr) + (minor.tick.dist*(0:(minor.num.ticks-1))) - 1
-
+  
       #if zoomed in, keep only the ticks in the plot region
       if(karyoplot$zoom==TRUE) {
         if(clipping==TRUE) {
         minor.tick.pos <- minor.tick.pos[minor.tick.pos >= start(karyoplot$plot.region) & minor.tick.pos<= end(karyoplot$plot.region)]
         }
       }
-      
-      xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos)$x
-      y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
-      if(is.null(minor.tick.col)) {
-        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
-      } else {
-        graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, col=minor.tick.col, ...)       
+      if(length(minor.tick.pos)>0) {  
+        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos)$x
+        y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
+        if(is.null(minor.tick.col)) {
+          graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
+        } else {
+          graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, col=minor.tick.col, ...)       
+        }
       }
-      
     }
   }
   
