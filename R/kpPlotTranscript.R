@@ -38,7 +38,7 @@
 #' detail.level=2,
 #' add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
 #' add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=1,
-#' col="black", coding.exons.col=NULL, coding.exons.border.col=NULL, 
+#' col="black", border=NULL, coding.exons.col=NULL, coding.exons.border.col=NULL, 
 #' non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
 #' introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
 #' ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
@@ -58,6 +58,7 @@
 #' @param transcript.name.position="left" 
 #' @param transcript.name.cex=1,
 #' @param col="black" 
+#' @param border=NULL
 #' @param coding.exons.col=NULL 
 #' @param coding.exons.border.col=NULL
 #' @param non.coding.exons.col=NULL 
@@ -162,7 +163,7 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
                               detail.level=2,
                               add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
                               add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=1,
-                              col="black", coding.exons.col=NULL, coding.exons.border.col=NULL, 
+                              col="black", border=NULL, coding.exons.col=NULL, coding.exons.border.col=NULL, 
                               non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
                               introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
                               ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) {
@@ -189,10 +190,11 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
 
 
   #Set the colors if needed
+  if(is.null(border)) border <- col
   if(is.null(coding.exons.col)) coding.exons.col <- col
-  if(is.null(coding.exons.border.col)) coding.exons.border.col <- col
+  if(is.null(coding.exons.border.col)) coding.exons.border.col <- border
   if(is.null(non.coding.exons.col)) non.coding.exons.col <- col
-  if(is.null(non.coding.exons.col)) non.coding.exons.border.col <- col
+  if(is.null(non.coding.exons.col)) non.coding.exons.border.col <- border
   if(is.null(introns.col)) introns.col <- col
   if(is.null(marks.col)) marks.col <- col
   if(is.null(transcript.name.col)) transcript.name.col <- col
@@ -201,8 +203,6 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
   y0 <- rep(y0, length.out=length(data$transcripts))
   y1 <- rep(y1, length.out=length(data$transcripts))
 
-
-  
   #And start plotting
   for(nt in seq_len(length(data$transcripts))) {
     transcript <- data$transcripts[nt]
@@ -211,15 +211,12 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
     t.y1 <- y1[nt]
     mid.transcript <- t.y0 + (t.y1-t.y0)/2
     transcript.height <- t.y1-t.y0
-     
-    
   
     if(detail.level==1) { #plot only boxes
-      kpRect(karyoplot, data=transcript, y0=t.y0, y1=t.y1, col=col, border=col, ymax=ymax, ymin=ymin, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      kpRect(karyoplot, data=transcript, y0=t.y0, y1=t.y1, col=col, border=border, ymax=ymax, ymin=ymin, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
       
       if(add.strand.marks==TRUE) {
-        addStrandMarks(karyoplot, transcript, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, mark.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
-      
+        addStrandMarks(karyoplot, transcript, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
       }
     } else if(detail.level==2) {
       coding.exons <- data$coding.exons[[names(transcript)]]
@@ -234,7 +231,7 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
       kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
 
       if(add.strand.marks==TRUE) {
-        addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, mark.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
+        addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
       }
       
             
@@ -263,14 +260,16 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
   invisible(karyoplot)
 }
 
-#Note: the code assumes all regs are in the same chromosome
+#Note: the code assumes all regs are in the same chromosome and the same strand
 addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
-                           mark.height, mark.width=NULL, mark.distance=NULL, mark.col=NULL,
+                           mark.height, mark.width=NULL, mark.distance=NULL, marks.col=NULL,
                            r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
   
+  st <- as.character(strand(regs)[1])
   #since the strand marks are plotted sith direct calls to base R, if clipping is TRUE, cut them with the plotting region
   if(clipping==TRUE) {
     regs <- intersect(regs, karyoplot$plot.region, ignore.strand=TRUE)
+    strand(regs) <- st 
   }
   
   #if there are no regions to add marks to, simply return
@@ -303,12 +302,10 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   asp.pin <- par("pin")[2]/par("pin")[1]
   
   plot.mark.width <- plot.mark.height*asp.usr*asp.pin*mark.width
-
   
   for(nr in seq_len(length(regs))) {
     reg <- regs[nr]
-    strand <- as.character(strand(reg)[1])
-    if(strand=="*") {
+    if(st=="*") {
       #NOTE: If transcripts have strand "*", should we just NOT plot any mark
       return()
     }
@@ -322,13 +319,12 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
       left.margin <- (reg.width-((num.marks-1)*plot.mark.width*mark.distance)-plot.mark.width)/2
       mark.starts <- plot.coords$x[1]+left.margin+plot.mark.width/2+plot.mark.width*mark.distance*c(0:(num.marks-1))
       
-      
-      if(strand=="-") {
-        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]+plot.mark.height, col=mark.col)
-        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]-plot.mark.height, col=mark.col)
+      if(st=="-") {
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]+plot.mark.height, col=marks.col)
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]-plot.mark.height, col=marks.col)
       } else {
-        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]+plot.mark.height, y1=plot.coords$y[1], col=mark.col)
-        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]-plot.mark.height, y1=plot.coords$y[1], col=mark.col)
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]+plot.mark.height, y1=plot.coords$y[1], col=marks.col)
+        segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]-plot.mark.height, y1=plot.coords$y[1], col=marks.col)
       }
     }
   }
