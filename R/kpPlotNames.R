@@ -56,8 +56,7 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
     if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
     if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #position
-    if(is.null(position)) stop("The parameter 'position' is required")
-    if(!(position %in% c("left", "right", "top", "bottom", "center"))) stop("Invalid specification for parameter position: ", position)
+  position <- match.arg(position, c("left", "right", "top", "bottom", "center"))
 
   #Note: we use r0=0 and r1=1 (and ymin=0 and ymax=1) so we only use data input normalization (data, chr, etc...) but not normalization of r0, ymins, etc...  
   pp <- prepareParameters4("kpPlotNames", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
