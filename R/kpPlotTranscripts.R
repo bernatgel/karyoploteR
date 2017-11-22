@@ -48,44 +48,32 @@
 #' @param y0  (numeric) The bottom of the transcripts in the y axis. It can have a different value for each transcript and values will be recycled if needed. If null, it will be set to the minimum y value in the data.panel, usually 0. (Defaults to NULL)
 #' @param y1  (numeric) The top of the transcripts in the y axis. It can have a different value for each transcript and values will be recycled if needed. If null, it will be set to the maximum y value in the data.panel, usually 1. (Defaults to NULL)
 #' @param non.coding.exons.height  (numeric) The height of the non.coding exons relative to the transcript height. For example, if 0.5, non-coding exons will have a height half the size of the coding ones. (default 0.5) 
-#' @param detail.level=2
-#' @param add.strand.marks=TRUE 
-#' @param mark.height=0.20 
-#' @param mark.width=1 
-#' @param mark.distance=4
-#' @param add.transcript.names=TRUE 
-#' @param transcript.names=NULL 
-#' @param transcript.name.position="left" 
-#' @param transcript.name.cex=1,
-#' @param col="black" 
-#' @param border=NULL
-#' @param coding.exons.col=NULL 
-#' @param coding.exons.border.col=NULL
-#' @param non.coding.exons.col=NULL 
-#' @param non.coding.exons.border.col=NULL 
-#' @param introns.col=NULL 
-#' @param marks.col=NULL 
-#' @param transcript.name.col=NULL
-#' @param ymax=NULL 
-#' @param ymin=NULL 
-#' @param r0=NULL 
-#' @param r1=NULL 
-#' @param data.panel=1 
-#' @param clipping=TRUE 
-#' @param ...
+#' @param detail.level (numeric: 1 or 2) The detail level of the transcript representation: 1 will plot only boxes representing the transcripts, 2 will plot detailed structure of the trasncripts (coding and non-coding exons and introns). (Defaults to 2)
+#' @param add.strand.marks  (boolean) Whether strand marks should be plotted or not. Strand marks are small arrows along the introns (or whole transcripts if detail level=1). (defaults to TRUE)
+#' @param mark.height (numeric) The height of the strand marks in "coding exons heights", that is, if mark.height is 0.5, the mark will have a height of half the height of an exon. (defaults to 0.2)
+#' @param mark.width  (numeric) The width of the strand marks, in mark heights. mark.width=1 will produce arrow heads with a slope pf 45 degrees. A value higher than 1 will produce smaller angles and a value below 1 larger angles with more vertical lines. (defaults to 1, 45 degrees)
+#' @param mark.distance  (numeric) The distance between marks, in mark widths. A distance of 2, will add a space of 2*mark.width between consecutive marks. (defaults to 4)
+#' @param add.transcript.names (boolean) Whether to add transcript names to the plot (defailts to TRUE)
+#' @param transcript.names  (named character) A named character vector with the labels of the transcripts. If not null, it will be used as a dictionary, so transcript ids should be names and desired labels the values. If NULL, the transcript ids will be used as labels. (defaults to null)
+#' @param transcript.name.position  (character) The position of the text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". Defaults to "left".
+#' @param transcript.name.cex  (numeric) The cex value to plot the transcript labels. (defaults to 1)
+#' @param col  (color) The color of the genes, transcripts and labels. It is possible to specify different colors for each element class (transcript names, exons, strand marks...). All elements with no explicit color will be plotted using col. (defaults to "black) 
+#' @param border  (color) The color of the border of rectangles representing genes, transcripts and exons. Every element class may have its own specific color using the appropiate parameters. The ones with no explicit color will use border. At the same time, if border is NULL, it will default to col. (fesults to NULL)
+#' @param coding.exons.col  (color) The fill color of the rectangles representing the coding exons. If NULL, it will use col. (defaults to NULL)
+#' @param coding.exons.border.col  (color) The color of the border of the coding exons. If NULL, it will use border. (defaults to NULL)
+#' @param non.coding.exons.col  (color) The fill color of the rectangles representing the non-coding exons. If NULL, it will use col. (defaults to NULL)
+#' @param non.coding.exons.border.col  (color) The color of the border of the non-coding exons. If NULL, it will use border. (defaults to NULL)
+#' @param introns.col (color) The color of the lines representing the introns. If NULL, it will use col. (defaults to NULL) 
+#' @param marks.col   (color) The color of the arrows representing the strand. If NULL, it will use col. (defaults to NULL) 
+#' @param transcript.name.col  (color) The color of the transcript labels. If NULL, it will use col. (defaults to NULL)
+#' @param ymax  (numeric) The maximum value of \code{y} to be plotted. If NULL, it is set to the max value of the selected data panel. (defaults to NULL)
+#' @param ymin  (numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL) 
+#' @param r0  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
+#' @param r1  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
+#' @param data.panel (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
+#' @param clipping (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
+#' @param ...  The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
-#' @param karyoplot    
-#' @param data    
-#' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
-#' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param col    (color) The background color of the regions. (defaults to black)
-#' @param border    (color) The color used to draw the border of the regions. If NULL, no border is drawn. (defaults to NULL)
-#' @param avoid.overlapping    (boolean) Whether overlapping regions should be drawn as stacks (TRUE) on drawing one occluding the other in a single layer (FALSE). (defaults to TRUE)
-#' @param num.layers    (numeric) The number of layers the plotting space should be divided into to allow for plotting overlapping regions. The lotting region will be divided into this many pieces regardless if any overlapping regions actually exist. If NULL, the maximum number of regions overlapping a single point in the genome. (defaults to NULL)
-#' @param layer.margin    (numeric) The blank space left between layers of regions. (defaults to 0.05)
-#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
-#' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #'  
 #' @return
@@ -266,8 +254,8 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
                            r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
   #if there are no regions to add marks to, simply return
   if(length(regs)==0) return()
-  
-  #since the strand marks are plotted sith direct calls to base R, if clipping is TRUE, cut them with the plotting region
+  message("S1")
+  #since the strand marks are plotted sith direct calls to base R graphics, if clipping is TRUE, cut them with the plotting region
   #intersect removes with ignore.strand==TRUE removes the strand, so get it before
   st <- as.character(strand(regs)[1])
   if(clipping==TRUE) {
@@ -275,11 +263,13 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
     strand(regs) <- st 
   }
   
+  message("S2")
   #if after clipping there are no regions to add marks to, simply return
   if(length(regs)==0) return()
   #if the marks would be invisible (height=0, simply return)
   if(mark.height==0) return()
   
+  message("S3")
   #Assume all regs are in the same chromosome
   chr <- as.character(seqnames(regs))[1]
   
@@ -306,26 +296,32 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   
   plot.mark.width <- plot.mark.height*asp.usr*asp.pin*mark.width
   
+  
+  message("S4: ", st)
   for(nr in seq_len(length(regs))) {
     reg <- regs[nr]
     if(st=="*") {
       #NOTE: If transcripts have strand "*", should we just NOT plot any mark
       return()
     }
-    
+    message("S5")
     #Now, given the regions, determine if how many marks we should plot and where
     plot.coords <- ccf(chr=c(chr, chr), x=c(start(reg), end(reg)), y=c(mid.transcript, mid.transcript))
     
     reg.width <- diff(plot.coords$x)
+    message("reg: ", reg.width, "  mark.width: ", plot.mark.width)
     if(reg.width > 1.4*plot.mark.width) {
+      message("S6")
       num.marks <- (reg.width-plot.mark.width)%/%(plot.mark.width*mark.distance)+1
       left.margin <- (reg.width-((num.marks-1)*plot.mark.width*mark.distance)-plot.mark.width)/2
       mark.starts <- plot.coords$x[1]+left.margin+plot.mark.width/2+plot.mark.width*mark.distance*c(0:(num.marks-1))
       
       if(st=="-") {
+        message("S7")
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]+plot.mark.height, col=marks.col)
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]-plot.mark.height, col=marks.col)
       } else {
+        message("S8")
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]+plot.mark.height, y1=plot.coords$y[1], col=marks.col)
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]-plot.mark.height, y1=plot.coords$y[1], col=marks.col)
       }

@@ -73,14 +73,19 @@
 #'@export kpPlotGenes
 
 
-kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts.structure=TRUE,
-                        gene.margin=0.3, gene.col="black",
-                        add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col="black",
-                        transcript.margin=0.5, transcript.col="black", 
-                        add.transcript.name=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col="black",
+kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NULL,
+                        add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col=NULL,
+                        plot.transcripts=TRUE, transcript.margin=0.5, transcript.col=NULL,
+                        add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col=NULL,
+                        plot.transcripts.structure=TRUE,
+                        non.coding.exons.height=0.5, 
+                        add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
+                        coding.exons.col=NULL, coding.exons.border.col=NULL, 
+                        non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
+                        introns.col=NULL, marks.col=NULL,
                         data.panel=1, r0=NULL, r1=NULL, col="black", 
-                          border=NULL, avoid.overlapping=TRUE, num.layers=NULL,
-                          layer.margin=0.05, clipping=TRUE, ...) {
+                        border=NULL, avoid.overlapping=TRUE, num.layers=NULL,
+                        layer.margin=0.05, clipping=TRUE, ...) {
   
   #karyoplot
     if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -107,7 +112,7 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
     invisible(karyoplot)
   }
   
-  if(length(data$genes)>20 & plot.transcripts.structure==TRUE) {
+  if(length(data$genes)>20 & plot.transcripts==TRUE & plot.transcripts.structure==TRUE) {
     message("NOTE: Plotting many genes with detailed transcript structure may take a long time. You can set 'plot.transcripts' and 'plot.transcripts.structure' to FALSE to speed up the process reducing the detail level.")
   }
   
@@ -117,7 +122,22 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
   
   total.height <- 1
   
+  #Set the colors for the unspecified entities
+  if(is.null(border)) {border <- col}
+  if(is.null(gene.col)) { gene.col<- col}
+  if(is.null(gene.border.col)) { gene.border.col<- border}
+  if(is.null(gene.name.col)) { gene.name.col<- col}
+  if(is.null(transcript.col)) { transcript.col<- col}
+  if(is.null(transcript.name.col)) { transcript.name.col<- col}
+  if(is.null(coding.exons.col)) { coding.exons.col<- col}
+  if(is.null(coding.exons.border.col)) { coding.exons.border.col<- border} 
+  if(is.null(non.coding.exons.col)) { non.coding.exons.col<- col} 
+  if(is.null(non.coding.exons.border.col)) { non.coding.exons.border.col<- border} 
+  if(is.null(introns.col)) { introns.col<- col}
+  if(is.null(marks.col)) { marks.col <- col}
+
   
+  #All parameters processed. Start working
   gene.pos <- list()
   transcript.pos <- list()
   
@@ -137,77 +157,117 @@ kpPlotGenes <- function(karyoplot, data, plot.transcripts=TRUE, plot.transcripts
       y0 <- 0
       y1 <- 1 - gene.margin
     }
-    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, border=gene.border.col, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping, ...)
     if(add.gene.names==TRUE) {
       gene.labels <- getGeneNames(genes=data$genes, gene.names=gene.names)
-      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel)
+      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
     }
-    #TODO: Store the position of the genes in the latest.plot slot
     
   } else { #if plot.transcripts==TRUE
-    #Compute the position of each transcript (and the height dedicated to each gene depending on the numbre of transcripts)
-  
-    #Treat all genes as if they have the same length as the gene, so each genes has its own "rectangular space" preserved
-    num.transcripts.per.gene <- Map(length, as.list(data$transcripts))
-    genes.for.coverage <- Reduce(c, Map(rep, as.list(data$genes), num.transcripts.per.gene))
-    strand(genes.for.coverage) <- "*"
-    max.coverage <- max(max(coverage(genes.for.coverage)))
+    #Compute the position of each transcript (and the height dedicated to each 
+    # gene depending on the numbre of transcripts it has) and then, plot them
     
-    bin.height <- total.height/max.coverage
-    transcript.height <- bin.height/(1+transcript.margin)
-    
-    #Once done, plot every transcript separately 
-    #and position them using the disjoint binning functionality of Bioconductor
-    bins <- disjointBins(genes.for.coverage)
-    names(bins) <- names(genes.for.coverage)
-    
-    #Initialize various counters
-    last.gene <- ""
-    transcript.in.gene <- 1
-    for(nt in seq_len(length(bins))) {
-      bin <- bins[nt]
-      if(last.gene != names(bin)) { #if we are starting a new gene, finish the last one, if necessary, and restart counters
-        transcript.in.gene <- 1
-        last.gene <- names(bin)
-      } else {
-        transcript.in.gene <- transcript.in.gene + 1
+    if(avoid.overlapping==FALSE) {
+      #All transcripts span the whole vertical space
+      all.transcript.names <- as.character(unlist(GRangesList(data$transcripts))$tx_id)
+      for(t in all.transcript.names) {
+        transcript.pos[[t]] <- list(y0=0, y1=1)
+      }
+    } else { #Get the positions of the transcripts so they don't overlap
+      #TODO: Add the transcript name length to avoid overlapping?
+      
+      #Treat all genes as if they have the same length as the gene, so each genes has its own "rectangular space" preserved
+      num.transcripts.per.gene <- Map(length, as.list(data$transcripts))
+      genes.for.coverage <- Reduce(c, Map(rep, as.list(data$genes), num.transcripts.per.gene))
+      strand(genes.for.coverage) <- "*"
+      max.coverage <- max(max(coverage(genes.for.coverage)))
+      
+      bin.height <- total.height/max.coverage
+      transcript.height <- bin.height/(1+transcript.margin)
+      
+      #Position them using the disjoint binning functionality of Bioconductor
+      bins <- disjointBins(genes.for.coverage)
+      names(bins) <- names(genes.for.coverage)
+      
+      
+      #TODO: This could be vectorized with a tapply per gene in the bins object
+      # and inside, an apply to each transcript to get its position
+      #Initialize the transcript counter
+      transcript.in.gene <- 1
+      last.gene <- ""
+      for(nt in seq_len(length(bins))) {
+        bin <- bins[nt]
+        #if we are starting a new gene restart the transcript counter, 
+        #else, move to the next transcript in the gene
+        if(last.gene != names(bin)) { 
+          transcript.in.gene <- 1
+          last.gene <- names(bin)
+        } else {
+          transcript.in.gene <- transcript.in.gene + 1
+        }
+        
+        #And compute the y0 and y1 of that transcript
+        transcript <- data$transcripts[[names(bin)]][transcript.in.gene]
+        names(transcript) <- transcript$tx_id #Does it work with all txdbs??
+        
+        transcript.y0 <- bin.height*(bin-1)
+        transcript.y1 <- transcript.y0 + transcript.height
+        
+        transcript.pos[[as.character(names(transcript))]] <- list(y0=setNames(transcript.y0, NULL), y1=setNames(transcript.y1, NULL))
+        
       }
       
-      #Start plotting
-      transcript <- data$transcripts[[names(bin)]][transcript.in.gene]
-      names(transcript) <- transcript$tx_id #Does it work with all txdbs??
-      t.name <- getTranscriptNames(transcript, transcript.names)
-      
-      transcript.y0 <- bin.height*(bin-1)
-      transcript.y1 <- transcript.y0 + transcript.height
-      
-      transcript.pos[[t.name]] <- list(y0=setNames(transcript.y0, NULL), y1=setNames(transcript.y1, NULL))
-      
-      detail.level <- ifelse(plot.transcripts.structure==TRUE, 2, 1)
-      
-      #Efficiency note: AFAIK, the copy-on-modify ability of R should avoid the overhead of copying data$coding.exons and data$non.coding.exons. Maybe should check
-      kpPlotTranscripts(karyoplot, data=list(transcripts=transcript, coding.exons=data$coding.exons, non.coding.exons=data$non.coding.exons), y0 = transcript.y0, y1=transcript.y1, detail.level = detail.level, r0=r0, r1=r1)
-                          
     }
     
-    #Compute the position of the genes  
-    for(g in names(data$genes)) {
+    #Once we've got the position of transcripts, compute the position of the genes  
+    for(g in as.character(names(data$genes))) {
       #get the vertical position of all transcripts of that gene
       tpos <- data.frame(do.call(rbind, transcript.pos[as.character(data$transcripts[[g]]$tx_id)]))
       gene.pos[[g]] <- list(y0=min(unlist(tpos[,1])), y1=max(unlist(tpos[,2])))
     }
     
-
+    #All positioning data ready. Plot the transcripts
+    
+    #Now, plot the transcripts in their positions
+    detail.level <- ifelse(plot.transcripts.structure==TRUE, 2, 1)
+      
+    #Join all transcripts in a single GRanges as expected by kpPlotTranscripts
+    transcripts <- unlist(GRangesList(data$transcripts))
+    names(transcripts) <- transcripts$tx_id
+    
+    #Compute the y0 and y1 of all transcripts
+    y0 <- unlist(do.call(rbind, transcript.pos[names(transcripts)])[,1])
+    y1 <- unlist(do.call(rbind, transcript.pos[names(transcripts)])[,2])
+    
+    kpPlotTranscripts(karyoplot, 
+                      data=list(transcripts=transcripts, coding.exons=data$coding.exons, non.coding.exons=data$non.coding.exons), 
+                      add.transcript.names=add.transcript.names, transcript.names = transcript.names,
+                      y0 = y0, y1=y1, detail.level = detail.level, 
+                      r0=r0, r1=r1, 
+                      non.coding.exons.height = non.coding.exons.height, 
+                      add.strand.marks = add.strand.marks, mark.height = mark.height, mark.width = mark.width,
+                      mark.distance = mark.distance, marks.col = marks.col, 
+                      transcript.name.position = transcript.name.position, 
+                      transcript.name.cex = transcript.name.cex, 
+                      transcript.name.col = transcript.name.col, 
+                      coding.exons.col = coding.exons.col, 
+                      coding.exons.border.col = coding.exons.border.col,
+                      non.coding.exons.col = non.coding.exons.col, 
+                      non.coding.exons.border.col = non.coding.exons.border.col, 
+                      introns.col = introns.col,
+                      data.panel = data.panel, clipping = clipping,
+                      ymin=0, ymax=1, ...) 
+                        
     #Finally, plot the gene names if needed
     if(add.gene.names) {
       gene.labels <- getGeneNames(data$genes, gene.names)
-      y0 <- unlist(do.call(rbind, gene.pos[names(data$genes)])[,1])
-      y1 <- unlist(do.call(rbind, gene.pos[names(data$genes)])[,2])
+      y0 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,1])
+      y1 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,2])
       kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, col=gene.name.col, cex=gene.name.cex, position = gene.name.position, r0 = r0, r1=r1, clipping=clipping, data.panel=data.panel)
     }
   } #END if plot.transcripts==TRUE
   
-  
+  #Store the gene and transcript position in the karyoplot object
   karyoplot$latest.plot <- list(funct="kpPlotGenes", 
                                 computed.values=list(gene.vertical.position=gene.pos, 
                                                      transcript.vertical.position=transcript.pos)
@@ -257,16 +317,16 @@ isValidData <- function(...) {
 
 getGeneNames <- function(genes, gene.names) {
   if(!is.null(gene.names)) {
-    return(gene.names[names(genes)])
+    return(as.character(gene.names[names(genes)]))
   } else {
-    return(names(genes))
+    return(as.character(names(genes)))
   }
 }
 
 getTranscriptNames <- function(transcripts, transcript.names) {
   if(!is.null(transcript.names)) {
-    return(transcript.names[names(transcripts)])
+    return(as.character(transcript.names[names(transcripts)]))
   } else {
-    return(names(transcript))
+    return(as.character(names(transcript)))
   }
 }
