@@ -75,7 +75,7 @@
 
 kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NULL,
                         add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col=NULL,
-                        plot.transcripts=TRUE, transcript.margin=0.5, transcript.col=NULL,
+                        plot.transcripts=TRUE, transcript.margin=0.5, transcript.col=NULL, transcript.border.col=NULL,
                         add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col=NULL,
                         plot.transcripts.structure=TRUE,
                         non.coding.exons.height=0.5, 
@@ -100,8 +100,8 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
   
   #If data is a TxDb object, build a list from it with the expected format
   if(methods::is(data, "TxDb")) {
-    data <- tryCatch(makeDataFromTxDb(karyoplot, data, plot.transcripts, plot.transcripts.structure),
-                     error=function(e) {stop("Error: There was an error extracting the information from the TxDb object.")})
+    data <- tryCatch(makeGenesDataFromTxDb(karyoplot, data, plot.transcripts, plot.transcripts.structure),
+                     error=function(e) {stop("Error: There was an error extracting the information from the TxDb object. ", e)})
   }
   
   #if there's nothing to plot, return
@@ -128,6 +128,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
   if(is.null(gene.border.col)) { gene.border.col<- border}
   if(is.null(gene.name.col)) { gene.name.col<- col}
   if(is.null(transcript.col)) { transcript.col<- col}
+  if(is.null(transcript.border.col)) { transcript.border.col<- border}
   if(is.null(transcript.name.col)) { transcript.name.col<- col}
   if(is.null(coding.exons.col)) { coding.exons.col<- col}
   if(is.null(coding.exons.border.col)) { coding.exons.border.col<- border} 
@@ -255,6 +256,8 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
                       non.coding.exons.col = non.coding.exons.col, 
                       non.coding.exons.border.col = non.coding.exons.border.col, 
                       introns.col = introns.col,
+                      col=transcript.col,
+                      border=transcript.border.col,
                       data.panel = data.panel, clipping = clipping,
                       ymin=0, ymax=1, ...) 
                         
@@ -277,9 +280,8 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
 }
 
 
-
 #TODO: Make it exportable so users can build the structures from it and modify them as needed. (Changing the gene names?)
-makeDataFromTxDb <- function(karyoplot, txdb, plot.transcripts, plot.transcripts.structure) {
+makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts, plot.transcripts.structure) {
   res <- list()
   
   #get the genes

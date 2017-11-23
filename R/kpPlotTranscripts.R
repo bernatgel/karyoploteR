@@ -254,7 +254,6 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
                            r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
   #if there are no regions to add marks to, simply return
   if(length(regs)==0) return()
-  message("S1")
   #since the strand marks are plotted sith direct calls to base R graphics, if clipping is TRUE, cut them with the plotting region
   #intersect removes with ignore.strand==TRUE removes the strand, so get it before
   st <- as.character(strand(regs)[1])
@@ -262,14 +261,15 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
     regs <- intersect(regs, karyoplot$plot.region, ignore.strand=TRUE)
     strand(regs) <- st 
   }
-  
-  message("S2")
   #if after clipping there are no regions to add marks to, simply return
   if(length(regs)==0) return()
   #if the marks would be invisible (height=0, simply return)
   if(mark.height==0) return()
   
-  message("S3")
+  #We'll be plotting something, so begin kpPlot
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
   #Assume all regs are in the same chromosome
   chr <- as.character(seqnames(regs))[1]
   
@@ -279,7 +279,6 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
                            r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel = data.panel)
   mid.transcript <- pp$y[1]
   transcript.height <- abs(pp$y[2]-pp$y[3])
-  
   
   #This function works in plot coordinates, to allow for aspect ratio corrections
   ccf <- karyoplot$coord.change.function
@@ -296,32 +295,26 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   
   plot.mark.width <- plot.mark.height*asp.usr*asp.pin*mark.width
   
-  
-  message("S4: ", st)
+
   for(nr in seq_len(length(regs))) {
     reg <- regs[nr]
     if(st=="*") {
       #NOTE: If transcripts have strand "*", should we just NOT plot any mark
       return()
     }
-    message("S5")
     #Now, given the regions, determine if how many marks we should plot and where
     plot.coords <- ccf(chr=c(chr, chr), x=c(start(reg), end(reg)), y=c(mid.transcript, mid.transcript))
     
     reg.width <- diff(plot.coords$x)
-    message("reg: ", reg.width, "  mark.width: ", plot.mark.width)
     if(reg.width > 1.4*plot.mark.width) {
-      message("S6")
       num.marks <- (reg.width-plot.mark.width)%/%(plot.mark.width*mark.distance)+1
       left.margin <- (reg.width-((num.marks-1)*plot.mark.width*mark.distance)-plot.mark.width)/2
       mark.starts <- plot.coords$x[1]+left.margin+plot.mark.width/2+plot.mark.width*mark.distance*c(0:(num.marks-1))
       
       if(st=="-") {
-        message("S7")
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]+plot.mark.height, col=marks.col)
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1], y1=plot.coords$y[1]-plot.mark.height, col=marks.col)
       } else {
-        message("S8")
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]+plot.mark.height, y1=plot.coords$y[1], col=marks.col)
         segments(x0 = mark.starts-plot.mark.width/2, x1=mark.starts+plot.mark.width/2, y0=plot.coords$y[1]-plot.mark.height, y1=plot.coords$y[1], col=marks.col)
       }
