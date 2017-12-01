@@ -55,9 +55,9 @@
 #' @param mark.distance  (numeric) The distance between marks, in mark widths. A distance of 2, will add a space of 2*mark.width between consecutive marks. (defaults to 4)
 #' @param add.transcript.names (boolean) Whether to add transcript names to the plot (defailts to TRUE)
 #' @param transcript.names  (named character) A named character vector with the labels of the transcripts. If not null, it will be used as a dictionary, so transcript ids should be names and desired labels the values. If NULL, the transcript ids will be used as labels. (defaults to null)
-#' @param transcript.name.position  (character) The position of the text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". Defaults to "left".
+#' @param transcript.name.position  (character) The position of the text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". (Defaults to "left")
 #' @param transcript.name.cex  (numeric) The cex value to plot the transcript labels. (defaults to 1)
-#' @param col  (color) The color of the genes, transcripts and labels. It is possible to specify different colors for each element class (transcript names, exons, strand marks...). All elements with no explicit color will be plotted using col. (defaults to "black) 
+#' @param col  (color) The color of the transcripts and labels. It is possible to specify different colors for each element class (transcript names, exons, strand marks...). All elements with no explicit color will be plotted using col. (defaults to "black) 
 #' @param border  (color) The color of the border of rectangles representing genes, transcripts and exons. Every element class may have its own specific color using the appropiate parameters. The ones with no explicit color will use border. At the same time, if border is NULL, it will default to col. (fesults to NULL)
 #' @param coding.exons.col  (color) The fill color of the rectangles representing the coding exons. If NULL, it will use col. (defaults to NULL)
 #' @param coding.exons.border.col  (color) The color of the border of the coding exons. If NULL, it will use border. (defaults to NULL)
@@ -143,6 +143,8 @@
 #'  
 #'  
 #'@export kpPlotTranscripts
+#'
+#' @importFrom graphics par segments
 
 
 

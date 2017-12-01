@@ -2,31 +2,99 @@
 #' 
 #' @description 
 #' 
-#' Plots rectangles along the genome representing the regions (or intervals) specified by a \code{GRanges} object
+#' Plot genes and transcripts in the genome. Can get the genes and trancripts information from TxDb or from custom objects.
 #' 
 #' @details 
-#'  
-#'  This is one of the high-level, or specialized, plotting functions of karyoploteR. It takes a \code{GRanges} object and
-#'  plots its content. Overlapping regions can be stacked and the number of layers for overlapping regions can be set.
-#'  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
-#'  independent numeric vectors and the function only takes in \code{GRanges}.
 #'
-#' @usage kpPlotGenes(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
+#'  This is one of karyoploteR's higher level functions. It takes a transcript 
+#'  database (\code{TxDb}) object or a custom object with a specific structure 
+#'  and plots the genes along the genome. It's possible to plot genes as 
+#'  a whole using rectangle for each gene or to plot each transcript 
+#'  independently. If transcripts are drawn, it's possible to plot them as
+#'  single boxes or to plot the detailed structure, differentiating 
+#'  coding exons, non-coding exons and introns. Transcripts may have, in 
+#'  addition, little arrows to mark the trascript strand (plus or minus). These
+#'  strand marks are plotted in introns if the transcript structure is shown 
+#'  or on the whole transcript length if transcripts are plotted as boxes. 
+#'  Finally, it's possible to add labels to genes and transcripts. By default 
+#'  genes and transcripts identifiers in the input data structure will be used
+#'  as labels, but it's possible to provide named character vectors to be 
+#'  used as dictionaries to change id's to better names.
+#'    
+#'  The genes and transcripts representations are customizable. It's possible
+#'  to change the colors of the different elements individually (i.e. to 
+#'  have red coding exons, blue non-coding exons and green introns); it's 
+#'  possible to change the relative height of the non-coding exons and to 
+#'  change the slate and density of the strand marks.
+#'  
+#'  The data stating the positions of genes, transcripts and exons in the 
+#'  genome and their relations (which transcripts belong to which genes) 
+#'  can be given as a standard transcript database (\code{TxDb}) object or
+#'  as a custom list with the following elements: \code{genes},
+#'  \code{transcripts}, \code{coding.exons} and \code{non.coding.exons}.
+#'  
+#'  
+#' @note Plotting transcripts, specially plotting their structure might get 
+#' quite slow in comparison to the usual speed of plotting in karyoploteR. It
+#' is not advised to plot genes and transcripts on the whole genome or in 
+#' large regions of it. These functions have been designed to work with
+#' zoomed in karyoplots.
+#'
+#' @usage kpPlotGenes(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NULL,
+#'                        add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col=NULL,
+#'                        plot.transcripts=TRUE, transcript.margin=0.5, transcript.col=NULL, transcript.border.col=NULL,
+#'                        add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col=NULL,
+#'                        plot.transcripts.structure=TRUE,
+#'                        non.coding.exons.height=0.5, 
+#'                        add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
+#'                        coding.exons.col=NULL, coding.exons.border.col=NULL, 
+#'                        non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
+#'                        introns.col=NULL, marks.col=NULL,
+#'                        data.panel=1, r0=NULL, r1=NULL, col="black", 
+#'                        border=NULL, avoid.overlapping=TRUE, clipping=TRUE, ...)
 #' 
-#' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
-#' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
-# #removed as requested by the package reviewer. It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.
-#' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
-#' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param col    (color) The background color of the regions. (defaults to black)
-#' @param border    (color) The color used to draw the border of the regions. If NULL, no border is drawn. (defaults to NULL)
-#' @param avoid.overlapping    (boolean) Whether overlapping regions should be drawn as stacks (TRUE) on drawing one occluding the other in a single layer (FALSE). (defaults to TRUE)
-#' @param num.layers    (numeric) The number of layers the plotting space should be divided into to allow for plotting overlapping regions. The lotting region will be divided into this many pieces regardless if any overlapping regions actually exist. If NULL, the maximum number of regions overlapping a single point in the genome. (defaults to NULL)
-#' @param layer.margin    (numeric) The blank space left between layers of regions. (defaults to 0.05)
+#' 
+#' @param karyoplot (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
+#' @param data  (a \code{TxDb} object or a list with the required elements) A \code{TxDb} object with information on genes, transcripts and exons and their position on the genome.
+#' @param gene.margin  (numeric) If whole genes (as oposed to transcripts) are plotted (\code{plot.transcripts=FALSE}), the vertical margin between overlapping genes. The value is with respect to the gene height. A value of 0.5 will create a space above the genes with half the height of the genes themselves. (defaults to 0.3)
+#' @param gene.col  (color) If whole genes (as oposed to transcripts) are plotted (\code{plot.transcripts=FALSE}), the color used to fill the rectangles representing the genes. If NULL, the value of \code{col} will be used. (Defaults to NULL)
+#' @param gene.border.col  (color) If whole genes (as oposed to transcripts) are plotted (\code{plot.transcripts=FALSE}), the color used in the border of the rectangles representing the genes. If NULL, the value of \code{col} will be used. If NA, no border is drawn. (Defaults to NULL)
+#' @param add.gene.names  (boolean) Whether to add the names of the genes to the plot.
+#' @param gene.names  (named character vector) A named character vector with the labels of the genes. If not NULL, it will be used as a dictionary, so gene ids should be names and desired labels the values. If NULL, the gene ids will be used as labels. (defaults to null) 
+#' @param gene.name.position (character) The position of the gene name text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". (Defaults to "top")
+#' @param gene.name.cex (numeric) The cex value to plot the gene names (defaults to 1)
+#' @param gene.name.col (color) The color of the gene labels. If NULL, it will use col. (defaults to NULL)
+#' @param plot.transcripts (boolean) Whether to plot the individual transcripts (TRUE) or a single rectangle to represent the whole gene (FALSE). (Defaults to TRUE)
+#' @param transcript.margin (numeric) If transcripts are plotted (\code{plot.transcripts=TRUE}), the vertical margin between overlapping transcripts. The value is with respect to the transcript height. A value of 0.5 will create a space above the transcripts with half the height of the transcripts themselves. (defaults to 0.5)
+#' @param transcript.col (color) If transcripts are plotted (\code{plot.transcripts=TRUE}), the color used to fill the rectangles representing the transcripts. If NULL, the value of \code{col} will be used. (Defaults to NULL)  
+#' @param transcript.border.col (color) If transcripts are plotted (\code{plot.transcripts=TRUE}), the color used in the border the rectangles representing the transcripts. If NULL, the value of \code{col} will be used. If NA, no border will be drawn. (Defaults to NULL)  
+#' @param add.transcript.names (boolean) Whether to add the names of the tramscripts to the plot.
+#' @param transcript.names (named character) A named character vector with the labels of the transcripts. If not null, it will be used as a dictionary, so transcript ids should be names and desired labels the values. If NULL, the transcript ids will be used as labels. (defaults to null)
+#' @param transcript.name.position (character) The position of the transcript name text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". (Defaults to "left")
+#' @param transcript.name.cex (numeric) The cex value to plot the transcript names (defaults to 0.6)
+#' @param transcript.name.col (color) The color of the transcript labels. If NULL, it will use col. (defaults to NULL)
+#' @param plot.transcripts.structure (boolean) Whether to draw the transcripts as single rectangles (FALSE) or to show the complete transcript structure (introns and exons) (TRUE). (Defaults to TRUE)
+#' @param non.coding.exons.height  (numeric) The height of the non.coding exons relative to the transcript height. For example, if 0.5, non-coding exons will have a height half the size of the coding ones. (default 0.5) 
+#' @param add.strand.marks  (boolean) Whether strand marks should be plotted or not. Strand marks are small arrows along the introns (or whole transcripts if plot.transcript.structure=FALSE). (defaults to TRUE)
+#' @param mark.height (numeric) The height of the strand marks in "coding exons heights", that is, if mark.height is 0.5, the mark will have a height of half the height of an exon. (defaults to 0.2)
+#' @param mark.width (numeric) The width of the strand marks, in mark heights. mark.width=1 will produce arrow heads with a slope pf 45 degrees. A value higher than 1 will produce smaller angles and a value below 1 larger angles with more vertical lines. (defaults to 1, 45 degrees)
+#' @param mark.distance   (numeric) The distance between marks, in mark widths. A distance of 2, will add a space of 2*mark.width between consecutive marks. (defaults to 4)
+#' @param coding.exons.col  (color) The fill color of the rectangles representing the coding exons. If NULL, it will use col. (defaults to NULL)
+#' @param coding.exons.border.col  (color) The color of the border of the coding exons. If NULL, it will use border. (defaults to NULL)
+#' @param non.coding.exons.col  (color) The fill color of the rectangles representing the non-coding exons. If NULL, it will use col. (defaults to NULL)
+#' @param non.coding.exons.border.col  (color) The color of the border of the non-coding exons. If NULL, it will use border. (defaults to NULL)
+#' @param introns.col (color) The color of the lines representing the introns. If NULL, it will use col. (defaults to NULL) 
+#' @param marks.col   (color) The color of the arrows representing the strand. If NULL, it will use col. (defaults to NULL) 
+#' @param data.panel (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
+#' @param r0  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
+#' @param r1  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
+#' @param col  (color) The color of the genes, transcripts and labels. It is possible to specify different colors for each element class (transcript names, exons, strand marks...). All elements with no explicit color will be plotted using col. (Defaults to "black") 
+#' @param border  (color) The color of the border of rectangles representing genes, transcripts and exons. Every element class may have its own specific color using the appropiate parameters. The ones with no explicit color will use border. At the same time, if border is NULL, it will default to col. (Defaults to NULL)
+#' @param avoid.overlapping (boolean) If two or more regions (genes, transcripts) overlap in the genome (even partially), they can be drawn in two different layers (TRUE) or in the same layer, with superposing representations (FALSE). (Defaults to TRUE, draw non-overlapping elements)
 #' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
-#' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
+#' @param ...  The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
+#'
 #'  
 #' @return
 #' 
@@ -37,38 +105,20 @@
 #' @examples
 #'  
 #'  
-#'  set.seed(1000)
+#'  library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#'  txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 #'  
-#'  #Example 1: create 20 sets of non-overlapping random regions and plot them all. Add a coverage plot on top.
-#'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
+#'  zoom <- toGRanges("chr2", 47986268, 48147403)
+#'  gene.names <- c("2956"="MSH6", "80204"="FBXO11")
 #'  
-#'  all.regs <- GRanges()
-#'  
-#'  nreps <- 20
-#'  for(i in 1:nreps) {
-#'    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
-#'                                non.overlapping = TRUE, genome = "hg19", mask=NA)
-#'    all.regs <- c(all.regs, regs)
-#'    kpPlotGenes(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
-#'  }
-#'  
-#'  kpPlotCoverage(kp, all.regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
-#'  kpAxis(kp, ymin = 0, ymax= 20, numticks = 2, r0 = 0.8, r1=1)
-#'  
-#'  
-#'  #Example 2: Do the same with a single bigger set of possibly overlapping regions
-#'  
-#'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
-#'  
-#'  regs <- createRandomRegions(nregions = 1000, length.mean = 10000000, length.sd = 1000000,
-#'                              non.overlapping = FALSE, genome = "hg19", mask=NA)
-#'                              
-#'  kpPlotGenes(kp, regs, r0 = 0, r1 = 0.8, col="#AAAAAA")
-#'  
-#'  kpPlotCoverage(kp, regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
-#'  kpAxis(kp, ymin = 0, ymax= 20, numticks = 2, r0 = 0.8, r1=1)
-#'  
-#'  
+#'  kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#'  kpPlotGenes(kp, data=txdb, add.transcript.names = FALSE, gene.names=gene.names, r1=0.6)
+#' 
+#'  kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#'  kpPlotGenes(kp, data=txdb, plot.transcripts=FALSE, gene.names=gene.names, r1=0.6)
+#'
+#'  kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#'  kpPlotGenes(kp, data=txdb, plot.transcripts.structure=FALSE, add.transcript.names=FALSE, gene.names=gene.names, r1=0.8, col="blue", marks.col="white", gene.name.col="black")
 #'  
 #'@export kpPlotGenes
 
@@ -84,8 +134,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
                         non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
                         introns.col=NULL, marks.col=NULL,
                         data.panel=1, r0=NULL, r1=NULL, col="black", 
-                        border=NULL, avoid.overlapping=TRUE, num.layers=NULL,
-                        layer.margin=0.05, clipping=TRUE, ...) {
+                        border=NULL, avoid.overlapping=TRUE, clipping=TRUE, ...) {
   
   #karyoplot
     if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -280,6 +329,64 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
 }
 
 
+#' makeGenesDataFromTxDb
+#' 
+#' @description 
+#' 
+#' This is a utility function that transforms a TxDb object into a custom 
+#' object valid as input for \code{\link{kpPlotGenes}}.
+#' 
+#' @details 
+#'  
+#' This function creates a valid data object for \code{\link{kpPlotGenes}} 
+#' starting from a TxDb object. The resulting object will contain only the
+#' genes and transcripts ovelapping the plot region of the given Karyoplot 
+#' object. 
+#' 
+#' @note \code{\link{kpPlotGenes}} accepts TxDb objects directly. This 
+#' function is only expected to be used when the user want to manipulate the 
+#' results somehow (i.e. removing some of the genes).
+#' 
+#' @usage makeGenesDataFromTxDb(karyoplot, txdb, plot.transcripts, plot.transcripts.structure)
+#' 
+#' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
+#' @param txdb (a TxDb object) The transcript database object from which the data will be extracted.
+#' @param plot.transcripts (boolean) TRUE if transcripts are needed in addition to the genes.
+#' @param plot.transcripts.structure (boolean) TRUE if the coding and non-coding exons are needed in addition to the genes and transcripts.
+#' 
+#' @return
+#' 
+#' Returns a list with at least one element called \code{genes}, a 
+#' \code{GRanges} with all genes overlapping karyoplot. If 
+#' \code{plot.transcripts} is TRUE, the returned list will have 
+#' a \code{transcript} element, a list of \code{GRanges} objects, one per gene
+#' (named with the gene ids),
+#' with the transcripts of that gene. If \code{plot.transcripts.structure} is
+#' TRUE, two more elements are present: \code{coding.exons} and 
+#' \code{non.coding.exons}, each a list with one element per trascript 
+#' (named with the transcript id), and each element the coding or non-coding
+#' exons of that transcript.
+#' 
+#'  
+#' @seealso \code{\link{kpPlotGenes}}
+#' 
+#' @examples
+#'  
+#' 
+#' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' 
+#' zoom <- toGRanges("chr17", 32.6e6, 33.2e6)
+#' kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#' 
+#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, TRUE, TRUE)
+#'   
+#' @export makeGenesDataFromTxDb
+#' 
+#' @importFrom GenomicFeatures genes exons transcriptsBy cds
+#' @importFrom IRanges subsetByOverlaps
+#' 
+
+
 #TODO: Make it exportable so users can build the structures from it and modify them as needed. (Changing the gene names?)
 makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts, plot.transcripts.structure) {
   res <- list()
@@ -329,6 +436,6 @@ getTranscriptNames <- function(transcripts, transcript.names) {
   if(!is.null(transcript.names)) {
     return(as.character(transcript.names[names(transcripts)]))
   } else {
-    return(as.character(names(transcript)))
+    return(as.character(names(transcripts)))
   }
 }
