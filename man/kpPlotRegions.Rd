@@ -2,7 +2,7 @@
 % Please edit documentation in R/kpPlotRegions.R
 \name{kpPlotRegions}
 \alias{kpPlotRegions}
-\title{kpPlotCoverage}
+\title{kpPlotRegions}
 \usage{
 kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
 }

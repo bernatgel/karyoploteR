@@ -136,12 +136,18 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   
   
   #Sort everything by chr and start
+  #(We need it sorted for the non overlapping algorithm)
   ord <- order(valid.chr, valid.x) #Will be problematic with non UCSC genes? the chr order?
   valid.chr <- valid.chr[ord]
   valid.x <- valid.x[ord]
   valid.y <- valid.y[ord]
   valid.labels <- valid.labels[ord]
-  #TODO: Should reorder other parameters? only if the same length as data.points
+  if(length(label.color)==length(ord)) label.color <- label.color[ord]
+  if(length(line.color)==length(ord)) line.color <- line.color[ord]
+  if(length(pos)==length(ord)) pos <- pos[ord]
+  if(length(offset)==length(ord)) offset <- offset[ord]
+  
+  #TODO: Should reorder other parameters? Specially "dots", only if the same length as data.points
   
   
   #Transform to plot coordinates  
