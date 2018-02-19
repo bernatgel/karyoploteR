@@ -227,8 +227,8 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
       #TODO: Add the transcript name length to avoid overlapping?
       
       #Treat all genes as if they have the same length as the gene, so each genes has its own "rectangular space" preserved
-      num.transcripts.per.gene <- Map(length, as.list(data$transcripts))
-      genes.for.coverage <- Reduce(c, Map(rep, as.list(data$genes), num.transcripts.per.gene))
+      num.transcripts.per.gene <- lengths(data$transcripts)
+      genes.for.coverage <- rep(data$genes, num.transcripts.per.gene)
       strand(genes.for.coverage) <- "*"
       max.coverage <- max(max(coverage(genes.for.coverage)))
       
