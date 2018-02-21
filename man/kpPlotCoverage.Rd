@@ -75,6 +75,4 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
 }
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}
-
-\code{\link[IRanges]{coverage}}
 }
