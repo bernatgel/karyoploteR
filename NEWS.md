@@ -1,3 +1,25 @@
+# karyoploteR 1.5.4
+
+## New features
+
+* Added `kpPlotGenes` and `kpPlotTranscripts` to plot gene and transcript models
+
+## API changes
+
+
+## Other
+
+* Added plot.type=4 to `plotDefaultPlotParams`
+* Added new examples and extended the tutorial at the karyoploteR tutorial and examples site at https://bernatgel.github.io/karyoploter_tutorial/
+
+
+## Bug Fixes
+
+* Various minor bug fixes.
+* Various documentation fixes
+
+
+
 # karyoploteR 1.3.11
 
 ## New features
