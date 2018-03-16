@@ -4,10 +4,14 @@
 \alias{kpAddChromosomeNames}
 \title{kpAddChromosomeNames}
 \usage{
-kpAddChromosomeNames(karyoplot, ...)
+kpAddChromosomeNames(karyoplot, xoffset=0, yoffset=0, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
+
+\item{xoffset}{(numeric) a number of units to move the the chromosome names on the x axis with respect to their standard position (defaults to 0)}
+
+\item{yoffset}{(numeric) a number of units to move the the chromosome names on the y axis with respect to their standard position (defaults to 0)}
 
 \item{...}{any additional parameter to be passed to the text plotting. All R base graphics params are passed along.}
 }
