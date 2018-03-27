@@ -3,6 +3,7 @@
 ## New features
 
 * Added `kpPlotGenes` and `kpPlotTranscripts` to plot gene and transcript models
+* Added `kpArea` to plot shaded areas. Ideal for coverage plots, RNA-seq, ChIP-seq, etc...
 
 ## API changes
 
