@@ -11,19 +11,20 @@
 #' independent x axis. It is possible to control the number and position of the tick
 #' marks and labels
 #' 
-#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
+#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
-#' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases
-#' @param tick.len  (numeric) The length of the major tick marks in plot coordinates
-#' @param add.units (boolean) Add the units (Mb, Kb...) to the tick labels. Defaults to FALSE.
-#' @param minor.ticks (boolean) Whether to add unlabeled minor ticks between the major ticks
-#' @param minor.tick.dist   (numeric) The distance between the minor ticks in bases
-#' @param minor.tick.len   (numeric) The length of the minor tick marks in plot coordinates
-#' @param cex  (numeric) The cex parameter for the major ticks label
+#' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases (defaults to 20 milions, one major tick every 20Mb)
+#' @param tick.len  (numeric) The length of the major tick marks in plot coordinates (defaults to 5)
+#' @param add.units (boolean) Add the units (Mb, Kb...) to the tick labels. (Defaults to FALSE)
+#' @param digits   (integer) The maximum number of digits after the decimal point in labels. (defaults to 2)
+#' @param minor.ticks (boolean) Whether to add unlabeled minor ticks between the major ticks (defaults to TRUE)
+#' @param minor.tick.dist   (numeric) The distance between the minor ticks in bases (defaults to 5 milions, a minor tick mark every 5Mb)
+#' @param minor.tick.len   (numeric) The length of the minor tick marks in plot coordinates (defaults to 2)
+#' @param cex  (numeric) The cex parameter for the major ticks label (defaults to 0.5)
 #' @param tick.col   (color) If specified, the color to plot the major ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)
 #' @param minor.tick.col  (color) If specified, the color to plot the minor ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)
-#' @param clipping  (boolean)
+#' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...  Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.
 #' 
 #' @return
@@ -48,9 +49,9 @@
 
 
 kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE,
-                             minor.ticks=TRUE, 
+                             digits=2, minor.ticks=TRUE, 
                             minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, 
-                            tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...) {
+                            tick.col=NULL, minor.tick.col=NULL, clipping=TRUE,  ...) {
   
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
@@ -62,15 +63,15 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
   mids <- karyoplot$ideogram.mid
   
   
-  toLabel <- function(n, add.units) {
+  toLabel <- function(n, add.units, digits) {
     if(add.units==TRUE) {
       units <- c("b", "Kb", "Mb")
     } else {
       units <- c("", "", "")
     }
     if(abs(n) < 1000) return(paste0(as.character(n), units[1]))
-    if(abs(n) < 1000000) return(paste0(as.character(round(n/10)/100), units[2])) #Kb
-    return(paste0(as.character(round(n/10000)/100), units[3])) #Mb
+    if(abs(n) < 1000000) return(paste0(as.character(round(n/1000, digits=digits)), units[2])) #Kb
+    return(paste0(as.character(round(n/1000000, digits=digits)), units[3])) #Mb
   }
   
   old.scipen <- options("scipen")
@@ -95,7 +96,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     }
     
     if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
-      tick.labels <- sapply(tick.pos, toLabel, add.units=add.units)
+      tick.labels <- sapply(tick.pos, toLabel, add.units=add.units, digits=digits)
       
       xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos)$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2

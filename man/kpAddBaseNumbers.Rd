@@ -4,30 +4,32 @@
 \alias{kpAddBaseNumbers}
 \title{kpAddBaseNumbers}
 \usage{
-kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
+kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}}
 
-\item{tick.dist}{(numeric) The distance between the major numbered tick marks in bases}
+\item{tick.dist}{(numeric) The distance between the major numbered tick marks in bases (defaults to 20 milions, one major tick every 20Mb)}
 
-\item{tick.len}{(numeric) The length of the major tick marks in plot coordinates}
+\item{tick.len}{(numeric) The length of the major tick marks in plot coordinates (defaults to 5)}
 
-\item{add.units}{(boolean) Add the units (Mb, Kb...) to the tick labels. Defaults to FALSE.}
+\item{add.units}{(boolean) Add the units (Mb, Kb...) to the tick labels. (Defaults to FALSE)}
 
-\item{minor.ticks}{(boolean) Whether to add unlabeled minor ticks between the major ticks}
+\item{digits}{(integer) The maximum number of digits after the decimal point in labels. (defaults to 2)}
 
-\item{minor.tick.dist}{(numeric) The distance between the minor ticks in bases}
+\item{minor.ticks}{(boolean) Whether to add unlabeled minor ticks between the major ticks (defaults to TRUE)}
 
-\item{minor.tick.len}{(numeric) The length of the minor tick marks in plot coordinates}
+\item{minor.tick.dist}{(numeric) The distance between the minor ticks in bases (defaults to 5 milions, a minor tick mark every 5Mb)}
 
-\item{cex}{(numeric) The cex parameter for the major ticks label}
+\item{minor.tick.len}{(numeric) The length of the minor tick marks in plot coordinates (defaults to 2)}
+
+\item{cex}{(numeric) The cex parameter for the major ticks label (defaults to 0.5)}
 
 \item{tick.col}{(color) If specified, the color to plot the major ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)}
 
 \item{minor.tick.col}{(color) If specified, the color to plot the minor ticks. Otherwise the default color or, if given, the col parameter will be used. (Defaults to NULL)}
 
-\item{clipping}{(boolean)}
+\item{clipping}{(boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{Any other parameter to be passed to internal function calls. Specially useful for graphic parameters.}
 }
