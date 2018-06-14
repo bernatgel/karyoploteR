@@ -1,3 +1,7 @@
+# karyoploteR 1.7.1
+
+* Added `kpPlotBigWig` to plot data in bigwig files, usually data derived from bam coverage for ChIP-seq, etc...
+
 # karyoploteR 1.5.4
 
 ## New features
