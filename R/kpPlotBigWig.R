@@ -22,15 +22,15 @@
 #' only adjusting the \code{col} and \code{border} parameters. 
 #' 
 #' 
-#' @usage kpPlotBigWig(karyoplot, data, ymin=0, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
+#' @usage kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{BigWigFile} or character) The path to a bigwig file (either local or a URL to a remote file) or a \code{BigWigFile} object.
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
-#' @param ymin    (numeric) The minimum value to be plotted on the data panel. (deafults to 0)
-#' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)
+#' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, the minimum between 0 and the minimum value in the WHOLE GENOME will be used. (deafults to NULL)
+#' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum between 0 and maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)
 #' @param col  (color) The fill color of the area. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no area will be drawn. (defaults to NULL)
 #' @param border  (color) The color of the line enclosing the area. If NULL the color will be assigned automatically, either a darker version of the color used for the area or black if col=NA. If NA no border will be drawn. (Defaults to NULL)
 #' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
@@ -38,7 +38,7 @@
 #'   
 #' @return
 #' 
-#' Returns the original karyoplot object with the data computed (ymax value used) stored at \code{karyoplot$latest.plot}
+#' Returns the original karyoplot object with the data computed (ymax and ymin values used) stored at \code{karyoplot$latest.plot}
 #' 
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpArea}}, \code{\link{kpPlotBAMDensity}}
 #' 
@@ -62,7 +62,7 @@
 #' 
 
 
-kpPlotBigWig <- function(karyoplot, data, ymin=0, ymax=NULL, data.panel=1, 
+kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, 
                          r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) {
   
   #karyoplot

@@ -4,16 +4,16 @@
 \alias{kpPlotBigWig}
 \title{kpPlotBigWig}
 \usage{
-kpPlotBigWig(karyoplot, data, ymin=0, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
+kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
 
 \item{data}{(a \code{BigWigFile} or character) The path to a bigwig file (either local or a URL to a remote file) or a \code{BigWigFile} object.}
 
-\item{ymin}{(numeric) The minimum value to be plotted on the data panel. (deafults to 0)}
+\item{ymin}{(numeric) The minimum value to be plotted on the data panel. If NULL, the minimum between 0 and the minimum value in the WHOLE GENOME will be used. (deafults to NULL)}
 
-\item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)}
+\item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum between 0 and maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)}
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
@@ -30,7 +30,7 @@ kpPlotBigWig(karyoplot, data, ymin=0, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
 \value{
-Returns the original karyoplot object with the data computed (ymax value used) stored at \code{karyoplot$latest.plot}
+Returns the original karyoplot object with the data computed (ymax and ymin values used) stored at \code{karyoplot$latest.plot}
 }
 \description{
 Plots the wiggle values in a BigWig file
