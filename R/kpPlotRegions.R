@@ -92,8 +92,12 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
     
-  #data <- toGRanges(data) #Removed as requested by the package reviewer
+  #TODO: update to use toGRanges internally. But if the file is a bed file and
+  # a tabix index is available, load only the regions visible in the plot.region
+  # using rtracklayer::import. We might not need to check if the index is available,
+  # since no overhead is expected in trying to load only a part of the bed file.
   
+    #data <- toGRanges(data) #Removed as requested by the package reviewer
   
       
   #if null, get the r0 and r1
