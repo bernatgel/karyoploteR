@@ -1,6 +1,19 @@
 # karyoploteR 1.7.1
 
-* Added `kpPlotBigWig` to plot data in bigwig files, usually data derived from bam coverage for ChIP-seq, etc...
+* Added `kpPlotBAMCoverage` to plot the exact coverage from a BAM file
+
+## Other
+
+* Improved performance of kpPlotBAMDensity. Specially in zoomed plots.
+
+## Bug Fixes
+
+* kpAxis: Axis were not visible in zoomed plots. They are now visible.
+
+
+# karyoploteR 1.7.1
+
+* Added `kpPlotBigWig` to plot data in bigwig files, usually data derived from BAM coverage for ChIP-seq, etc...
 
 
 ## Other
