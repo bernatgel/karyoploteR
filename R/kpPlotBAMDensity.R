@@ -62,6 +62,7 @@
 #' 
 #' @export kpPlotBAMDensity
 #' @importFrom Rsamtools BamFile countBam idxstatsBam ScanBamParam
+#' @importFrom GenomeInfoDb Seqinfo
 
 
 kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA, clipping=TRUE,...) {
@@ -80,7 +81,7 @@ kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FA
   #is in the karyoplot$plot.region
   plot.region.lengths <- setNames(width(karyoplot$plot.region), as.character(seqnames(karyoplot$plot.region)))
   windows <- tileGenome(plot.region.lengths, tilewidth = window.size, cut.last.tile.in.chrom = TRUE)
-  seqinfo(windows) <- Seqinfo(seqnames=seqlevels(windows)) #remove the seqlength info from seqinfo to avoid a potential out-of-bounds warning when shifting the windows
+  seqinfo(windows) <- GenomeInfoDb::Seqinfo(seqnames=seqlevels(windows)) #remove the seqlength info from seqinfo to avoid a potential out-of-bounds warning when shifting the windows
   
   #Now, move the windows start(karyoplot$plor.region) bases to the right. 
   #It's only necessary when zoomed or with chromosomes not starting at position 1
