@@ -91,6 +91,10 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1,
             paste0(karyoplot$chromosomes, collapse=","), "). Nothing will be plotted")
   }
   
+  #TODO: Add a parameter to define if the ymin/ymax values should take into account: the visible regions, the visible chromosomes or the whole genome.
+  # The whole genome and whole chromosomes can be computed using the statistics in the file and accessed using summary, but it seems
+  # region values must be computed after loading the data.
+  
   #if ymax is NULL, set it to the maximum of the file on the whole genome using
   # the summary info from BigWigFile or 0 if all values are negative
   if(is.null(ymax)) {
