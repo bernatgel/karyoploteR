@@ -1,4 +1,12 @@
-# karyoploteR 1.7.1
+# karyoploteR 1.7.4
+
+## Other
+
+* The zoom region in plotKaryotype can be specified in any format accepted
+by regioneR::toGRanges, including UCSC/IGV style "chr9:23000-40000".
+
+
+# karyoploteR 1.7.3
 
 * Added `kpPlotBAMCoverage` to plot the exact coverage from a BAM file
 

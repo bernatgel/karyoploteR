@@ -17,7 +17,7 @@ plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, label
 
 \item{chromosomes}{The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical for named genomes and no filtering for custom genomes. (defaults to "auto")}
 
-\item{zoom}{A GRanges object specifiyng a single region to zoom in. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})}
+\item{zoom}{A GRanges object specifiyng a single region to zoom in or any format accepted by \code{regioneR::toGRanges}. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})}
 
 \item{cytobands}{A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)}
 
