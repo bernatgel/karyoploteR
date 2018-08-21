@@ -5,7 +5,8 @@
 \title{kpPlotMarkers}
 \usage{
 kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
-                     adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
+                     adjust.label.position=TRUE,  ignore.chromosome.ends=FALSE,
+                     label.margin=0.001, max.iter=150, label.dist=0.001,
                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
                      line.color="black", label.color="black",
@@ -25,6 +26,8 @@ kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL,
 \item{labels}{(a character vector) The labels to be plotted. (defaults to NULL)}
 
 \item{adjust.label.position}{(logical) whether to adjust the label positions to avoid label overlapping (defaults to TRUE)}
+
+\item{ignore.chromosome.ends}{(logical) If TRUE, when adjusting label position marker labels can move beyond the chromosome ends. (defaults to FALSE, do not move out of origin chromosome)}
 
 \item{label.margin}{(numeric) The vertical margin to leave between the ens of the marker line and the marker label. In plot coordinates. (defaults to 0.001)}
 

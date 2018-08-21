@@ -61,6 +61,16 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
     }
   }
   
+  #Specify the missing colors if possible
+  if(is.null(border) & !is.null(col) & !is.na(col)) {
+    border=darker(col, amount = 100)
+  }
+  if(is.null(col) & !is.null(border) & !is.na(border)) {
+    col=lighter(border)
+  }
+  if(is.na(col) & is.null(border)) {
+    border <- "black"
+  }
   
   pp <- prepareParameters4("kpPlotRibbon", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
                            y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
@@ -82,17 +92,6 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
     x.chr <- xplot[in.chr]
     y0.chr <- y0plot[in.chr]
     y1.chr <- y1plot[in.chr]
-    
-    #Specify the missing colors if possible
-    if(is.null(border) & !is.null(col) & !is.na(col)) {
-      border=darker(col, amount = 100)
-    }
-    if(is.null(col) & !is.null(border) & !is.na(border)) {
-      col=lighter(border)
-    }
-    if(is.na(col) & is.null(border)) {
-      border <- "black"
-    }
     
     if(karyoplot$zoom==TRUE) {
       if(clipping==TRUE) {

@@ -19,7 +19,8 @@
 #' allowed. With many markers, the algorithm might be slow.
 #'
 #' @usage kpPlotMarkers(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
-#'                      adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
+#'                      adjust.label.position=TRUE,  ignore.chromosome.ends=FALSE,
+#'                      label.margin=0.001, max.iter=150, label.dist=0.001,
 #'                      marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
 #'                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
 #'                      line.color="black", label.color="black",
@@ -32,6 +33,7 @@
 #' @param y    (a numeric vector) A numeric vector with the values of the data points. If \code{y} is not NULL, it is used instead of any data column in \code{data}. (defaults to 0.75)
 #' @param labels    (a character vector) The labels to be plotted. (defaults to NULL)
 #' @param adjust.label.position (logical) whether to adjust the label positions to avoid label overlapping (defaults to TRUE)
+#' @param ignore.chromosome.ends (logical) If TRUE, when adjusting label position marker labels can move beyond the chromosome ends. (defaults to FALSE, do not move out of origin chromosome)
 #' @param label.margin  (numeric) The vertical margin to leave between the ens of the marker line and the marker label. In plot coordinates. (defaults to 0.001)
 #' @param max.iter  (numeric) The maximum number of iterations in the iterative algorithm to adjust the label positioning. (defaults to 150)
 #' @param label.dist  (numeric) The minimum distance between labels to consider them as non-overlapping (defaults to 0.001)
@@ -80,9 +82,9 @@
 #' @importFrom IRanges IRanges
 
 #TODO: Adjust the positioning algorithm when zoom is active so labels do not fall out of the plot.region
-
+#TODO: Implement vertical label displacement to accomodate more labels in the same plot
 kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels=NULL, 
-                   adjust.label.position=TRUE, label.margin=0.001, max.iter=150, label.dist=0.001,
+                   adjust.label.position=TRUE, ignore.chromosome.ends=FALSE, label.margin=0.001, max.iter=150, label.dist=0.001,
                    marker.parts = c(0.8,0.1, 0.1), text.orientation ="vertical",
                    ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, 
                    line.color="black", label.color="black",
@@ -147,7 +149,8 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   if(length(pos)==length(ord)) pos <- pos[ord]
   if(length(offset)==length(ord)) offset <- offset[ord]
   
-  #TODO: Should reorder other parameters? Specially "dots", only if the same length as data.points
+  #TODO: Should reorder other parameters? Specially any parameter passed at 
+  # "dots", only if the same length as data.points
   
   
   #Transform to plot coordinates  
@@ -159,6 +162,10 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
     #Now, move the text as needed (only horizontally) to avoid overlapping
     xlabels <- xplot
     
+    #TODO: we do it per chromosome. This will be problematic in dense plots. 
+    #IDEA: If we can get a reverse function for ccf, we could work on all labels
+    #at the same time and then reverse transform from plot coordinates to
+    #genome coordinates and call the plotting functions.
     for(current.chr in karyoplot$chromosomes) {
       in.chr <- valid.chr==current.chr
       
@@ -186,11 +193,11 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
               #If it's the first label
               if(i==1) {
                 #if it will not fall out of the chromosome, move the label to the left
-                if((xp[i]-sw[i]/2-delta) > ccf(chr=current.chr, x=0, data.panel=data.panel)$x) {
+                if((xp[i]-sw[i]/2-delta) > ccf(chr=current.chr, x=0, data.panel=data.panel)$x || ignore.chromosome.ends==TRUE) {
                   xp[i] <- xp[i]-delta
                 } else {
                   #if it will not fall out of the chromosome by the right side
-                  if(xp[i+1]+delta < ccf(chr=current.chr, x=karyoplot$chromosome.lengths[current.chr], data.panel=data.panel)$x) {
+                  if(xp[i+1]+delta < ccf(chr=current.chr, x=karyoplot$chromosome.lengths[current.chr], data.panel=data.panel)$x || ignore.chromosome.ends==TRUE) {
                     #move the next label to right
                     xp[i+1] <- xp[i+1]+delta  
                   } else {
@@ -203,7 +210,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
                   xp[i] <- xp[i]-delta
                 } else {
                   #if it will not fall out of the chromosome by the right side
-                  if(xp[i+1]+delta < ccf(chr=current.chr, x=karyoplot$chromosome.lengths[current.chr], data.panel=data.panel)$x) {
+                  if(xp[i+1]+delta < ccf(chr=current.chr, x=karyoplot$chromosome.lengths[current.chr], data.panel=data.panel)$x  || ignore.chromosome.ends==TRUE) {
                     #move the next label to right
                     xp[i+1] <- xp[i+1]+delta  
                   } else {
