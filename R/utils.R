@@ -149,16 +149,16 @@ darker <- function(col, amount=150) {
 #      and 4
 
 processAutotrack <- function(r0, r1, autotrack) {
-  if(!methods::is(autotrack, "numeric")) stop("'autotrack' must be a numeric and it is a ", class(autotrack))
-  if(length(autotrack)<2) stop("'autotrack' must be a numeric of length 2 or 3 and it is of length ", length(autotrack))    
+  if(!all(unlist(lapply(autotrack, methods::is, "numeric")))) stop("'autotrack' must be a list of numerics and it is a ", unlist(lapply(autotrack, class)))
+  if(length(autotrack)<2) stop("'autotrack' must be a list of numerics of length 2 or 3 and it is of length ", length(autotrack))    
   
-  at.current.min <- min(autotrack[1])
-  at.current.max <- max(autotrack[1])
-  at.total <- autotrack[2]
-  at.margin <- ifelse(length(autotrack)==2, 0.05, autotrack[3])
+  at.current.min <- min(autotrack[[1]])
+  at.current.max <- max(autotrack[[1]])
+  at.total <- autotrack[[2]]
+  at.margin <- ifelse(length(autotrack)==2, 0.05, autotrack[[3]])
   
   tr.height <- (r1-r0)/at.total
   r0 <- r0+(at.current.min-1)*tr.height
-  r1 <- r0+tr.height*(1-at.margin)  
+  r1 <- r0+(at.current.max-at.current.min+1)*tr.height-tr.height*at.margin
   return(c(r0=r0, r1=r1))
 }
