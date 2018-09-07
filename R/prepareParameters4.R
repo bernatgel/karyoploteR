@@ -21,7 +21,7 @@
 #' 
 #' @note For detailed documentation on the parameters, see \code{\link{kpRect}}
 #'  
-#' @usage prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...)
+#' @usage prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, filter.data=TRUE, ...)
 #'  
 #' @param function.name (character) The name of the function calling \code{prepareParameters4}. Only user for error reporting.
 #' @param karyoplot (KaryoPlot) A karyoplot object.
@@ -35,6 +35,7 @@
 #' @param ymin The minimum value of y
 #' @param r0 The start of the range to use for plotting
 #' @param r1 The end of the range to use for plotting
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will spàn from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5% of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param data.panel The data panel to use
 #' @param filter.data A boolean indicating if data should be filtered so only data in visible chromosomes is kept. (defaults to TRUE, filter data)
 #' @param ... Any additional parameter
@@ -56,7 +57,7 @@
 #' 
 
 
-prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...) {
+prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
@@ -72,7 +73,12 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
   if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  
+  #Process autotrack
+  if(!is.null(autotrack) && !is.na(autotrack)) {
+    rr <- processAutotrack(r0=r0, r1=r1, autotrack=autotrack)
+    r0 <- rr["r0"]
+    r1 <- rr["r1"]
+  }
   
   if(!is.null(data)) {
     if(all(!is.na(data))) {

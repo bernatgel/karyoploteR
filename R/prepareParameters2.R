@@ -33,6 +33,7 @@
 #' @param ymin The minimum value of y
 #' @param r0 The start of the range to use for plotting
 #' @param r1 The end of the range to use for plotting
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will spàn from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5% of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param data.panel The data panel to use
 #' @param filter.data A boolean indicating if data should be filtered so only data in visible chromosomes is kept. (defaults to TRUE, filter data)
 #' @param ... Any additional parameter
@@ -77,8 +78,6 @@ prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=
     r1 <- rr["r1"]
   }
     
-  
-  message("r0=", r0, "   r1=", r1)
   if(!is.null(data)) {
     if(all(!is.na(data))) {
       #use the values in 'data' only if the individual parameters (chr, x and y) are nothing (null or NA)
