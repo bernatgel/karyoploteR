@@ -54,7 +54,7 @@
 #' 
 
 
-prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...) {
+prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
     
   #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
@@ -70,8 +70,15 @@ prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=
   if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
+  #Process autotrack
+  if(!is.null(autotrack) && !is.na(autotrack)) {
+    rr <- processAutotrack(r0=r0, r1=r1, autotrack=autotrack)
+    r0 <- rr["r0"]
+    r1 <- rr["r1"]
+  }
+    
   
-  
+  message("r0=", r0, "   r1=", r1)
   if(!is.null(data)) {
     if(all(!is.na(data))) {
       #use the values in 'data' only if the individual parameters (chr, x and y) are nothing (null or NA)
