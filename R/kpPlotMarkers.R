@@ -182,7 +182,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
         delta <- strwidth("a", units = "user")/4
         
         #to be sure that we do not enter a loop, store a hash of the all old positions
-        old.pos <- digest(xp)
+        old.pos <- digest::digest(xp)
     
         for(iter in seq_len(max.iter)) {
           for(i in seq_len(length(chr.labels)-1)) {
