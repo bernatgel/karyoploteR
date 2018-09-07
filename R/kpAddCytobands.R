@@ -41,15 +41,9 @@
 
 kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
-  
-  
-  ccf <- karyoplot$coord.change.function
-  pp <- karyoplot$plot.params
-  mids <- karyoplot$ideogram.mid
-    
-  color.table <- getCytobandColors(color.table)
+  #karyoplot
+  if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   #If there are no cytobands, create a single "fake" cytoband to represent the whole chromosome
   if(!is.null(karyoplot$cytobands) && length(karyoplot$cytobands)>0) { 
@@ -59,9 +53,34 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
     mcols(cyto) <- data.frame(name=seqnames(cyto), gieStain="gpos50", stringsAsFactors=FALSE)  
   }
   
+  if(!methods::is(cyto, "GRanges")) stop("'cytobands' must be a GRanges object")
+  
+  
+  #IDEA: Should we add the possibility of having a "color" column specifying 
+  #the color of each cytoband? If present, it would take precendence over 
+  #"gieStain". Maybe we could also add a separate parameter to specify the 
+  #column name of the "gieStain" or color info... but That would grow the 
+  #function quite a lot.
+  #If the cytobands object does not have the "gieStain" attribute, 
+  if(!("gieStain" %in% colnames(mcols(cyto)))) {
+    warning("No 'gieStain' column found in cytobands. Using 'gpos50' (gray) for all of them")
+    mcols(cyto) <- cbind(mcols(cyto), gieStain="gpos50")
+  }
+  
   #filter out the cytobands out of our chromosomes
   cyto <- filterChromosomes(cyto, keep.chr = karyoplot$chromosomes)
   
+  
+  karyoplot$beginKpPlot()
+  on.exit(karyoplot$endKpPlot())
+  
+  
+  ccf <- karyoplot$coord.change.function
+  pp <- karyoplot$plot.params
+  mids <- karyoplot$ideogram.mid
+    
+  color.table <- getCytobandColors(color.table)
+ 
   #And plot them
   ybottom <- mids(as.character(seqnames(cyto))) - pp$ideogramheight/2
   ytop <- mids(as.character(seqnames(cyto))) + pp$ideogramheight/2

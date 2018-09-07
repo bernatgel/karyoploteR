@@ -116,8 +116,18 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
                           zoom=NULL, cytobands=NULL, plot.params=NULL,
                           use.cache=TRUE, main=NULL, ...) {
   
-  #check required parameters...
-  #TODO: Add checks for all params
+  #Parameters Check
+  #TODO: Finish checks
+  #genome
+  
+  #plot.type
+  
+  
+  #cytobands
+  if(!is.null(cytobands)) {
+    cytobands <- tryCatch(toGRanges(cytobands), error=function(e) {})
+    if(!methods::is(cytobands, "GRanges")) stop("'cytobands' must be NULL, a GRanges or something accepted by regioneR::toGRanges")
+  }
   
   #zoom
   if(!is.null(zoom)) {
@@ -127,6 +137,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
       zoom <- zoom [1]
     }
   }
+  
+  #End parameters check
   
   if(is.null(plot.params)) {
     plot.params <- getDefaultPlotParams(plot.type)
