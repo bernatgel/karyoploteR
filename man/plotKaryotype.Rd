@@ -19,7 +19,7 @@ plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, label
 
 \item{zoom}{A GRanges object specifiyng a single region to zoom in or any format accepted by \code{regioneR::toGRanges}. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})}
 
-\item{cytobands}{A GRanges object specifying the positions and types of the cytobands. If NULL, the cytobands are recovered from the package cache or downloaded from UCSC. If empty, no cytobands will be plotted. (defaults to NULL)}
+\item{cytobands}{A GRanges object (or anything accepted by \code{\link[regioneR]{toGRanges}} function: bed file, data.frame...) specifying the positions and types of the cytobands. The type of the cytobands MUST be in a column named "gieStain" (as used by UCSC) with values such as 'gneg', 'gpos50', 'stalk', 'acen'... If NULL, the cytobands are recovered from the package cache or downloaded from UCSC if possible (it's not possible for custom genomes). If empty, no cytobands will be plotted. (defaults to NULL)}
 
 \item{plot.params}{An object obtained from \code{\link{getDefaultPlotParams}} and possibly modified, containing the basic plotting parameters. If NULL, the defaults parameters will be used. (defaults to NULL)}
 
