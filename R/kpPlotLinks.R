@@ -23,7 +23,7 @@
 #'   generated.
 #' 
 #'
-#' @usage kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...)
+#' @usage kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with link start regions. If data2 is NULL, mcols(data) should be a bed-like structure with "link.chr", "link.start", "link.end" and optionally a "link.strand" columns. The first thee columns can have any name and the strand information will be extracted from the first column with "strand" in its name.
@@ -33,6 +33,7 @@
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)
 #' @param col    (color) The background color of the links. If NULL and border is specified, it defaults to a lighter version of border.
@@ -77,7 +78,7 @@
 #'@export kpPlotLinks
 
 
-kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...) {
+kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, ymin=NULL, ymax=NULL, col="#8e87eb", border=NULL, clipping=TRUE, ...) {
   #Check parameters
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -139,12 +140,12 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
   
   #Transform the coordinates of the starts
   pp.start <- prepareParameters4("kpPlotLinks", karyoplot=karyoplot, data=data, chr=NULL, x0=NULL, x1=NULL,
-                           y0=y, y1=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
+                           y0=y, y1=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack = autotrack, 
                            data.panel=data.panel, ...)
   
   #Transform the coordinates of the starts
   pp.end <- prepareParameters4("kpPlotLinks", karyoplot=karyoplot, data=data2, chr=NULL, x0=NULL, x1=NULL,
-                                 y0=y, y1=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
+                                 y0=y, y1=y, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, 
                                  data.panel=data.panel, ...)
   
   x0.start <- ccf(chr=pp.start$chr, x=pp.start$x0, data.panel=data.panel)$x
@@ -170,8 +171,8 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
   
 
   #transform the arch height to the plot coords using ccf and prepare parameters2 to take into account r0 and r1, ymin and ymax, etc
-  y.min <- prepareParameters2("kpPlotLinks", karyoplot = karyoplot, data=NULL, chr=karyoplot$chromosomes[1], x=0, y=0, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel)$y
-  y.max <- prepareParameters2("kpPlotLinks", karyoplot = karyoplot, data=NULL, chr=karyoplot$chromosomes[1], x=0, y=arch.height, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel)$y
+  y.min <- prepareParameters2("kpPlotLinks", karyoplot = karyoplot, data=NULL, chr=karyoplot$chromosomes[1], x=0, y=0, r0=r0, r1=r1, autotrack=autotrack, ymin=ymin, ymax=ymax, data.panel=data.panel)$y
+  y.max <- prepareParameters2("kpPlotLinks", karyoplot = karyoplot, data=NULL, chr=karyoplot$chromosomes[1], x=0, y=arch.height, r0=r0, r1=r1, autotrack=autotrack, ymin=ymin, ymax=ymax, data.panel=data.panel)$y
 
   y.ctrl <- abs(ccf(chr=karyoplot$chromosomes[1], x=0, y=y.min, data.panel=data.panel)$y - ccf(chr=karyoplot$chromosomes[1], x=0, y=y.max, data.panel=data.panel)$y)
   

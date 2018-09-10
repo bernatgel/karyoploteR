@@ -4,7 +4,7 @@
 \alias{kpAddLabels}
 \title{kpAddLabels}
 \usage{
-kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
+kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, autotrack=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
@@ -14,6 +14,8 @@ kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1
 \item{r0}{(numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
+
+\item{autotrack}{(list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)}
 
 \item{label.margin}{(numeric) the additional the margin between the labels the first base of the chromosome. In plot coordinates. Usual value might be 0.05. Can be negative. (defaults to 0.01)}
 

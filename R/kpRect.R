@@ -16,7 +16,7 @@
 #' In addition, via the ellipsis operator (\code{...}), \code{kpRect} accepts any parameter 
 #' valid for \code{rect} (e.g. \code{border}, \code{col}, ...)
 #'
-#' @usage kpRect(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
+#' @usage kpRect(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, clipping=TRUE, ...) 
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the data. If \code{data} is present, \code{chr} will be set to \code{seqnames(data)}, \code{x0} to \code{start(data)} and x1 to \code{end(data)}. If no parameter \code{y0} is specified and \code{data} has a column named \code{y0}, this column will be used. The same for \code{y1}. (defaults to NULL)
@@ -30,6 +30,7 @@
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
@@ -64,14 +65,15 @@
 
 
 kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, 
-                   ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) {
+                   ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, 
+                   data.panel=1, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
   pp <- prepareParameters4("kpRect", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
                            y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
-                           data.panel=data.panel, ...)
+                           autotrack=autotrack, data.panel=data.panel, ...)
   
   ccf <- karyoplot$coord.change.function
   
@@ -87,7 +89,7 @@ kpRect <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=N
     }
   }
   
-  #Filter the additional parameters using the 'filter' vector returned by prepareParameters2
+  #Filter the additional parameters using the 'filter' vector returned by prepareParameters4
   dots <- filterParams(list(...), pp$filter, pp$original.length)
   
   #And call the base plotting function with both the standard parameters and the modified dots parameters

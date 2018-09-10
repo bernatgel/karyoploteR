@@ -18,7 +18,7 @@
 #' chromosome basis, so it is not possible to draw lines encompassing more than 
 #' one chromosome.
 #'
-#' @usage kpArea(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
+#' @usage kpArea(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
 #' 
 #' @inheritParams kpPoints 
 #' @param base.y  (numeric) The y value at wich the polygon will be closed. (defaults to 0)
@@ -55,7 +55,7 @@
 
 
 kpArea <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) {
+                    data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col=NULL, border=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
  
   #COLORS
@@ -76,7 +76,7 @@ kpArea <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymi
     
   
   pp <- prepareParameters2("kpArea", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
-                           ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
+                           ymin=0, ymax=1, r0=0, r1=1, autotrack=NULL, data.panel=data.panel, ...)
   
   for(current.chr in karyoplot$chromosomes) {
     in.chr <- which(pp$chr==current.chr)
@@ -88,12 +88,12 @@ kpArea <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymi
       pol.y <- c(base.y, pp$y[in.chr], base.y)
       
       kpPolygon(karyoplot, chr=pol.chr, x=pol.x, y=pol.y, col=col, border=NA, ymin=ymin, ymax=ymax,
-                data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
+                data.panel=data.panel, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, ...)
     }
     
     if(!is.na(border)) { #Plot the line only if we have a color for it
       kpLines(karyoplot, chr=pp$chr[in.chr], x= pp$x[in.chr], y=pp$y[in.chr], col=border,
-              ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
+              ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, ...)
     }
     
   }

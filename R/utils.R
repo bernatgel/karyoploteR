@@ -141,3 +141,25 @@ darker <- function(col, amount=150) {
   new.col[new.col[,1]<0, 1] <- 0
   return(grDevices::rgb(t(new.col)))  
 }
+
+
+
+#Autotrack
+#TODO: document and export? maybe export only if used out of prepareParameters2 
+#      and 4
+
+processAutotrack <- function(r0, r1, autotrack) {
+  if(!all(unlist(lapply(autotrack, methods::is, "numeric")))) stop("'autotrack' must be a list of numerics and it is a ", unlist(lapply(autotrack, class)))
+  if(length(autotrack)<2) stop("'autotrack' must be a list of numerics of length 2 or 3 and it is of length ", length(autotrack))    
+  
+  at.current.min <- min(autotrack[[1]])
+  at.current.max <- max(autotrack[[1]])
+  at.total <- autotrack[[2]]
+  at.margin <- ifelse(length(autotrack)==2, 0.05, autotrack[[3]])
+  
+  tr.height <- (r1-r0)/at.total
+  r0 <- r0+(at.current.min-1)*tr.height
+  r1 <- r0+(at.current.max-at.current.min+1)*tr.height-tr.height*at.margin
+  
+  return(c(r0=r0, r1=r1))
+}

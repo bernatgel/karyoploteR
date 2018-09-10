@@ -12,13 +12,14 @@
 #' used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not have
 #' a chr option: axis are always plotted for all chromosomes.
 #' 
-#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
+#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, autotrack=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param ymin    (numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL)
 #' @param ymax    (numeric) The maximum value of \code{y} to be plotted. If NULL, it is set to the max value of the selected data panel. (defaults to NULL)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param side  (numeric) In which side of the data panel should the axis be plotted. 1 - plot it on the right of the data panel. 2 - Plot it on the left. (defualts to 1)
 #' @param numticks    (numeric) the number of ticks (and labels) of the axis. If \code{tick.pos} is present, it takes precedence over \code{num.ticks} and \code{num.ticks} is ignored. (defaults to 3)
 #' @param labels    (character) the labels to be placed next to the ticks. If the number of labels is lower than the number of  tickes, the labels will be reused. If NULL, the numeric values of the ticks will be used. (defaults to NULL)
@@ -61,21 +62,13 @@
 
 
 
-kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, 
+kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, autotrack=NULL, side=1, numticks=3, 
                    labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, 
                    data.panel=1, chromosomes="auto", ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
-  
-  
-  ccf <- karyoplot$coord.change.function
-  
+ 
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
-  
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
   if(is.null(tick.len)) tick.len <- 0.01 * max(width(karyoplot$plot.region))
   if(is.null(tick.pos)) {
@@ -116,7 +109,7 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   }
   
   kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
-             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=FALSE, ...)
   
  
   if(side==1) {
@@ -124,24 +117,24 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
                x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$plot.region)),
                y1=rep(tick.pos, length(karyoplot$plot.region)),
-               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=FALSE, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x-tick.len-label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$plot.region)),
-           labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1, pos=2, 
+           labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1,  autotrack=autotrack, pos=2, 
            data.panel=data.panel,  clipping=FALSE, ...)  #pos=2 -> left to the given coordinate
   } else {
     kpSegments(karyoplot, chr=rep(chrs, each=numticks),
                x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$plot.region)), 
                y1=rep(tick.pos, length(karyoplot$plot.region)), 
-               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1,  autotrack=autotrack, data.panel=data.panel, clipping=FALSE, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x+tick.len+label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$plot.region)),
-           labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4, 
+           labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1,  autotrack=autotrack, pos=4, 
            data.panel=data.panel, clipping=FALSE, ...)  #pos=4 -> right to the given coordinate
   }
   

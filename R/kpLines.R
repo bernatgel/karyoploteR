@@ -17,7 +17,7 @@
 #' (e.g. \code{lwd}, \code{lty}, \code{col}, ...) The lines are drawn in a per chromosome 
 #' basis, so it is not possible to draw lines encompassing more than one chromosome.
 #'
-#' @usage kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
+#' @usage kpLines(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, clipping=TRUE, ...)
 #' 
 #' @inheritParams kpPoints 
 #' 
@@ -66,13 +66,14 @@
 
 
 kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
+                    data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
   pp <- prepareParameters2("kpLines", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
-                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, ...)
+                           ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, 
+                           data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
   ss <- sapply(karyoplot$chromosomes, function(current.chr) {

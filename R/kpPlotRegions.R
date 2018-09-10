@@ -11,7 +11,7 @@
 #'  In contrast with the low-level functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
 #'  independent numeric vectors and the function only takes in \code{GRanges}.
 #'
-#' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
+#' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
@@ -19,6 +19,7 @@
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param col    (color) The background color of the regions. (defaults to black)
 #' @param border    (color) The color used to draw the border of the regions. If NULL, no border is drawn. (defaults to NULL)
 #' @param avoid.overlapping    (boolean) Whether overlapping regions should be drawn as stacks (TRUE) on drawing one occluding the other in a single layer (FALSE). (defaults to TRUE)
@@ -73,7 +74,8 @@
 #'@export kpPlotRegions
 
 
-kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="black", 
+kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, 
+                          autotrack=NULL, col="black", 
                           border=NULL, avoid.overlapping=TRUE, num.layers=NULL,
                           layer.margin=0.05, clipping=TRUE, ...) {
   #karyoplot
@@ -89,20 +91,10 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="
   }
   
   
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
-    
   #TODO: update to use toGRanges internally. But if the file is a bed file and
   # a tabix index is available, load only the regions visible in the plot.region
   # using rtracklayer::import. We might not need to check if the index is available,
   # since no overhead is expected in trying to load only a part of the bed file.
-  
-    #data <- toGRanges(data) #Removed as requested by the package reviewer
-  
-      
-  #if null, get the r0 and r1
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
   if(is.null(border)) border <- col
     
@@ -128,7 +120,8 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="
     
     
   kpRect(karyoplot=karyoplot, chr=chr, x0=x0, x1=x1, y0=y0, y1=y1, ymin=0, ymax=1, 
-         r0=r0, r1=r1, data.panel=data.panel, col=col, border=border, clipping=clipping, ... )
+         r0=r0, r1=r1, autotrack=autotrack, data.panel=data.panel, col=col,
+         border=border, clipping=clipping, ... )
   
   invisible(karyoplot)
 }

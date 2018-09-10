@@ -22,13 +22,14 @@
 #' only adjusting the \code{col} and \code{border} parameters. 
 #' 
 #' 
-#' @usage kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
+#' @usage kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{BigWigFile} or character) The path to a bigwig file (either local or a URL to a remote file) or a \code{BigWigFile} object.
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, the minimum between 0 and the minimum value in the WHOLE GENOME will be used. (deafults to NULL)
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum between 0 and maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)
 #' @param col  (color) The fill color of the area. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no area will be drawn. (defaults to NULL)
@@ -63,7 +64,8 @@
 
 
 kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, 
-                         r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) {
+                         r0=NULL, r1=NULL, autotrack=NULL, 
+                         col=NULL, border=NULL, clipping=TRUE, ...) {
   
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -117,8 +119,8 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1,
     #Note: remove unneeded seqlevels when calling import to avoid a warning about unknown seqlevels
     wig.data <- rtracklayer::import(data, format = "bigWig", selection=plot.region[i])
     kpArea(karyoplot, data = wig.data, y=wig.data$score, ymin=ymin, ymax=ymax,
-           data.panel=data.panel, r0=r0, r1=r1, col=col, border=border,
-           clipping=TRUE, ...)
+           data.panel=data.panel, r0=r0, r1=r1, autotrack=autotrack, 
+           col=col, border=border, clipping=TRUE, ...)
   }
   
   karyoplot$latest.plot <- list(funct="kpPlotBigWig", computed.values=list(ymax=ymax, ymin=ymin))
