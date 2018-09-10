@@ -11,7 +11,7 @@
 #' a every window. It uses \code{\link{Rsamtools}} to efficiently access the
 #' BAM file. The BAM file must be indexed.
 #' 
-#' @usage kpPlotBAMDensity(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA,  clipping=TRUE, ...)
+#' @usage kpPlotBAMDensity(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="gray80", border=NA,  clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{BamFile} or character) The path to a bam file (must be indexed) or a \code{BamFile} object.
@@ -20,6 +20,7 @@
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5% of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)
 #' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum density is used. (defaults to NULL)
 #' @param col  (color) The background color to plot. If NULL, it will be a lighter version of 'border' or 'black' if border is null. (Defaults to "gray80")
@@ -65,7 +66,7 @@
 #' @importFrom GenomeInfoDb Seqinfo
 
 
-kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NA, clipping=TRUE,...) {
+kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FALSE, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="gray80", border=NA, clipping=TRUE,...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotBAMDensity: 'karyoplot' must be a valid 'KaryoPlot' object"))
   if(is.character("data")) {
@@ -111,7 +112,7 @@ kpPlotBAMDensity <- function(karyoplot, data=NULL, window.size=1e6, normalize=FA
     border <- "black"
   }
   
-  karyoplot <- kpBars(karyoplot, data=windows, y0=0, y1=dens,ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, border=border, col=col, clipping=clipping, ...)
+  karyoplot <- kpBars(karyoplot, data=windows, y0=0, y1=dens,ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, autotrack=autotrack, border=border, col=col, clipping=clipping, ...)
   
   karyoplot$latest.plot <- list(funct="kpPlotBAMDensity", computed.values=list(density=dens, windows=windows, max.density=max(dens)))
 

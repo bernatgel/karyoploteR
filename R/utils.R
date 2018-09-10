@@ -160,6 +160,6 @@ processAutotrack <- function(r0, r1, autotrack) {
   tr.height <- (r1-r0)/at.total
   r0 <- r0+(at.current.min-1)*tr.height
   r1 <- r0+(at.current.max-at.current.min+1)*tr.height-tr.height*at.margin
-  message("r0=", r0, "   r1=", r1)
+  
   return(c(r0=r0, r1=r1))
 }

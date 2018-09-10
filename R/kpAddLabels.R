@@ -8,12 +8,13 @@
 #' 
 #' Given a KaryoPlot object, plot labels on the side of the data panels to help identify the different types of data plotted
 #' 
-#' @usage kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
+#' @usage kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, autotrack=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param labels   (character) the text on the labels
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5% of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param label.margin    (numeric) the additional the margin between the labels the first base of the chromosome. In plot coordinates. Usual value might be 0.05. Can be negative. (defaults to 0.01)
 #' @param data.panel    (numeric) The identifier of the data panel where the labels are to be added. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param pos   (numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 2)
@@ -43,7 +44,7 @@
 #' @export kpAddLabels
 #' 
 
-kpAddLabels <- function(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...) {
+kpAddLabels <- function(karyoplot, labels, r0=NULL, r1=NULL, autotrack=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...) {
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
@@ -57,12 +58,10 @@ kpAddLabels <- function(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, 
     chrs <- karyoplot$chromosomes[1]
   }
   
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
-  
-  
   #Compute the bounding boxes
-  adj.y <- prepareParameters2("kpAddLabels", karyoplot, data=NULL, chr=chrs, x=0, y=c(0,1), ymax=1, ymin=0, r0=r0, r1=r1, data.panel=data.panel)$y
+  adj.y <- prepareParameters2("kpAddLabels", karyoplot, data=NULL, chr=chrs, 
+                              x=0, y=c(0,1), ymax=1, ymin=0, r0=r0, r1=r1, 
+                              autotrack=autotrack, data.panel=data.panel)$y
   y0 <- karyoplot$coord.change.function(chr = chrs, x = 0, y=rep(adj.y[1], length(chrs)), data.panel = data.panel)$y
   y1 <- karyoplot$coord.change.function(chr = chrs, x = 0, y=rep(adj.y[2], length(chrs)), data.panel = data.panel)$y
   x0 <- rep(0, length(chrs))

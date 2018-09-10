@@ -16,7 +16,7 @@
 #' color of the fitting line and CI area and CI borders. It is also possible to
 #' adjust the line type and line width of the fitting line and CI border.
 #' 
-#' @usage kpPlotLoess(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.interval=0.95, span=0.5, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="black", lty=1, lwd=1, ci.col="#888888AA", ci.border=NA, ci.border.lty=1, ci.border.lwd=1, clipping=TRUE, ...)
+#' @usage kpPlotLoess(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.interval=0.95, span=0.5, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, ymin=NULL, ymax=NULL, col="black", lty=1, lwd=1, ci.col="#888888AA", ci.border=NA, ci.border.lty=1, ci.border.lwd=1, clipping=TRUE, ...)
 #'  
 #' @inheritParams kpPoints 
 #' @param conf.interval The confidence interval to plot. If a number in (0,1), the confidence interval is plotted. Else, no confidence interval is plotted. (defaults to 0.95)
@@ -57,15 +57,13 @@
 #' 
 
 
-kpPlotLoess <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.interval=0.95, span=0.5, data.panel=1, r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, col="black", lty=1, lwd=1, ci.col="#888888AA", ci.border=NA, ci.border.lty=1, ci.border.lwd=1, clipping=TRUE, ...) {
+kpPlotLoess <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.interval=0.95, span=0.5, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, ymin=NULL, ymax=NULL, col="black", lty=1, lwd=1, ci.col="#888888AA", ci.border=NA, ci.border.lty=1, ci.border.lwd=1, clipping=TRUE, ...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotLoess: 'karyoplot' must be a valid 'KaryoPlot' object"))
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
-  
+
   #Use prepare parameters to normalize the input but do not rescale or filter it
   pp <- prepareParameters2("kpPlotLoess", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y,
-                           ymin=0, ymax=1, r0=0, r1=1, data.panel=1, filter.data = FALSE, ...)
+                           ymin=0, ymax=1, r0=0, r1=1, data.panel=1, autotrack=NULL, filter.data = FALSE, ...)
   
   #Prepare the arrays to accumulate the data for every chromosome to return in the karyoplot
   all.chr <- character()
@@ -99,7 +97,8 @@ kpPlotLoess <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.int
       
       kpPlotRibbon(karyoplot=karyoplot, chr=chr.chr, x0=x.chr, x1=x.chr, y0=lower.ci, y1=upper.ci, 
                    col=ci.col, border=ci.border, lty=ci.border.lty, lwd=ci.border.lwd,
-                   data.panel=data.panel, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, ...)
+                   data.panel=data.panel, ymin=ymin, ymax=ymax, r0=r0, r1=r1,
+                   autotrack=autotrack, clipping=clipping, ...)
     } else {
       upper.ci <- NULL
       lower.ci <- NULL
@@ -108,7 +107,8 @@ kpPlotLoess <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, conf.int
     #And plot the fitting
     kpLines(karyoplot=karyoplot, chr=chr.chr, x=x.chr, y=l.fit$fit,
             col=col, lty=lty, lwd=lwd,
-            data.panel=data.panel, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, ...)
+            data.panel=data.panel, ymin=ymin, ymax=ymax, r0=r0, r1=r1,
+            autotrack=autotrack, clipping=clipping, ...)
 
     all.chr <- c(all.chr, chr.chr)
     all.x <- c(all.x, x.chr)

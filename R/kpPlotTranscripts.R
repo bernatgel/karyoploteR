@@ -41,7 +41,8 @@
 #' col="black", border=NULL, coding.exons.col=NULL, coding.exons.border.col=NULL, 
 #' non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
 #' introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
-#' ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
+#' ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, 
+#' data.panel=1, clipping=TRUE, ...) 
 #' 
 #' @param karyoplot (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data  (a \code{list}) data must be a list with an element called 'transcripts' with a \code{GRanges} with all transcripts to be plotted. Additionally, to plot the transcript structure it needs two other elements, 'coding.exons' and 'non.coding.exons', each a list with an element for every transcript with \code{GRanges} objects representing the transcript exons. An example of the data structure needed can be seen in the function examples.
@@ -70,6 +71,7 @@
 #' @param ymin  (numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL) 
 #' @param r0  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
 #' @param r1  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
+#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track `min(autotrack[[1]])` to track `max(autotrack[[1]])`. The margin is specified as the part of a track, by default 0.05, 5% of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param data.panel (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param clipping (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
 #' @param ...  The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
@@ -142,7 +144,7 @@
 #'
 #'  
 #'  
-#'@export kpPlotTranscripts
+#' @export kpPlotTranscripts
 #'
 #' @importFrom graphics par segments
 
@@ -156,7 +158,8 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
                               col="black", border=NULL, coding.exons.col=NULL, coding.exons.border.col=NULL, 
                               non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
                               introns.col=NULL, marks.col=NULL, transcript.name.col=NULL,
-                              ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) {
+                              ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, 
+                              autotrack=NULL, data.panel=1, clipping=TRUE, ...) {
   
 
   #karyoplot
@@ -203,10 +206,10 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
     transcript.height <- t.y1-t.y0
   
     if(detail.level==1) { #plot only boxes
-      kpRect(karyoplot, data=transcript, y0=t.y0, y1=t.y1, col=col, border=border, ymax=ymax, ymin=ymin, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      kpRect(karyoplot, data=transcript, y0=t.y0, y1=t.y1, col=col, border=border, ymax=ymax, ymin=ymin, r0=r0, r1=r1, autotrack = autotrack, data.panel=data.panel, clipping=clipping)
       
       if(add.strand.marks==TRUE) {
-        addStrandMarks(karyoplot, transcript, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
+        addStrandMarks(karyoplot, transcript, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, autotrack=autotrack, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
       }
     } else if(detail.level==2) {
       coding.exons <- data$coding.exons[[names(transcript)]]
@@ -218,10 +221,10 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
       introns <- setdiff(transcript, c(coding.exons, non.coding.exons, ignore.mcols=TRUE), ignore.strand=TRUE)
       strand(introns) <- strand(transcript)
 
-      kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      kpSegments(karyoplot, data=introns, y0=mid.transcript, y1=mid.transcript, col=introns.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=clipping)
 
       if(add.strand.marks==TRUE) {
-        addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
+        addStrandMarks(karyoplot, introns, transcript.height=transcript.height, mid.transcript = mid.transcript, mark.height=mark.height, mark.width=mark.width, mark.distance=mark.distance, marks.col=marks.col, r0=r0, r1=r1, autotrack=autotrack, ymin=ymin, ymax=ymax, data.panel=data.panel, clipping=clipping)
       }
       
             
@@ -229,10 +232,10 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
       nc.y0 <- mid.transcript-(t.y1-t.y0)*non.coding.exons.height/2
       nc.y1 <- mid.transcript+(t.y1-t.y0)*non.coding.exons.height/2
       
-      kpRect(karyoplot, data=non.coding.exons, y0=nc.y0, y1=nc.y1, col=non.coding.exons.col, border=non.coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      kpRect(karyoplot, data=non.coding.exons, y0=nc.y0, y1=nc.y1, col=non.coding.exons.col, border=non.coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=clipping)
       
       #coding exons
-      kpRect(karyoplot, data=coding.exons, y0=t.y0, y1=t.y1, col=coding.exons.col, border=coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping)
+      kpRect(karyoplot, data=coding.exons, y0=t.y0, y1=t.y1, col=coding.exons.col, border=coding.exons.border.col, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=clipping)
       
     }
     
@@ -243,7 +246,7 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
       } else {
         transcript.labels <- names(transcript)
       }
-      kpPlotNames(karyoplot, data = transcript, y0 = t.y0, y1=t.y1, labels = transcript.labels, position = transcript.name.position, cex=transcript.name.cex, col=transcript.name.col, r0=r0, r1=r1, ymin=ymin, ymax=ymax, clipping=clipping, data.panel = data.panel)
+      kpPlotNames(karyoplot, data = transcript, y0 = t.y0, y1=t.y1, labels = transcript.labels, position = transcript.name.position, cex=transcript.name.cex, col=transcript.name.col, r0=r0, r1=r1, autotrack = autotrack, ymin=ymin, ymax=ymax, clipping=clipping, data.panel = data.panel)
     }
   }    
   
@@ -253,7 +256,8 @@ kpPlotTranscripts <- function(karyoplot, data, y0=NULL, y1=NULL, non.coding.exon
 #Note: the code assumes all regs are in the same chromosome and the same strand
 addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
                            mark.height, mark.width=NULL, mark.distance=NULL, marks.col=NULL,
-                           r0=NULL, r1=NULL, ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
+                           r0=NULL, r1=NULL, autotrack=NULL,
+                           ymin=NULL, ymax=NULL, data.panel=NULL, clipping=NULL) {
   #if there are no regions to add marks to, simply return
   if(length(regs)==0) return()
   #since the strand marks are plotted sith direct calls to base R graphics, if clipping is TRUE, cut them with the plotting region
@@ -278,7 +282,7 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   #Transform mid.transcript and transcript.height to account for r0/r1, ymin, ymax, etc..
   pp <- prepareParameters2(karyoplot, function.name = "addStrandMarks", data = NULL,
                            chr = rep(chr, 3), x=c(0,0,0), y=c(mid.transcript, 0, transcript.height),
-                           r0=r0, r1=r1, ymin=ymin, ymax=ymax, data.panel = data.panel)
+                           r0=r0, r1=r1, autotrack=autotrack, ymin=ymin, ymax=ymax, data.panel = data.panel)
   mid.transcript <- pp$y[1]
   transcript.height <- abs(pp$y[2]-pp$y[3])
   
