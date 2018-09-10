@@ -11,7 +11,7 @@
 #' note that \code{kpHeatmap} will not extend the regions in any way, so if regions are not 
 #' contiguous, they will appear as a series of rectangles and not as a continuous plot.
 #' 
-#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), clipping=TRUE, ...)
+#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, colors=c("blue", "white", "yellow"), clipping=TRUE, ...)
 #'  
 #' @inheritParams kpPoints
 #' @param x0 (numeric) the position (in base pairs) where the data region starts
@@ -48,24 +48,14 @@
 #'@export kpHeatmap
 
 kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, 
-                      ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, 
+                      ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, 
+                      autotrack=NULL, data.panel=1, 
                       colors=c("blue", "white", "yellow"), clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
   
-  
-  #if null, get the r0 and r1
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
-  
-  ccf <- karyoplot$coord.change.function
-    
+ 
+  #Manually process "y" since in this track it is not affected by r0, r1, autotrack, etc...
   if(!is.null(data)) {
-    chr <- as.character(seqnames(data))
-    x0 <- start(data)
-    x1 <- end(data)
-        
     if(is.null(y)) {
       if("value" %in% names(mcols(data))) {
         y <- data$value
@@ -79,8 +69,6 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL,
     }
   } 
   
-  if(is.null(chr)) stop("chr must be specified, either by the 'chr' parameter or by providing a 'data' object")
-    
   if(is.null(ymin)) ymin <- min(y)
   if(is.null(ymax)) ymax <- max(y)
   
@@ -97,22 +85,11 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL,
   #Create the colorRamp
   cr <- grDevices::colorRamp(colors=colors)
   
+  invisible(kpRect(karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=0, y1=1,
+                   ymin=0, ymax=1, r0=r0, r1=r1, autotrack=autotrack,
+                   col=grDevices::rgb(cr(y), max=255), border=NA,
+                   data.panel=data.panel, clipping=clipping, ...))
+  
+  
  
-  #Determine the plotting coordinates
-  x0plot <- ccf(chr=chr, x=x0, data.panel=data.panel)$x
-  x1plot <- ccf(chr=chr, x=x1, data.panel=data.panel)$x
-  yminplot <- ccf(chr=chr, y=rep_len(r0, length(chr)), data.panel=data.panel)$y
-  ymaxplot <- ccf(chr=chr, y=rep_len(r1, length(chr)), data.panel=data.panel)$y
-  
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
-  }
-  
-  graphics::rect(xleft=x0plot, xright=x1plot, ytop=ymaxplot, ybottom=yminplot,
-                 col=grDevices::rgb(cr(y), max=255), border=NA, ...)
-  
-  invisible(karyoplot)
 }
