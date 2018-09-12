@@ -144,9 +144,35 @@ darker <- function(col, amount=150) {
 
 
 
-#Autotrack
-#TODO: document and export? maybe export only if used out of prepareParameters2 
-#      and 4
+#' processAutotrack
+#' 
+#' @description 
+#' Adjusts the r0 and r1 taking in to account the autotrack parameter
+#' 
+#' @details 
+#' Simple utility function to adjust the r0 and r1 values given a valid
+#' autotrack definition. 
+#' 
+#' @usage processAutotrack(r0, r1, autotrack)
+#' 
+#' @param r0 (numeric) the original r0
+#' @param r1 (numeric) the original r1
+#' @param autotrack (list) the autotrack definition (current track(s), total tracks and margin)
+#' 
+#' @return
+#' The adjusted r0 and r1 values to be used for plotting
+#' 
+#' @examples
+#'  
+#' processAutotrack(0, 1, list(1, 4, 0))
+#' processAutotrack(0.5, 1, list(1, 4, 0))
+#' 
+#' processAutotrack(0, 1, list(c(1,3), 4, 0))
+#' 
+#' processAutotrack(0, 1, list(c(1,3), 4, 0.5))
+#'  
+#' @export processAutotrack
+#'
 
 processAutotrack <- function(r0, r1, autotrack) {
   if(!all(unlist(lapply(autotrack, methods::is, "numeric")))) stop("'autotrack' must be a list of numerics and it is a ", unlist(lapply(autotrack, class)))
