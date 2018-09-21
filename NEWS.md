@@ -1,3 +1,10 @@
+# karyoploteR 1.7.9
+
+## Bug Fixes
+
+* Fixed a bug in the coordinate change function where plotting was out of place
+or even invisible if the zoom object had addition seqlevels
+
 # karyoploteR 1.7.4
 
 ## Other

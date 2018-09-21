@@ -135,7 +135,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     if(!methods::is(zoom, "GRanges")) stop("'zoom' must be NULL or a GRanges object")
     if(length(zoom)>1) {
       warning("The zoom parameter has more than one region. Only the first one will be used.")
-      zoom <- zoom [1]
+      zoom <- zoom[1]
     }
   }
   

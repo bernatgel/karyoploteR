@@ -49,10 +49,7 @@ kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, da
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotRainfall: 'karyoplot' must be a valid 'KaryoPlot' object"))
   if(!methods::is(data, "GRanges")) stop(paste0("In kpPlotRainfall: 'data' must be a valid 'GRanges' object"))
-  
-  karyoplot$beginKpPlot()
-  on.exit(karyoplot$endKpPlot())
-  
+
   #TODO: Convert the VCF into a GRanges if needed
   
   #Assign colors if needed
@@ -73,11 +70,13 @@ kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, da
   distances <- list()
   #and for each chromosome, compute the distances and plot them
   for(chr in karyoplot$chromosomes) {
-    ss <- start(data.per.chr[[chr]])
-    feat.dist <- ss - c(1,ss[1:length(ss)-1])
-    feat.dist <- log10(feat.dist)
-    distances[[chr]] <- feat.dist
-    kpPoints(karyoplot, chr=chr, x=ss, y=feat.dist, col=data.per.chr[[chr]]$col, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
+    if(length(data.per.chr)>0) {
+      ss <- start(data.per.chr[[chr]])
+      feat.dist <- ss - c(1,ss[1:length(ss)-1])
+      feat.dist <- log10(feat.dist)
+      distances[[chr]] <- feat.dist
+      kpPoints(karyoplot, chr=chr, x=ss, y=feat.dist, col=data.per.chr[[chr]]$col, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
+    }
   }
   
   karyoplot$latest.plot <- list(funct="kpPlotRainfall", computed.values=list(distances=distances))
