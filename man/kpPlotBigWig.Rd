@@ -55,15 +55,16 @@ only adjusting the \code{col} and \code{border} parameters.
 }
 \examples{
 
-#Using the test BigWig file included in the rtracklayer package
-rtrack_test_path <- system.file("tests", package = "rtracklayer")
-test_bw <- file.path(rtrack_test_path, "test.bw")
+bigwig.file <- system.file("extdata", "BRCA.genes.hg19.bw", package = "karyoploteR")
+brca.genes.file <- system.file("extdata", "BRCA.genes.hg19.txt", package = "karyoploteR")
+brca.genes <- toGRanges(brca.genes.file)
+seqlevelsStyle(brca.genes) <- "UCSC"
 
-
-kp <- plotKaryotype(zoom=toGRanges("chr19", 1000, 3000))
-kp <- kpPlotBigWig(kp, data=test_bw, r0=0, r1=0.3)
-kp <- kpPlotBigWig(kp, data=test_bw, r0=0.4, r1=0.7, border="red", lwd=2)
-kp <- kpPlotBigWig(kp, data=test_bw, r0=0.8, r1=1, ymin=0, ymax=2, border="gold", col=NA)
+kp <- plotKaryotype(zoom = brca.genes[1])
+kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.3)
+kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.4, r1=0.7, border="red", lwd=2)
+kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.8, r1=1, ymin=0, ymax=500, border="gold", col=NA)
+kpAxis(kp, r0=0.8, r1=1, ymin=0, ymax=500)
 
 
 
