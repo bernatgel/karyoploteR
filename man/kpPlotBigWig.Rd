@@ -35,7 +35,7 @@ kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NU
 Returns the original karyoplot object with the data computed (ymax and ymin values used) stored at \code{karyoplot$latest.plot}
 }
 \description{
-Plots the wiggle values in a BigWig file
+Plots the wiggle values in a BigWig file. This function does not work on windows.
 }
 \details{
 \code{kpPlotBigWig} plots the data contained in a binary file format called 
@@ -53,19 +53,23 @@ The data is plotted using \code{\link{kpArea}} and therefore it is possible
 to plot as a single line, a line with shaded area below or as a shaded area 
 only adjusting the \code{col} and \code{border} parameters.
 }
+\note{
+Since this functions uses \code{rtracklayer} BigWig infrastructure and it does not work on windows, this function won't work on windows either.
+}
 \examples{
 
-bigwig.file <- system.file("extdata", "BRCA.genes.hg19.bw", package = "karyoploteR")
-brca.genes.file <- system.file("extdata", "BRCA.genes.hg19.txt", package = "karyoploteR")
-brca.genes <- toGRanges(brca.genes.file)
-seqlevelsStyle(brca.genes) <- "UCSC"
+if (.Platform$OS.type != "windows") {
+  bigwig.file <- system.file("extdata", "BRCA.genes.hg19.bw", package = "karyoploteR")
+  brca.genes.file <- system.file("extdata", "BRCA.genes.hg19.txt", package = "karyoploteR")
+  brca.genes <- toGRanges(brca.genes.file)
+  seqlevelsStyle(brca.genes) <- "UCSC"
 
-kp <- plotKaryotype(zoom = brca.genes[1])
-kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.3)
-kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.4, r1=0.7, border="red", lwd=2)
-kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.8, r1=1, ymin=0, ymax=500, border="gold", col=NA)
-kpAxis(kp, r0=0.8, r1=1, ymin=0, ymax=500)
-
+  kp <- plotKaryotype(zoom = brca.genes[1])
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.3)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.4, r1=0.7, border="red", lwd=2)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.8, r1=1, ymin=0, ymax=500, border="gold", col=NA)
+  kpAxis(kp, r0=0.8, r1=1, ymin=0, ymax=500)
+}
 
 
 }
