@@ -34,7 +34,7 @@
 getChromosomeNamesBoundingBox <- function(karyoplot) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
-  if(karyoplot$plot.type %in% c(1,2)) {
+  if(karyoplot$plot.type %in% c(1,2,6)) {
     chr.labels <- karyoplot$chromosomes
     
     y0 <- karyoplot$ideogram.mid(chr=chr.labels) - karyoplot$plot.params$ideogramheight
@@ -44,7 +44,7 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
   
     return(list(x0=x0, x1=x1, y0=y0, y1=y1))  
   }
-  if(karyoplot$plot.type %in% c(3, 5)) {
+  if(karyoplot$plot.type %in% c(3, 5,7)) {
     #position the labels centered in the chromosome and in the top margin
     chr.labels <- karyoplot$chromosomes
     

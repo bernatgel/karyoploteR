@@ -37,7 +37,7 @@
 
 
 getDefaultPlotParams <- function(plot.type) {
-  valid.plot.types <- c(1:5) #c(1:4)
+  valid.plot.types <- c(1:7) #c(1:4)
   
   if(!plot.type %in% valid.plot.types) {
     stop(paste0("plot.type is not valid. Select a valid value: ", 
@@ -47,7 +47,6 @@ getDefaultPlotParams <- function(plot.type) {
   if(plot.type == 1) { #Horizontal. Data above the ideogram
     plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
                         ideogramheight=50, ideogramlateralmargin=0,
-                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=200, data1inmargin=20, data1outmargin=20,
                         data1min=0, data1max=1,
                         data2height=0, data2inmargin=0, data2outmargin=0, #make the panel invisible
@@ -90,6 +89,26 @@ getDefaultPlotParams <- function(plot.type) {
                         data2min=0, data2max=1
     )
   }
+  if(plot.type == 6) { #Horizontal. No data panels.
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
+                        ideogramheight=50, ideogramlateralmargin=0,
+                        data1height=0, data1inmargin=0, data1outmargin=5, #make the panel invisible
+                        data1min=0, data1max=1,
+                        data2height=0, data2inmargin=0, data2outmargin=5, #make the panel invisible
+                        data2min=0, data2max=1                        
+    )
+  }
+  if(plot.type == 7) {  #Horizontal. All ideograms in a single line. No data panels
+    plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=30, bottommargin=30,
+                        ideogramheight=200, ideogramlateralmargin=0.003,
+                        data1height=0, data1inmargin=0, data1outmargin=5, #make the panel invisible
+                        data1min=0, data1max=1,
+                        data2height=0, data2inmargin=0, data2outmargin=5, #make the panel invisible
+                        data2min=0, data2max=1                        
+    )
+  } 
+  
+  
   
   #Add the additional "ideogram" and "all" data.panels
   plot.params <- c(plot.params,

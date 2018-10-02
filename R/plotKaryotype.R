@@ -20,10 +20,15 @@
 #'  and positions of the data panels respect to the ideograms: 
 #'  \itemize{
 #'    \item \code{plot.type=1}  Horizontal ideograms with a single data panel above them
-#'    \item \code{plot.type=2}  Horizontal ideograms with a two data panels, one above and one below them
+#'    \item \code{plot.type=2}  Horizontal ideograms with two data panels, one above and one below them
+#'    \item \code{plot.type=3}  Horizontal ideograms with all chromosomes in a single line with two data panels, one above and one below them
+#'    \item \code{plot.type=4}  Horizontal ideograms with all chromosomes in a single line with one data panel above
+#'    \item \code{plot.type=5}  Horizontal ideograms with all chromosomes in a single line with one data panel below them
+#'    \item \code{plot.type=6}  Horizontal ideograms with NO data panels. Only plotting in the ideograms is possible.
+#'    \item \code{plot.type=7}  Horizontal ideograms with all chromosomes in a single line with NO data panels. Only plotting in the ideograms is possible.
 #'  }
 #'  
-#'  More plot types are expected to come in the near future.
+#' 
 #'  
 #' 
 #' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", zoom=NULL, cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
@@ -300,11 +305,11 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   #Create the plot
   #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
-    if(plot.type %in% c(1,2)) {
+    if(plot.type %in% c(1,2,6)) {
       xlim <- c(0, 1)
       ylim <- c(0, pp$bottommargin + length(gr.genome)*kp$chromosome.height + pp$topmargin)
     } else {
-      if(plot.type %in% c(3,4,5)) {
+      if(plot.type %in% c(3,4,5,7)) {
         xlim <- c(0, 1)
         ylim <- c(0, pp$bottommargin + kp$chromosome.height + pp$topmargin)
       }

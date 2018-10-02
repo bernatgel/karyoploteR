@@ -95,7 +95,40 @@ getCoordChangeFunctions <- function(karyoplot)
       return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
     }
   }
-  
+  if(plot.type == 6) {
+    genomic2plot <- genomic2plot_2HorizDataAboveAndBelowIdeogram
+    ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
+    chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(y)) {
+        if(is.null(chr)) {
+          stop("If y is not NULL, chr must be specified too")
+        }
+        if(length(y) != length(chr)) {
+          stop("If y is not NULL, it have to have the same length as chr")
+        }
+      }
+      if(is.null(data.panel) || data.panel==1 || data.panel==2) data.panel <- "ideogram" #No data panels are visible in this plot.type
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+    }
+  }
+  if(plot.type == 7) { #All chromosomes in a line with 1 data panel below
+    genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
+    ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
+    chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
+    coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(!is.null(x)) {
+        if(is.null(chr)) {
+          stop("If x is not NULL, chr must be specified too")
+        }
+        if(length(x) != length(chr)) {
+          stop("If x is not NULL, it have to have the same length as chr")
+        }
+      }
+      if(is.null(data.panel) || data.panel==1 || data.panel==2) data.panel <- "ideogram" #No data panels are visible in this plot.type
+      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+    }
+  }
 
 
   return(list(
