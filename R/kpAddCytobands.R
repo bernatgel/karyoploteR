@@ -102,7 +102,7 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
       graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
     }
   }
-  graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col, border=border)      
+  graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col, border=border, ...)      
 
   
   invisible(karyoplot)
