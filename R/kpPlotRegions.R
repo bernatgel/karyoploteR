@@ -14,8 +14,7 @@
 #' @usage kpPlotRegions(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="black", border=NULL, avoid.overlapping=TRUE, num.layers=NULL, layer.margin=0.05, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
-#' @param data    (a \code{GRanges}) A GRanges object with the regions to plot.
-# #removed as requested by the package reviewer. It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.
+#' @param data    (a \code{GRanges} or equivalent) It can be any of the formats accepted by the \code{\link[regioneR]{toGRanges}} function from the package \href{http://bioconductor.org/packages/release/bioc/html/regioneR.html}{regioneR}.
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
@@ -83,7 +82,9 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL,
     if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
     if(missing(data)) stop("The parameter 'data' is required")
-    if(!methods::is(data, "GRanges")) stop("'data' must be a GRanges object")
+  
+    data <- toGRanges(data)
+    if(!methods::is(data, "GRanges")) stop("'data' must be a GRanges object or something accepted by toGRanges")
   
   #if there's nothing to plot, return
   if(length(data)==0) {
