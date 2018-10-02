@@ -228,22 +228,29 @@ genomic2plot_2HorizDataAboveAndBelowIdeogram <- function(chr=NULL, x=NULL, y=NUL
     if(is.null(y)) { #if y is null, set y to the bottom of the chromosome
       y.plot <- chrs.y
     } else { #Return the appropiate plot.y for the given original y
-      if(data.panel == 0) {
-        datayrange <- pp$data0max - pp$data0min 
-        yscaled <- ((y - pp$data0min) / datayrange) * pp$ideogramheight
+      if(data.panel == "ideogram") {
+        datayrange <- pp$dataideogrammax - pp$dataideogrammin 
+        yscaled <- ((y - pp$dataideogrammin) / datayrange) * pp$ideogramheight
         y.plot <- chrs.y - pp$ideogramheight/2 + yscaled
       } else {
-        if(data.panel == 1) {
-          datayrange <- pp$data1max - pp$data1min 
-          yscaled <- ((y - pp$data1min) / datayrange) * pp$data1height
-          y.plot <- chrs.y + pp$ideogramheight/2 + pp$data1inmargin + yscaled
+        if(data.panel == "all") {
+          all.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp) - pp$data1outmargin - pp$data2outmargin
+          datayrange <- pp$dataallmax - pp$dataallmin 
+          yscaled <- ((y - pp$dataallmin) / datayrange) * all.height
+          y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - pp$data2height + yscaled
         } else {
-          if(data.panel == 2) {
-            datayrange <- pp$data2max - pp$data2min 
-            yscaled <- ((y - pp$data2min) / datayrange) * pp$data2height
-            y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - yscaled
+          if(data.panel == 1) {
+            datayrange <- pp$data1max - pp$data1min 
+            yscaled <- ((y - pp$data1min) / datayrange) * pp$data1height
+            y.plot <- chrs.y + pp$ideogramheight/2 + pp$data1inmargin + yscaled
           } else {
-            stop("Invalid data.panel")
+            if(data.panel == 2) {
+              datayrange <- pp$data2max - pp$data2min 
+              yscaled <- ((y - pp$data2min) / datayrange) * pp$data2height
+              y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - yscaled
+            } else {
+              stop("Invalid data.panel")
+            }
           }
         }
       }
@@ -316,22 +323,29 @@ genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL,
     if(is.null(y)) { #if y is null, set y to the bottom of the chromosome
       y.plot <- chrs.y
     } else { #Return the appropiate plot.y for the given original y
-      if(data.panel == 0) {
-        datayrange <- pp$data0max - pp$data0min 
-        yscaled <- ((y - pp$data0min) / datayrange) * pp$ideogramheight
+      if(data.panel == "ideogram") {
+        datayrange <- pp$dataideogrammax - pp$dataideogrammin 
+        yscaled <- ((y - pp$dataideogrammin) / datayrange) * pp$ideogramheight
         y.plot <- chrs.y - pp$ideogramheight/2 + yscaled
       } else {
-        if(data.panel == 1) {
-          datayrange <- pp$data1max - pp$data1min 
-          yscaled <- ((y - pp$data1min) / datayrange) * pp$data1height
-          y.plot <- chrs.y + pp$ideogramheight/2 + pp$data1inmargin + yscaled
+        if(data.panel == "all") {
+          all.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp) - pp$data1outmargin - pp$data2outmargin
+          datayrange <- pp$dataallmax - pp$dataallmin 
+          yscaled <- ((y - pp$dataallmin) / datayrange) * all.height
+          y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - pp$data2height + yscaled
         } else {
-          if(data.panel == 2) {
-            datayrange <- pp$data2max - pp$data2min 
-            yscaled <- ((y - pp$data2min) / datayrange) * pp$data2height
-            y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - yscaled
+          if(data.panel == 1) {
+            datayrange <- pp$data1max - pp$data1min 
+            yscaled <- ((y - pp$data1min) / datayrange) * pp$data1height
+            y.plot <- chrs.y + pp$ideogramheight/2 + pp$data1inmargin + yscaled
           } else {
-            stop("Invalid data.panel")
+            if(data.panel == 2) {
+              datayrange <- pp$data2max - pp$data2min 
+              yscaled <- ((y - pp$data2min) / datayrange) * pp$data2height
+              y.plot <- chrs.y - pp$ideogramheight/2 - pp$data2inmargin - yscaled
+            } else {
+              stop("Invalid data.panel")
+            }
           }
         }
       }
