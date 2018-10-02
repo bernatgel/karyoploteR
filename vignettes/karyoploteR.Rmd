@@ -57,7 +57,7 @@ As you can see, the `plotKaryotype` returns a `KaryoPlot` object that has to be 
 For example, to create a plot of the mouse genome with data above the ideograms we would use this:
 
 ```{r}
-  kp <- plotKaryotype(genome="mm10", plot.type=1, main="The mm10 genome", cex=0.6)
+  kp <- plotKaryotype(genome="mm10", plot.type=1, main="The mm10 genome")
 ```
 
 And to plot the first thee chromosomes of the hg19 human genome assembly with data above and below them:
@@ -278,12 +278,12 @@ In addition to changing the genomes, chromosomes, and plot types, it's also poss
 
 This is for `plot.type=2`
 ```{r}
-plotDefaultPlotParams(plot.type=2, cex=0.6)
+plotDefaultPlotParams(plot.type=2)
 ```
 
 And this is for `plot.type=3`
 ```{r}
-plotDefaultPlotParams(plot.type=3, cex=0.6)
+plotDefaultPlotParams(plot.type=3)
 ```
 
 Or we can change the plot parameters to create different configurations. For example, we can create a plot with a data panel larger than the other and smaller margins:
@@ -296,7 +296,7 @@ plot.params$leftmargin <- 0.05
 plot.params$bottommargin <- 20
 plot.params$topmargin <- 20
 
-plotDefaultPlotParams(plot.type=2, plot.params=plot.params, cex=0.6)
+plotDefaultPlotParams(plot.type=2, plot.params=plot.params)
 ```
 
 Or a plot with a very small data panel above the ideogram almost touching it (for example, to mark the regions of interest) and a bigger data panel below it (for example, to plot the detailed data):
@@ -308,7 +308,7 @@ plot.params$data1height <- 50
 plot.params$data1inmargin <- 1
 plot.params$data2height <- 400
 
-plotDefaultPlotParams(plot.type = 3, plot.params=plot.params, cex=0.6)
+plotDefaultPlotParams(plot.type = 3, plot.params=plot.params)
 
 ```
 

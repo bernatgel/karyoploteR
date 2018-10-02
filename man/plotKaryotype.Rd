@@ -50,10 +50,13 @@ This is the main function of \code{karyoploteR}. It creates the basic empty plot
  and positions of the data panels respect to the ideograms: 
  \itemize{
    \item \code{plot.type=1}  Horizontal ideograms with a single data panel above them
-   \item \code{plot.type=2}  Horizontal ideograms with a two data panels, one above and one below them
+   \item \code{plot.type=2}  Horizontal ideograms with two data panels, one above and one below them
+   \item \code{plot.type=3}  Horizontal ideograms with all chromosomes in a single line with two data panels, one above and one below them
+   \item \code{plot.type=4}  Horizontal ideograms with all chromosomes in a single line with one data panel above
+   \item \code{plot.type=5}  Horizontal ideograms with all chromosomes in a single line with one data panel below them
+   \item \code{plot.type=6}  Horizontal ideograms with NO data panels. Only plotting in the ideograms is possible.
+   \item \code{plot.type=7}  Horizontal ideograms with all chromosomes in a single line with NO data panels. Only plotting in the ideograms is possible.
  }
- 
- More plot types are expected to come in the near future.
 }
 \examples{
  
