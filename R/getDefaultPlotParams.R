@@ -47,22 +47,27 @@ getDefaultPlotParams <- function(plot.type) {
   if(plot.type == 1) { #Horizontal. Data above the ideogram
     plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
                         ideogramheight=50, ideogramlateralmargin=0,
+                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=200, data1inmargin=20, data1outmargin=20,
-                        data1min=0, data1max=1
+                        data1min=0, data1max=1,
+                        data2height=0, data2inmargin=0, data2outmargin=0, #make the panel invisible
+                        data2min=0, data2max=1                        
     )
   } 
   if(plot.type == 2) { #Horizontal. Data above and below the ideogram
     plot.params <- list(leftmargin=0.1, rightmargin=0.05, topmargin=120, bottommargin=100,
                         ideogramheight=50, ideogramlateralmargin=0,
+                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=200, data1inmargin=20, data1outmargin=20,
                         data1min=0, data1max=1,
                         data2height=200, data2inmargin=20, data2outmargin=20,
                         data2min=0, data2max=1                        
-                        )
+    )
   }
   if(plot.type == 3) { #Horizontal. All ideograms in a single line with 2 data panels
     plot.params <- list(leftmargin=0.05, rightmargin=0.05, topmargin=30, bottommargin=30,
                         ideogramheight=10, ideogramlateralmargin=0.003,
+                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=200, data1inmargin=10, data1outmargin=0,
                         data1min=0, data1max=1,
                         data2height=200, data2inmargin=10, data2outmargin=0,
@@ -72,6 +77,7 @@ getDefaultPlotParams <- function(plot.type) {
   if(plot.type == 4) { #Horizontal. All ideograms in a single line 1 panel above
     plot.params <- list(leftmargin=0.05, rightmargin=0.05, topmargin=30, bottommargin=30,
                         ideogramheight=10, ideogramlateralmargin=0.003,
+                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=200, data1inmargin=10, data1outmargin=0,
                         data1min=0, data1max=1,
                         data2height=0, data2inmargin=0, data2outmargin=0, #make the panel invisible
@@ -81,6 +87,7 @@ getDefaultPlotParams <- function(plot.type) {
   if(plot.type == 5) { #Horizontal. All ideograms in a single line 1 panel below
     plot.params <- list(leftmargin=0.05, rightmargin=0.05, topmargin=30, bottommargin=30,
                         ideogramheight=10, ideogramlateralmargin=0.003,
+                        data0min=0, data0max=1, #plotting in the ideogram
                         data1height=0, data1inmargin=0, data1outmargin=0, #make this panel invisible
                         data1min=0, data1max=1,
                         data2height=200, data2inmargin=10, data2outmargin=0,
