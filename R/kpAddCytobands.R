@@ -79,7 +79,8 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
     
-  color.table <- getCytobandColors(color.table)
+  color.table <- getCytobandColors(color.table, ...)
+  border <- ifelse("border" %in% names(color.table), color.table["border"], "black")
  
   #And plot them
   ybottom <- mids(as.character(seqnames(cyto))) - pp$ideogramheight/2
@@ -101,7 +102,7 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
       graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
     }
   }
-  graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col)      
+  graphics::rect(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop, col=col, border=border)      
 
   
   invisible(karyoplot)

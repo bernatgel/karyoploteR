@@ -37,7 +37,7 @@ getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "bioviz
   
   if(is.null(color.table)) {
     if(color.schema=="biovizbase") {
-      color.table <- biovizBase::getBioColor("CYTOBAND")
+      color.table <- c(biovizBase::getBioColor("CYTOBAND"), border="black")
     } else {
       if(color.schema=="circos") {
          color.table <- c(gneg="#FFFFFF",
@@ -50,7 +50,8 @@ getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "bioviz
                          gpos="#000000",
                          stalk="#647FA4", #repetitive areas
                          acen="#D92F27", #centromeres
-                         gvar="#DCDCDC")
+                         gvar="#DCDCDC",
+                         border="black")
       } else {
         if(color.schema=="only.centromeres") {
           color.table <- c(gneg="#C8C8C8",
@@ -63,7 +64,8 @@ getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "bioviz
                            gpos="#C8C8C8",
                            stalk="#C8C8C8", #repetitive areas
                            acen="#D92F27", #centromeres
-                           gvar="#C8C8C8")
+                           gvar="#C8C8C8",
+                           border=NA)
         }
       }
     }
