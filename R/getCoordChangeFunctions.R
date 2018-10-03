@@ -311,7 +311,8 @@ getIdeogramMidY_3HorizAllChromosomesInOneLine <- function(chr, genome, plot.para
   pp <- plot.params
   chr.height <- getChrHeight_3HorizAllChromosomesInOneLine(pp)
   ypos <- pp$bottommargin + pp$data2outmargin + pp$data2height + pp$data2inmargin + pp$ideogramheight/2
-  return(setNames(rep(ypos, length(chr)), chr))
+  #return(setNames(rep(ypos, length(chr)), chr))
+  return(ypos) #It's a single value for all chromosomes!
 }
 
 getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
@@ -326,6 +327,7 @@ getChrHeight_3HorizAllChromosomesInOneLine <- function(pp) {
 genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL, data.panel,
                                                          genome, plot.params) {
   
+
   pp <- plot.params
   
   chr.names <- GenomeInfoDb::seqlevels(genome)
@@ -354,7 +356,8 @@ genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL,
   } else {
     chrs.y <- getIdeogramMidY_3HorizAllChromosomesInOneLine(chr, genome, pp) 
     if(is.null(y)) { #if y is null, set y to the bottom of the chromosome
-      y.plot <- chrs.y
+      y.plot <- chrs.y #shouldn't happen. Just tested in the if above!
+      
     } else { #Return the appropiate plot.y for the given original y
       if(data.panel == "ideogram") {
         datayrange <- pp$dataideogrammax - pp$dataideogrammin 
