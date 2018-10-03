@@ -12,7 +12,7 @@
 #' By default the lines will occupy the whole chromsome extent (data.panel="all") 
 #' but using the \code{data.panel} parameter it can be tuned.
 #' 
-#' @usage kpAddChromosomeSeparators(karyoplot, col="gray", lty=3, data.panel="all", ...) {
+#' @usage kpAddChromosomeSeparators(karyoplot, col="gray", lty=3, data.panel="all", ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param col (color) The color of the separator lines (defaults to "gray")
