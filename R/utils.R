@@ -144,48 +144,74 @@ darker <- function(col, amount=150) {
 
 
 
-#' processAutotrack
+
+############  Autotrack  ###############
+
+#' autotrack
 #' 
 #' @description 
-#' Adjusts the r0 and r1 taking in to account the autotrack parameter
+#' Computes r0 and r1 given track definition
 #' 
 #' @details 
-#' Simple utility function to adjust the r0 and r1 values given a valid
-#' autotrack definition. 
+#' Small utility function to help compute r0 and r1 given the total number of tracks 
+#' and the track(s) the current plot will occupy. It also takes into account a margin
+#' between tracks and original r0 and r1, so we can say something like, "Out of 5 
+#' tracks between 0 and 0.5, this plot will be at track 2", and it will return
+#' r0=0.1 and r1=0.2
 #' 
-#' @usage processAutotrack(r0, r1, autotrack)
 #' 
+#' @usage autotrack(current.track, total.tracks, margin=0.05, r0=0, r1=1)
+#' 
+#' @param current.track (numeric) The track or tracks the current plot will occupy, starting from 1. If more than one value is provided, the plot will expand from min(current.track) to max(current.track).
+#' @param total.tracks (numeric) The total number of tracks
+#' @param margin (numeric) The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. 
 #' @param r0 (numeric) the original r0
 #' @param r1 (numeric) the original r1
-#' @param autotrack (list) the autotrack definition (current track(s), total tracks and margin)
 #' 
 #' @return
-#' The adjusted r0 and r1 values to be used for plotting
+#' A list of two numerics: r0 and r1
 #' 
 #' @examples
-#'  
-#' processAutotrack(0, 1, list(1, 4, 0))
-#' processAutotrack(0.5, 1, list(1, 4, 0))
+#'
+#' #first track out of 4  
+#' autotrack(1, 4)
+#'
+#' #the same, but without margin
+#' autotrack(1, 4, 0)
 #' 
-#' processAutotrack(0, 1, list(c(1,3), 4, 0))
+#' #first and second tracks out of 4
+#' autotrack(c(1,2), 4)
 #' 
-#' processAutotrack(0, 1, list(c(1,3), 4, 0.5))
+#' #The first track out of 4, fitting the four track between 0 and 0.5
+#' autotrack(1, 4, r0=0, r1=0.5)
 #'  
-#' @export processAutotrack
+#' @export autotrack
 #'
 
-processAutotrack <- function(r0, r1, autotrack) {
-  if(!all(unlist(lapply(autotrack, methods::is, "numeric")))) stop("'autotrack' must be a list of numerics and it is a ", unlist(lapply(autotrack, class)))
-  if(length(autotrack)<2) stop("'autotrack' must be a list of numerics of length 2 or 3 and it is of length ", length(autotrack))    
+autotrack <- function(current.track, total.tracks, margin=0.05, r0=0, r1=1) {
+  if(!methods::is(current.track, "numeric")) stop("current.track must be numeric")
+  if(!methods::is(total.tracks, "numeric")) stop("total.tracks must be numeric")
+  if(length(total.tracks)>1) {
+    warning("total.tracks has more than one value. Using only the first one.")
+    total.tracks <- total.tracks[1]  
+  }
+  if(!methods::is(margin, "numeric")) stop("margin must be numeric")
+  if(length(margin)>1) {
+    warning("margin has more than one value. Using only the first one.")
+    margin <- margin[1]  
+  }
+  if(!methods::is(r0, "numeric")) stop("r0 must be numeric")
+  if(!methods::is(r1, "numeric")) stop("r1 must be numeric")
   
-  at.current.min <- min(autotrack[[1]])
-  at.current.max <- max(autotrack[[1]])
-  at.total <- autotrack[[2]]
-  at.margin <- ifelse(length(autotrack)==2, 0.05, autotrack[[3]])
   
-  tr.height <- (r1-r0)/at.total
+  at.current.min <- min(current.track)
+  at.current.max <- max(current.track)
+  
+  tr.height <- (r1-r0)/total.tracks
   r0 <- r0+(at.current.min-1)*tr.height
-  r1 <- r0+(at.current.max-at.current.min+1)*tr.height-tr.height*at.margin
+  r1 <- r0+(at.current.max-at.current.min+1)*tr.height-tr.height*margin
   
-  return(c(r0=r0, r1=r1))
+  return(list(r0=r0, r1=r1))
 }
+
+
