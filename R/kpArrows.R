@@ -16,7 +16,7 @@
 #' In addition, via the ellipsis operator (\code{...}), \code{kpSegments} accepts any parameter 
 #' valid for \code{segments} (e.g. \code{code}, \code{lwd}, \code{lty}, \code{col}, ...)
 #'
-#' @usage kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL,  clipping=TRUE, ...) 
+#' @usage kpArrows(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) 
 #' 
 #' @inheritParams kpRect 
 #' 
@@ -52,14 +52,14 @@
 kpArrows <- function(karyoplot, data=NULL, 
                      chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL,
                      ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,
-                     autotrack=NULL, clipping=TRUE, ...) {
+                     clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
   
   pp <- prepareParameters4("kpArrows", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
                            y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1,
-                           autotrack=autotrack, data.panel=data.panel, ...)
+                          data.panel=data.panel, ...)
   
   ccf <- karyoplot$coord.change.function
   

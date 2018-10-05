@@ -11,7 +11,7 @@
 #' note that \code{kpHeatmap} will not extend the regions in any way, so if regions are not 
 #' contiguous, they will appear as a series of rectangles and not as a continuous plot.
 #' 
-#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, colors=c("blue", "white", "yellow"), clipping=TRUE, ...)
+#' @usage kpHeatmap(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, colors=c("blue", "white", "yellow"), clipping=TRUE, ...)
 #'  
 #' @inheritParams kpPoints
 #' @param x0 (numeric) the position (in base pairs) where the data region starts
@@ -49,12 +49,12 @@
 
 kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL, 
                       ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, 
-                      autotrack=NULL, data.panel=1, 
+                      data.panel=1, 
                       colors=c("blue", "white", "yellow"), clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
  
-  #Manually process "y" since in this track it is not affected by r0, r1, autotrack, etc...
+  #Manually process "y" since in this track it is not affected by r0, r1, etc...
   if(!is.null(data)) {
     if(is.null(y)) {
       if("value" %in% names(mcols(data))) {
@@ -86,7 +86,7 @@ kpHeatmap <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y=NULL,
   cr <- grDevices::colorRamp(colors=colors)
   
   invisible(kpRect(karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1, y0=0, y1=1,
-                   ymin=0, ymax=1, r0=r0, r1=r1, autotrack=autotrack,
+                   ymin=0, ymax=1, r0=r0, r1=r1, 
                    col=grDevices::rgb(cr(y), max=255), border=NA,
                    data.panel=data.panel, clipping=clipping, ...))
   

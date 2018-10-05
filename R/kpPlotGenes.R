@@ -50,7 +50,7 @@
 #'                        coding.exons.col=NULL, coding.exons.border.col=NULL, 
 #'                        non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
 #'                        introns.col=NULL, marks.col=NULL,
-#'                        data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="black", 
+#'                        data.panel=1, r0=NULL, r1=NULL, col="black", 
 #'                        border=NULL, avoid.overlapping=TRUE, clipping=TRUE, ...)
 #' 
 #' 
@@ -88,7 +88,6 @@
 #' @param data.panel (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
 #' @param r1  (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL) 
-#' @param autotrack  (list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)
 #' @param col  (color) The color of the genes, transcripts and labels. It is possible to specify different colors for each element class (transcript names, exons, strand marks...). All elements with no explicit color will be plotted using col. (Defaults to "black") 
 #' @param border  (color) The color of the border of rectangles representing genes, transcripts and exons. Every element class may have its own specific color using the appropiate parameters. The ones with no explicit color will use border. At the same time, if border is NULL, it will default to col. (Defaults to NULL)
 #' @param avoid.overlapping (boolean) If two or more regions (genes, transcripts) overlap in the genome (even partially), they can be drawn in two different layers (TRUE) or in the same layer, with superposing representations (FALSE). (Defaults to TRUE, draw non-overlapping elements)
@@ -101,7 +100,7 @@
 #' 
 #' Returns the original karyoplot object, unchanged.
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpSegments}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpRect}}, \code{\link{kpSegments}}, \code{\link{kpPlotTranscripts}}
 #' 
 #' @examples
 #'  
@@ -134,7 +133,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
                         coding.exons.col=NULL, coding.exons.border.col=NULL, 
                         non.coding.exons.col=NULL, non.coding.exons.border.col=NULL, 
                         introns.col=NULL, marks.col=NULL,
-                        data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="black", 
+                        data.panel=1, r0=NULL, r1=NULL,  col="black", 
                         border=NULL, avoid.overlapping=TRUE, clipping=TRUE, ...) {
   
   #karyoplot
@@ -208,10 +207,10 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
       y0 <- 0
       y1 <- 1 - gene.margin
     }
-    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, border=gene.border.col, r0=r0, r1=r1, autotrack=autotrack, data.panel=data.panel, clipping=clipping, ...)
+    kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, border=gene.border.col, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping, ...)
     if(add.gene.names==TRUE) {
       gene.labels <- getGeneNames(genes=data$genes, gene.names=gene.names)
-      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...)
+      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
     }
     
   } else { #if plot.transcripts==TRUE
@@ -294,7 +293,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
                       data=list(transcripts=transcripts, coding.exons=data$coding.exons, non.coding.exons=data$non.coding.exons), 
                       add.transcript.names=add.transcript.names, transcript.names = transcript.names,
                       y0 = y0, y1=y1, detail.level = detail.level, 
-                      r0=r0, r1=r1, autotrack=autotrack,
+                      r0=r0, r1=r1, 
                       non.coding.exons.height = non.coding.exons.height, 
                       add.strand.marks = add.strand.marks, mark.height = mark.height, mark.width = mark.width,
                       mark.distance = mark.distance, marks.col = marks.col, 
@@ -316,7 +315,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
       gene.labels <- getGeneNames(data$genes, gene.names)
       y0 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,1])
       y1 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,2])
-      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, col=gene.name.col, cex=gene.name.cex, position = gene.name.position, r0 = r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel)
+      kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, col=gene.name.col, cex=gene.name.cex, position = gene.name.position, r0 = r0, r1=r1, clipping=clipping, data.panel=data.panel)
     }
   } #END if plot.transcripts==TRUE
   

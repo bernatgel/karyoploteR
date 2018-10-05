@@ -12,7 +12,7 @@
 #' the the actual individual bars. \code{kpPlotRibbon} has three additional parameters
 #' controlling the smoothing of the lines and their colors.
 #' 
-#' @usage kpPlotRibbon(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="gray80", border=NULL, clipping=TRUE, ...)
+#' @usage kpPlotRibbon(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NULL, clipping=TRUE, ...)
 #'  
 #' @inheritParams kpRect 
 #' @param col  (color) The background color to plot. If NULL, it will be a lighter version of 'border' or 'black' if border is null. (Defaults to "gray80")
@@ -44,7 +44,7 @@
 
 
 # smooth=FALSE,
-kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, col="gray80", border=NULL, clipping=TRUE, ...) {
+kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col="gray80", border=NULL, clipping=TRUE, ...) {
 
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotRibbon: 'karyoplot' must be a valid 'KaryoPlot' object"))
   karyoplot$beginKpPlot()
@@ -74,7 +74,7 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
   
   pp <- prepareParameters4("kpPlotRibbon", karyoplot=karyoplot, data=data, chr=chr, x0=x0, x1=x1,
                            y0=y0, y1=y1, ymin=ymin, ymax=ymax, r0=r0, r1=r1, 
-                           autotrack=autotrack, data.panel=data.panel, ...)
+                           data.panel=data.panel, ...)
   
   ccf <- karyoplot$coord.change.function
   

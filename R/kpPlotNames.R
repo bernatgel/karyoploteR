@@ -14,7 +14,7 @@
 #'  It is possible to specify and empty label (\code{labels=""}) to leave an
 #'  element without name.
 #'
-#' @usage kpPlotNames(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, labels=NULL, position="left", ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, clipping=TRUE, ...)
+#' @usage kpPlotNames(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, labels=NULL, position="left", ymax=NULL, ymin=NULL, r0=NULL, r1=NULL,  data.panel=1, clipping=TRUE, ...)
 #'
 #' @inheritParams kpRect
 #' @param position (character) The position of the text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". Defaults to "left".
@@ -49,7 +49,7 @@
 
 kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, 
                         labels=NULL, position="left",
-                        ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL,
+                        ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, 
                         data.panel=1, clipping=TRUE, ...) {
 
   
@@ -71,11 +71,11 @@ kpPlotNames <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL,
   
   #Now decide how to plot (with respect to the rectangles), and call kpText with the appropiate parameters
   switch(position,  
-    left=kpText(karyoplot, chr=pp$chr, x=pp$x0, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=2, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...),
-    right=kpText(karyoplot, chr=pp$chr, x=pp$x1, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=4, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...),
-    top=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y1, labels=labels, pos=3,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...),
-    bottom=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0, labels=labels, pos=1,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...),
-    center=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, ymin=ymin, ymax=ymax, r0=r0, r1=r1, autotrack=autotrack, clipping=clipping, data.panel=data.panel, ...)
+    left=kpText(karyoplot, chr=pp$chr, x=pp$x0, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=2, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
+    right=kpText(karyoplot, chr=pp$chr, x=pp$x1, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, pos=4, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
+    top=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y1, labels=labels, pos=3,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
+    bottom=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0, labels=labels, pos=1,  ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...),
+    center=kpText(karyoplot, chr=pp$chr, x=pp$x0+(pp$x1-pp$x0)/2, y=pp$y0+(pp$y1-pp$y0)/2, labels=labels, ymin=ymin, ymax=ymax, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
   )  
 
   invisible(karyoplot)
