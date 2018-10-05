@@ -4,7 +4,7 @@
 \alias{prepareParameters4}
 \title{prepareParameters4}
 \usage{
-prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, autotrack=NULL, data.panel=1, filter.data=TRUE, ...)
+prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...)
 }
 \arguments{
 \item{function.name}{(character) The name of the function calling \code{prepareParameters4}. Only user for error reporting.}
@@ -30,8 +30,6 @@ prepareParameters4(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NU
 \item{r0}{The start of the range to use for plotting}
 
 \item{r1}{The end of the range to use for plotting}
-
-\item{autotrack}{(list of numerics) a list numerics with 2 or 3 elements. The first element is the tracks to use with the current plot, the second element is the total number of tracks and the third element is the margin to leave over each track. If the first element, the current track, has more than one element, the plot will span from track min(autotrack[[1]]) to track max(autotrack[[1]]). The margin is specified as the part of a track, by default 0.05, 5 percent of the track height. If NULL, no autotracks will be used. (defaults to NULL)}
 
 \item{data.panel}{The data panel to use}
 

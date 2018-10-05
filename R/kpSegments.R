@@ -53,7 +53,7 @@
 
 
 kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL,
-                       ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, autotrack=NULL, clipping=TRUE,  ...) {
+                       ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL,  clipping=TRUE,  ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
   karyoplot$beginKpPlot()
