@@ -110,7 +110,7 @@ darker <- function(col, amount=150) {
 #' "brewer.pastel2"=c("#B3E2CD", "#FDCDAC", "#CBD5E8", "#F4CAE4", "#E6F5C9", "#FFF2AE", "#F1E2CC", "#CCCCCC"),
 #' "rainbow"=rainbow(n=length(all.chrs))
 #'   
-#' @seealso \code{\link{kpPlotPoints}}
+#' @seealso \code{\link{kpPoints}}
 #' 
 #' @examples
 #' 
