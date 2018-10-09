@@ -153,6 +153,7 @@ darker <- function(col, amount=150) {
 #' }
 #' 
 #' @export colByChr
+#' @importFrom grDevices rainbow
 #'
 
 colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") {
@@ -205,7 +206,7 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
       missing.chrs <- all.chrs[!(all.chrs %in% names(colors))] 
       cols <- c(colors, setNames(rep(default.col, length(missing.chrs)), missing.chrs))
     } else {
-      cols <- setNames(suppressWarnings(recycleArg(arg=colors, argname="colors", length.out = length(all.chrs))), all.chrs) #Function from S4Vectors not intended to be used directly...
+      cols <- setNames(rep(colors, length = length(all.chrs)), all.chrs)
     }   
   }
   if(is.null(cols)) cols <- setNames(rep(default.col, length(all.chrs)), all.chrs)

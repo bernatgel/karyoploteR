@@ -87,5 +87,5 @@ for(i in seq_len(length(color.sets))) {
 
 }
 \seealso{
-\code{\link{kpPlotPoints}}
+\code{\link{kpPoints}}
 }
