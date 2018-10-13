@@ -82,8 +82,12 @@ kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=
   #If its not a coverage object, assume it's a GRanges and compute the coverage
   if(!methods::is(data, "SimpleRleList")) { 
     #data <- toGRanges(data)
-    data <- coverage(data)
-  } 
+    
+    #the width parameter is needed so the coverage extends to the end of the chromosomes
+    data <- coverage(data, width=karyoplot$chromosome.lengths) 
+  }
+  
+  #extend the coverage until the end of the chromosome
   
   #Transform to plot
   ends <- cumsum(S4Vectors::runLength(data))
