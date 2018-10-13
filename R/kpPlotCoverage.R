@@ -13,10 +13,11 @@
 #'  functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
 #'  independent numeric vectors and the function only takes in the expected object types.
 #'
-#' @usage kpPlotCoverage(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, clipping=TRUE, ...)
+#' @usage kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
-#' @param data    (a \code{GRanges}) A GRanges object from wich the coverage will be computed or a \code{SimpleRleList} result of computing the coverage.
+#' @param data    (a \code{GRanges} or a coverage object) A GRanges object from wich the coverage will be computed or a \code{SimpleRleList} result of computing the coverage.
+#' @param show.0.cov (boolean) Wether to plot a thin line representing the regions with no coverage at all. (defaults to TRUE, plot the line)
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
@@ -41,7 +42,7 @@
 #'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
 #'  
 #'  all.regs <- GRanges()
-#'  
+#' 
 #'  nreps <- 20
 #'  for(i in 1:nreps) {
 #'    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
@@ -49,11 +50,11 @@
 #'    all.regs <- c(all.regs, regs)
 #'    kpPlotRegions(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
 #'  }
-#'  
+#' 
 #'  kpPlotCoverage(kp, all.regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
 #'  kpAxis(kp, ymin = 0, ymax= 20, numticks = 2, r0 = 0.8, r1=1)
-#'  
-#'  
+#' 
+#'   
 #'  #Example 2: Do the same with a single bigger set of possibly overlapping regions
 #'  
 #'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
@@ -67,9 +68,11 @@
 #'  
 #'  
 #'@export kpPlotCoverage
+#'@importFrom IRanges IntegerList
+#'@importFrom GenomicRanges coverage
+#'
 
-
-kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, clipping=TRUE, ...) {
+kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, clipping=TRUE, ...) {
   #Check parameters
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -84,11 +87,11 @@ kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=
     #data <- toGRanges(data)
     
     #the width parameter is needed so the coverage extends to the end of the chromosomes
-    data <- coverage(data, width=karyoplot$chromosome.lengths) 
+    data <- GenomeInfoDb::keepSeqlevels(data, karyoplot$chromosomes, pruning.mode="coarse")
+    data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths) 
   }
   
-  #extend the coverage until the end of the chromosome
-  
+
   #Transform to plot
   ends <- cumsum(S4Vectors::runLength(data))
   valid.chrs <- lapply(ends, length)>0 #remove the chromosomes with no data
@@ -96,6 +99,14 @@ kpPlotCoverage <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL, col=
   coverage.lvl <- S4Vectors::runValue(data)[valid.chrs]
   
   starts <- lapply(ends, function(x) {return(c(1, (x[-length(x)]+1)))})
+  
+  if(show.0.cov==FALSE) {
+    to.keep <- coverage.lvl!=0
+    coverage.lvl <- coverage.lvl[to.keep]
+    starts <- IRanges::IntegerList(starts)[to.keep]
+    ends <- IRanges::IntegerList(ends)[to.keep]
+  }
+  
   
   if(is.null(ymax)) ymax <- max(max(coverage.lvl))
   
