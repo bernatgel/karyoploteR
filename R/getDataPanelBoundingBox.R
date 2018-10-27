@@ -43,5 +43,5 @@ getDataPanelBoundingBox <- function(karyoplot, data.panel) {
   x1 <- karyoplot$coord.change.function(chr=as.character(seqnames(karyoplot$plot.region)), x=end(karyoplot$plot.region), data.panel=data.panel)$x
   y0 <- karyoplot$coord.change.function(chr=as.character(seqnames(karyoplot$plot.region)), y=rep(karyoplot$plot.params[[paste0("data", data.panel, "min")]], length(karyoplot$plot.region)), data.panel=data.panel)$y
   y1 <- karyoplot$coord.change.function(chr=as.character(seqnames(karyoplot$plot.region)), y=rep(karyoplot$plot.params[[paste0("data", data.panel, "max")]], length(karyoplot$plot.region)), data.panel=data.panel)$y
-  return(list(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop))
+  return(list(x0=x0, x1=x1, y0=y0, y1=y1))
 }
