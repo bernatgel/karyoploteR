@@ -292,18 +292,9 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     
     on.exit(kp$endKpPlot())
   
-    #Create a function returning the drawing area given a data.panel (to be used when clipping)
-    kp$getDataPanelBoundingBox <- function(data.panel) {
-      xleft <- kp$coord.change.function(chr=as.character(seqnames(kp$plot.region)), x=start(kp$plot.region), data.panel=data.panel)$x
-      xright <- kp$coord.change.function(chr=as.character(seqnames(kp$plot.region)), x=end(kp$plot.region), data.panel=data.panel)$x
-      ybottom <- kp$coord.change.function(chr=as.character(seqnames(kp$plot.region)), y=rep(kp$plot.params[[paste0("data", data.panel, "min")]], length(kp$plot.region)), data.panel=data.panel)$y
-      ytop <- kp$coord.change.function(chr=as.character(seqnames(kp$plot.region)), y=rep(kp$plot.params[[paste0("data", data.panel, "max")]], length(kp$plot.region)), data.panel=data.panel)$y
-      return(list(xleft=xleft, xright=xright, ybottom=ybottom, ytop=ytop))
-    }
     
 
   #Create the plot
-  #TODO: Manage the specification of the y lab and xlab
     pp <- plot.params
     if(plot.type %in% c(1,2,6)) {
       xlim <- c(0, 1)

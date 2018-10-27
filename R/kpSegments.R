@@ -69,12 +69,7 @@ kpSegments <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL
   y0plot <- ccf(chr=pp$chr, y=pp$y0, data.panel=data.panel)$y
   y1plot <- ccf(chr=pp$chr, y=pp$y1, data.panel=data.panel)$y
   
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
-  }
+  processClipping(karyoplot=karyoplot, clipping=clipping, data.panel=data.panel)  
   
   #Filter the additional parameters using the 'filter' vector returned by prepareParameters4
   dots <- filterParams(list(...), pp$filter, pp$original.length)
