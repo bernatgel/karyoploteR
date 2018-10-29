@@ -242,7 +242,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
 
   
-  #Create the KaryotypePlot Object that can be used to plot additional data onto the karyotype
+  #Create the KaryoPlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
