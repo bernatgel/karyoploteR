@@ -198,12 +198,7 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
       }
     }
     
-    if(karyoplot$zoom==TRUE) {
-      if(clipping==TRUE) {
-        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-      }
-    }
+    processClipping(karyoplot=karyoplot, clipping=clipping, data.panel=data.panel)  
     graphics::polygon(x = c(bezier_points_1[,1], rev(bezier_points_2[,1])), y=c(bezier_points_1[,2], rev(bezier_points_2[,2])), col=col, border=NA, ...)
     graphics::lines(bezier_points_1, col=border, ...)
     graphics::lines(bezier_points_2, col=border, ...)

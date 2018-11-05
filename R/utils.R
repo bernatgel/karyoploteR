@@ -70,8 +70,49 @@ filterParams <- function(p, valid.elements, orig.length) {
 }
 
 
+############  Clipping   ###############
+#' processClipping
+#' 
+#' @description 
+#' Sets image clipping if needed
+#' 
+#' @details 
+#' Small utility function to help manage clipping. If the current plot is
+#' a zoomed plot and clipping is TRUE, activate the clip to the current 
+#' data.panel. This will hide any plotting ocurring out of the data.panel
+#' region.
+#' 
+#' @note Users wont usually use this function. It is used by the plotting functions 
+#' to set the clipping if needed
+#' 
+#' @usage processClipping(karyoplot, clipping, data.panel) 
+#' 
+#' @param karyoplot (KaryoPlot) A KaryoPlot object representing the current plot
+#' @param clipping (logical) Wheter clipping should be activated or not
+#' @param data.panel (data panel identifier) The name of the data panel on which the plot should be allowed. Anything plotted outside it will be hidden (if clipping==TRUE and the plot is a zoom plot)
+#' 
+#' @return
+#' Returns the original karyoplot object, unchanged.
+#' 
+#' @examples
+#' 
+#' kp <- plotKaryotype()
+#' processClipping(kp, TRUE, 1)
+#'
+#'  
+#' @export processClipping
+#'
+processClipping <- function(karyoplot, clipping, data.panel) {
+  if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
 
-
+  if(karyoplot$zoom==TRUE) {
+    if(clipping==TRUE) {
+      dpbb <- getDataPanelBoundingBox(karyoplot, data.panel)
+      graphics::clip(x1 = dpbb$x0, x2 = dpbb$x1, y1 = dpbb$y0, y2=dpbb$y1)
+    }
+  }
+  invisible(karyoplot)
+}
 
 
 ############  Autotrack  ###############

@@ -93,14 +93,7 @@ kpPlotRibbon <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NU
     y0.chr <- y0plot[in.chr]
     y1.chr <- y1plot[in.chr]
     
-    if(karyoplot$zoom==TRUE) {
-      if(clipping==TRUE) {
-        dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-        graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-      }
-    }
-    
-    
+    processClipping(karyoplot=karyoplot, clipping=clipping, data.panel=data.panel)  
     
     graphics::polygon(x=c(x.chr, rev(x.chr)), y=c(y0.chr, rev(y1.chr)), col=col, border=NA, ...)
     # if(smooth==TRUE) {
