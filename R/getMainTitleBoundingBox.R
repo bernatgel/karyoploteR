@@ -34,7 +34,7 @@
 getMainTitleBoundingBox <- function(karyoplot) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
-  if(karyoplot$plot.type %in% c(1,2,4)) {
+  if(karyoplot$plot.type %in% c(1,2,4,6,7)) {
     y0 <- karyoplot$plot$ymax - karyoplot$plot.params$topmargin
     y1 <- karyoplot$plot$ymax
     x0 <- karyoplot$plot$xmin
@@ -52,5 +52,5 @@ getMainTitleBoundingBox <- function(karyoplot) {
  
   
   #Else
-  stop("Unknown plot type")
+  stop("Unknown plot type: ", karyoplot$plot.type)
 }
