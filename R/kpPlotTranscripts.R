@@ -290,7 +290,7 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   
   #strand marks height
   t.mark.height <- transcript.height*mark.height/2
-  plot.mark.height <- diff(ccf(chr = c(chr, chr), x=0, y=c(0, t.mark.height))$y)
+  plot.mark.height <- diff(ccf(chr = c(chr, chr), x=c(0,0), y=c(0, t.mark.height), data.panel=data.panel)$y)
   
   #Compute the mark.width relative to the mark.height. 
   #Adjust for the aspcet ratio of the plot coordinates (in points)
@@ -308,7 +308,7 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
       return()
     }
     #Now, given the regions, determine if how many marks we should plot and where
-    plot.coords <- ccf(chr=c(chr, chr), x=c(start(reg), end(reg)), y=c(mid.transcript, mid.transcript))
+    plot.coords <- ccf(chr=c(chr, chr), x=c(start(reg), end(reg)), y=c(mid.transcript, mid.transcript), data.panel=data.panel)
     
     reg.width <- diff(plot.coords$x)
     if(reg.width > 1.4*plot.mark.width) {

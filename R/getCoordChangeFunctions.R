@@ -17,6 +17,7 @@ getCoordChangeFunctions <- function(karyoplot)
     ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
     coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      
       if(!is.null(y)) {
         if(is.null(chr)) {
           stop("If y is not NULL, chr must be specified too")
@@ -34,6 +35,7 @@ getCoordChangeFunctions <- function(karyoplot)
     ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
     coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(is.null(data.panel)) stop("In coordChangeFunction: data.panel is required")
       if(!is.null(y)) {
         if(is.null(chr)) {
           stop("If y is not NULL, chr must be specified too")
@@ -50,6 +52,7 @@ getCoordChangeFunctions <- function(karyoplot)
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
     coordChangeFunction <- function(chr=NULL, x=NULL, y=NULL, data.panel=NULL) {
+      if(is.null(data.panel)) stop("In coordChangeFunction: data.panel is required")
       if(!is.null(x)) {
         if(is.null(chr)) {
           stop("If x is not NULL, chr must be specified too")
@@ -95,7 +98,7 @@ getCoordChangeFunctions <- function(karyoplot)
       return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
     }
   }
-  if(plot.type == 6) {
+  if(plot.type == 6) { #Plot only on the ideograms
     genomic2plot <- genomic2plot_2HorizDataAboveAndBelowIdeogram
     ideoMid <- getIdeogramMidY_2HorizDataAboveAndBelowIdeogram
     chrHeight <- getChrHeight_2HorizDataAboveAndBelowIdeogram
@@ -112,7 +115,7 @@ getCoordChangeFunctions <- function(karyoplot)
       return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
     }
   }
-  if(plot.type == 7) { #All chromosomes in a line with 1 data panel below
+  if(plot.type == 7) { #All chromosomes in a line and plot only in the ideograms
     genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
