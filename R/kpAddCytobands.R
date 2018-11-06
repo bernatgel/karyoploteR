@@ -86,8 +86,8 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   ybottom <- mids(as.character(seqnames(cyto))) - pp$ideogramheight/2
   ytop <- mids(as.character(seqnames(cyto))) + pp$ideogramheight/2
     
-  xleft <- ccf(x=start(cyto), chr=as.character(seqnames(cyto)))$x
-  xright <- ccf(x=end(cyto), chr=as.character(seqnames(cyto)))$x
+  xleft <- ccf(x=start(cyto), chr=as.character(seqnames(cyto)), data.panel="ideogram")$x
+  xright <- ccf(x=end(cyto), chr=as.character(seqnames(cyto)), data.panel="ideogram")$x
     
   #col <- do.call(c, color.table[cyto$gieStain])
   col <- color.table[as.character(cyto$gieStain)]
@@ -95,8 +95,8 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   if(karyoplot$zoom==TRUE) {
     if(clipping==TRUE) {
       #get the plot coordinates of the cytobands drawing area
-      clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
-      clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+      clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)), data.panel="ideogram")$x
+      clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)), data.panel="ideogram")$x
       clip.ybottom <- ybottom - 10 #add a small margin to allow for the width of the lines
       clip.ytop <- ytop + 10
       graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
