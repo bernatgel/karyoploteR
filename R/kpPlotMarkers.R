@@ -222,7 +222,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
               }
             }
           }
-          dd <- digest(xp)
+          dd <- digest::digest(xp)
           if(dd %in% old.pos) { #We have either found a valid position or entered a loop
             break; 
           } else {
@@ -238,12 +238,7 @@ kpPlotMarkers <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=0.75, labels
   }
   #Finished repositioning labels
 
-  if(karyoplot$zoom==TRUE) {
-    if(clipping==TRUE) {
-      dpbb <- karyoplot$getDataPanelBoundingBox(data.panel)
-      graphics::clip(x1 = dpbb$xleft, x2 = dpbb$xright, y1 = dpbb$ybottom, y2=dpbb$ytop)
-    }
-  }
+  processClipping(karyoplot=karyoplot, clipping=clipping, data.panel=data.panel)  
   
   #Plot the labels
   #detect if the data.panel is an inverted one
