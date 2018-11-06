@@ -247,7 +247,7 @@ plotDefaultPlotParams <- function(plot.type=2, plot.params=NULL,  ...) {
     
     #horizontal margin
     hmarg.y <- kp$coord.change.function(chr="chr21", y=pp$data1max*0.8, data.panel = 1)$y
-    hmarg.x0 <- kp$coord.change.function(chr = "chr21", x = kp$chromosome.lengths[1])$x
+    hmarg.x0 <- kp$coord.change.function(chr = "chr21", x = kp$chromosome.lengths[1], data.panel = 1)$x
     hmarg.x1 <- ifelse(pp$ideogramlateralmargin!=0, hmarg.x0 + pp$ideogramlateralmargin, hmarg.x0 + pp$ideogramlateralmargin+0.001)
     graphics::arrows(x0 = hmarg.x0, x1=hmarg.x1, y0=hmarg.y, y1=hmarg.y, code=3, length=0.03, ...)
     graphics::text(x= mean(hmarg.x0, hmarg.x1), y=hmarg.y, labels=paste0("ideogramlateralmargin=", pp$ideogramlateralmargin), pos=3, ...)
@@ -314,7 +314,7 @@ plotDefaultPlotParams <- function(plot.type=2, plot.params=NULL,  ...) {
     
     #horizontal margin
     hmarg.y <- kp$coord.change.function(chr="chr21", y=pp$data2max*0.8, data.panel = 2)$y
-    hmarg.x0 <- kp$coord.change.function(chr = "chr21", x = kp$chromosome.lengths[1])$x
+    hmarg.x0 <- kp$coord.change.function(chr = "chr21", x = kp$chromosome.lengths[1], data.panel=1)$x
     hmarg.x1 <- ifelse(pp$ideogramlateralmargin!=0, hmarg.x0 + pp$ideogramlateralmargin, hmarg.x0 + pp$ideogramlateralmargin+0.001)
     graphics::arrows(x0 = hmarg.x0, x1=hmarg.x1, y0=hmarg.y, y1=hmarg.y, code=3, length=0.03, ...)
     graphics::text(x= mean(hmarg.x0, hmarg.x1), y=hmarg.y, labels=paste0("ideogramlateralmargin=", pp$ideogramlateralmargin), pos=3, ...)
