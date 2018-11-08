@@ -12,7 +12,7 @@
 #' used by other karyoploteR functions (\code{r0} and \code{r1}). This function does not have
 #' a chr option: axis are always plotted for all chromosomes.
 #' 
-#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
+#' @usage kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, text.col="black", col="black", chromosomes="auto", ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param ymin    (numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL)
@@ -27,6 +27,8 @@
 #' @param label.margin    (numeric) the additional the margin between the labels and ticks. Can be negative. If NULL, the default margin is used. (defaults to NULL)
 #' @param data.panel    (numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)
 #' @param chromosomes (character) To which chromosomes should we add the axis: "first", "last", "auto", "all" or a vector of chromosome names. With auto, the chromosomes will depend on the plot type and side of axis plotting. (defaults to "auto")
+#' @param text.col (color) The color of the text elements (defaults to "black")
+#' @param col (color) The color of the axis lines (defaults to "black")
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #'
 #'    
@@ -57,13 +59,31 @@
 #' kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=2, cex=0.5)
 #' 
 #' 
+#' #Customizing the axis appearance
+#' pp <- getDefaultPlotParams(plot.type=4)
+#' pp$leftmargin <- 0.2
+#' pp$rightmargin <- 0.2
+#' kp <- plotKaryotype("hg19", plot.type=4, chromosomes=c("chr1", "chr2"), plot.params=pp)
+#'
+#' #Prepare data panel 1
+#' kpDataBackground(kp, data.panel=1)
+#' kpAxis(kp, data.panel = 1, text.col="red", cex=1.6, srt=45)
+#' kpAxis(kp, data.panel = 1, ymin = 0, ymax=10, numticks = 11, side = 2, 
+#'        cex = 0.7, col="red", text.col="gold", tick.len=30e6, )
+#'
+#' 
+#' 
+#' 
+#' 
 #' @export kpAxis
 
 
 
 kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, 
                    labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, 
-                   data.panel=1, chromosomes="auto", ...) {
+                   data.panel=1, 
+                   text.col="black", col="black",
+                   chromosomes="auto", ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
  
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
@@ -83,7 +103,7 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(chromosomes %in% c("first", "last", "auto", "all")) {
     chrs <- as.character(seqnames(karyoplot$plot.region))
     if(chromosomes == "auto") {
-      if(karyoplot$plot.type %in% c(1,2)) {
+      if(karyoplot$plot.type %in% c(1,2,6)) {
         chromosomes <- "all"
       } else {
         chromosomes <- ifelse(side==1, "first", "last")
@@ -108,7 +128,7 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   }
   
   kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
-             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
   
  
   if(side==1) {
@@ -116,25 +136,25 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
                x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$plot.region)),
                y1=rep(tick.pos, length(karyoplot$plot.region)),
-               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x-tick.len-label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$plot.region)),
            labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1,  pos=2, 
-           data.panel=data.panel,  clipping=FALSE, ...)  #pos=2 -> left to the given coordinate
+           data.panel=data.panel,  clipping=FALSE, col=text.col, ...)  #pos=2 -> left to the given coordinate
   } else {
     kpSegments(karyoplot, chr=rep(chrs, each=numticks),
                x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), 
                y0=rep(tick.pos, length(karyoplot$plot.region)), 
                y1=rep(tick.pos, length(karyoplot$plot.region)), 
-               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, ...)
+               ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x+tick.len+label.margin, each=numticks), 
            y=rep(tick.pos, length(karyoplot$plot.region)),
            labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4, 
-           data.panel=data.panel, clipping=FALSE, ...)  #pos=4 -> right to the given coordinate
+           data.panel=data.panel, clipping=FALSE, col=text.col, ...)  #pos=4 -> right to the given coordinate
   }
   
   invisible(karyoplot)
