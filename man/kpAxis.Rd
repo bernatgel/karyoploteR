@@ -4,7 +4,7 @@
 \alias{kpAxis}
 \title{kpAxis}
 \usage{
-kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, chromosomes="auto", ...)
+kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, labels=NULL, tick.pos=NULL, tick.len=NULL, label.margin=NULL, data.panel=1, text.col="black", col="black", chromosomes="auto", ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -30,6 +30,10 @@ kpAxis(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, numticks=3, la
 \item{label.margin}{(numeric) the additional the margin between the labels and ticks. Can be negative. If NULL, the default margin is used. (defaults to NULL)}
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
+
+\item{text.col}{(color) The color of the text elements (defaults to "black")}
+
+\item{col}{(color) The color of the axis lines (defaults to "black")}
 
 \item{chromosomes}{(character) To which chromosomes should we add the axis: "first", "last", "auto", "all" or a vector of chromosome names. With auto, the chromosomes will depend on the plot type and side of axis plotting. (defaults to "auto")}
 
@@ -67,6 +71,22 @@ kpAxis(kp, data.panel = 2, r0=0, r1=0.45, ymin = 0, ymax = 1, cex=0.5, side=2)
 kpDataBackground(kp, data.panel=2, r0 = 0.55, r1 = 1, color = "#EEFFEE")
 kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=1, cex=0.5)
 kpAxis(kp, data.panel = 2, r0=1, r1=0.55, ymin = 0, ymax = 1, side=2, cex=0.5)
+
+
+#Customizing the axis appearance
+pp <- getDefaultPlotParams(plot.type=4)
+pp$leftmargin <- 0.2
+pp$rightmargin <- 0.2
+kp <- plotKaryotype("hg19", plot.type=4, chromosomes=c("chr1", "chr2"), plot.params=pp)
+
+#Prepare data panel 1
+kpDataBackground(kp, data.panel=1)
+kpAxis(kp, data.panel = 1, text.col="red", cex=1.6, srt=45)
+kpAxis(kp, data.panel = 1, ymin = 0, ymax=10, numticks = 11, side = 2, 
+       cex = 0.7, col="red", text.col="gold", tick.len=30e6, )
+
+
+
 
 
 }
