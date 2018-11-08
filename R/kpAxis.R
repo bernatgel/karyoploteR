@@ -80,7 +80,7 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(is.null(label.margin)) label.margin <-  0
   
   #decide in which chromosomes we will add the axis.
-  if(chromosomes %in% c("first", "last", "auto", "all")) {
+  if(length(chromosomes)==1 && chromosomes %in% c("first", "last", "auto", "all")) {
     chrs <- as.character(seqnames(karyoplot$plot.region))
     if(chromosomes == "auto") {
       if(karyoplot$plot.type %in% c(1,2)) {
