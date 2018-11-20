@@ -4,12 +4,14 @@
 \alias{kpAddCytobands}
 \title{kpAddCytobands}
 \usage{
-kpAddCytobands(karyoplot, color.table=NULL, clipping=TRUE, ...)
+kpAddCytobands(karyoplot, color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres"), clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
 
 \item{color.table}{(named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)}
+
+\item{color.schema}{(character) The name of the color schema to use: \code{circos}, \code{biovizBase}, \code{only.centromeres} (everything in gray, except for centromeres in red). (defaults to \code{circos})}
 
 \item{clipping}{(boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)}
 

@@ -13,14 +13,12 @@
 #' @note In general, this function is automatically called by plotKaryotype
 #' and the user never nees to call it. 
 #' 
-## @usage kpAddCytobands(karyoplot, color.table=NULL, add.cytobands.names=FALSE, add.base.numbers=FALSE, ...)
-#' @usage kpAddCytobands(karyoplot, color.table=NULL, clipping=TRUE, ...)
+#' @usage kpAddCytobands(karyoplot, color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres"), clipping=TRUE, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
 #' @param color.table  (named character vector) a table specifying the colors to plot the cytobands. If NULL, it gets the colors calling \code{getCytobandColors}. (defaults to NULL)
+#' @param color.schema  (character) The name of the color schema to use: \code{circos}, \code{biovizBase}, \code{only.centromeres} (everything in gray, except for centromeres in red). (defaults to \code{circos})
 #' @param clipping  (boolean) Only used if zooming is active. If TRUE, cytoband representation will be not drawn out of the drawing are (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the cytobands representation may overflow into the margins of the plot. (defaults to TRUE)
-## @param add.cytobands.names  (boolean) whether to add or not the cytoband names to the plot. (defaults to FALSE)
-## @param add.base.numbers  (boolean) whether to add the base numbers to the plot. (defaults to FALSE)
 #' @param ...  any additional parameter to be passed to the functions called from kpAddCytobands.
 #' 
 #' @return
@@ -39,7 +37,7 @@
 
 
 
-kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
+kpAddCytobands <- function(karyoplot, color.table=NULL, color.schema=c("circos", "biovizbase", "only.centromeres"), clipping=TRUE, ...) {
   
   #karyoplot
   if(missing(karyoplot)) stop("The parameter 'karyoplot' is required")
@@ -79,7 +77,8 @@ kpAddCytobands <- function(karyoplot, color.table=NULL, clipping=TRUE, ...) {
   pp <- karyoplot$plot.params
   mids <- karyoplot$ideogram.mid
     
-  color.table <- getCytobandColors(color.table, ...)
+  #extract the color.schema if it was passed in the dots
+  color.table <- getCytobandColors(color.table=color.table, color.schema = color.schema)
   border <- ifelse("border" %in% names(color.table), color.table["border"], "black")
  
   #And plot them
