@@ -9,6 +9,10 @@ test_that("the function fails as expected with invalid parameters", {
   
   expect_silent(plotKaryotype())
   expect_silent(plotKaryotype(genome=valid.genome))
+  expect_silent(plotKaryotype(genome=valid.genome, cex=2))
+  expect_silent(plotKaryotype(genome=valid.genome, zoom=toGRanges(data.frame("1", 5, 20))))
+  expect_silent(plotKaryotype(genome=valid.genome, ideogram.plotter = NULL))
+  expect_silent(plotKaryotype(genome=valid.genome, labels.plotter = NULL))
   expect_error(plotKaryotype(genome=invalid.genome))
   
 })
