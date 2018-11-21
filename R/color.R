@@ -217,3 +217,42 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
 
 
 
+
+#' is.color
+#' 
+#' @description 
+#' Test if something is a valid color
+#' 
+#' @details 
+#' This function tests if something is a valid color. Returns TRUE or FALSE. 
+#' The function is vectorised. 
+#' 
+#' 
+#' @usage is.color(x)
+#' 
+#' @param x The element to test
+#' 
+#' @return
+#' TRUE is x is a valid color, FALSE otherwise
+#' 
+#' 
+#' @examples
+#'  
+#' is.color("red")
+#' is.color("#333333")
+#' is.color(NA)
+#' is.color(NULL)
+#' is.color("not_a_color")
+#' is.color(3)
+#'  
+#' @export is.color
+#'
+# Adapted from https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
+
+is.color <- function(x) {
+  if(is.null(x)) return(FALSE)
+  sapply(x, function(X) {
+    tryCatch(is.matrix(col2rgb(X)), 
+             error = function(e) FALSE)
+  })
+}
