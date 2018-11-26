@@ -42,6 +42,8 @@
 
 
 #TODO: Reimplement using kpText on data.panel="ideogram" (keep the "check if fits" code) before that
+
+#TODO: With the change above, add the possibility to adjust the cytoband labels y position
 kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
