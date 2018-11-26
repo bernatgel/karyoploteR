@@ -98,7 +98,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
       tick.labels <- sapply(tick.pos, toLabel, add.units=add.units, digits=digits)
       
-      xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos)$x
+      xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos, data.panel="ideogram")$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
       if(is.null(tick.col)) {
         graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-tick.len, ...)
@@ -119,7 +119,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
         }
       }
       if(length(minor.tick.pos)>0) {  
-        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos)$x
+        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos, data.panel="ideogram")$x
         y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
         if(is.null(minor.tick.col)) {
           graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       

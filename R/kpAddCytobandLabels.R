@@ -40,6 +40,8 @@
 #' @export kpAddCytobandLabels
 #' 
 
+
+#TODO: Reimplement using kpText on data.panel="ideogram" (keep the "check if fits" code) before that
 kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   
@@ -58,8 +60,8 @@ kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE, clipping=TR
       
       ylabel <- karyoplot$ideogram.mid(bands.chr)
       
-      bandxleft <- ccf(x=start(karyoplot$cytobands), chr=bands.chr)$x
-      bandxright <- ccf(x=end(karyoplot$cytobands), chr=bands.chr)$x
+      bandxleft <- ccf(x=start(karyoplot$cytobands), chr=bands.chr, data.panel="ideogram")$x
+      bandxright <- ccf(x=end(karyoplot$cytobands), chr=bands.chr, data.panel="ideogram")$x
       
       bandmids <- (bandxleft +(bandxright-bandxleft)/2)
       
@@ -75,8 +77,8 @@ kpAddCytobandLabels <- function(karyoplot, cex=0.5, force.all=FALSE, clipping=TR
         if(karyoplot$zoom==TRUE) {
           if(clipping==TRUE) {
             #get the plot coordinates of the cytobands drawing area
-            clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
-            clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)))$x
+            clip.xleft <- ccf(x=start(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)), data.panel="ideogram")$x
+            clip.xright <- ccf(x=end(karyoplot$plot.region), chr=as.character(seqnames(karyoplot$plot.region)), data.panel="ideogram")$x
             clip.ybottom <- karyoplot$plot$ymin #We do not want to clip the text above or below the ideograms
             clip.ytop <- karyoplot$plot$ymax
             graphics::clip(x1 = clip.xleft, x2 = clip.xright, y1 = clip.ybottom, y2=clip.ytop)
