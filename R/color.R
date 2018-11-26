@@ -246,13 +246,16 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
 #' is.color(3)
 #'  
 #' @export is.color
+#' 
+#' @importFrom grDevices col2rgb
+#' 
 #'
 # Adapted from https://stackoverflow.com/questions/13289009/check-if-character-string-is-a-valid-color-representation
 
 is.color <- function(x) {
   if(is.null(x)) return(FALSE)
   sapply(x, function(X) {
-    tryCatch(is.matrix(col2rgb(X)), 
+    tryCatch(is.matrix(grDevices::col2rgb(X)), 
              error = function(e) FALSE)
   })
 }
