@@ -20,3 +20,22 @@ test_that("the returned karyoplot object is complete and correct", {
 })
 
 
+#kpAddBaseNumbers
+test_that("kpAddBaseNumbers works", {
+  #github issue 26
+  kp <- plotKaryotype(genome="hg19",plot.type=2)
+  kpAddBaseNumbers(kp)
+  #TODO: Extend testing
+  
+})
+
+
+#kpAddCytobandLabels
+test_that("kpAddCytobandLabels works", {
+  #identified when fixing github issue 26
+  kp <- plotKaryotype(genome="hg19", plot.type=2)
+  kpAddCytobandLabels(kp)
+  
+  #TODO: Extend testing
+  
+})
