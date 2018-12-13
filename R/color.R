@@ -83,6 +83,45 @@ darker <- function(col, amount=150) {
 }
 
 
+#' transparent
+#' 
+#' @description 
+#' Given a color, return a transparent one
+#' 
+#' @details 
+#' Very simple utility function to create transparent colors. Given a color, it
+#' transforms it to rgb space, adds a set amount to all chanels and transforms
+#' it back to a color.
+#' 
+#' @usage transparent(col, amount=150)
+#' 
+#' @param col (color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.
+#' @param amount (number, [0-1]) The amount of transparency. 0 for completely visible, 1 for completely transparent. (Defaults to 0.5).
+#' 
+#' @return
+#' A transparent color
+#' 
+#' @seealso \code{\link{lighter}}
+#' 
+#' @examples
+#'  
+#' transparent("red")
+#' transparent("#333333")
+#'  
+#' @export transparent
+#'
+
+#Given a color, returns a transparent one
+transparent <- function(col, amount=0.5) {
+  #Colors must be specified by name or #RRGGBB(AA)
+  if(!methods::is(col, "character")) stop("Unknown color definition.")
+  if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
+  if(amount>1 || amount<0) stop("amount must be a number between 0 and 1")
+  
+  return(adjustcolor(col, alpha.f = (1-amount)))
+}
+
+
 
 #' colByChr
 #' 
