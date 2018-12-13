@@ -9,7 +9,7 @@ darker(col, amount=150)
 \arguments{
 \item{col}{(color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.}
 
-\item{amount}{(integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).}
+\item{amount}{(integer, [0-255]) The fixed amount to subtract to each RGB channel (Defaults to 150).}
 }
 \value{
 A darker color

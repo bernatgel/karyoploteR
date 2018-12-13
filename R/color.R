@@ -53,7 +53,7 @@ lighter <- function(col, amount=150) {
 #' @usage darker(col, amount=150)
 #' 
 #' @param col (color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.
-#' @param amount (integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).
+#' @param amount (integer, [0-255]) The fixed amount to subtract to each RGB channel (Defaults to 150).
 #' 
 #' @return
 #' A darker color
