@@ -11,7 +11,7 @@
 #' 
 #' @usage lighter(col, amount=150)
 #' 
-#' @param col (color) The original color
+#' @param col (color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.
 #' @param amount (integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).
 #' 
 #' @return
@@ -28,9 +28,16 @@
 #' 
 
 lighter <- function(col, amount=150) {
-  new.col <- ((grDevices::col2rgb(col))+amount)/255
-  new.col[new.col[,1]>1,1] <- 1
-  return(grDevices::rgb(t(new.col)))  
+  #Colors must be specified by name or #RRGGBB(AA)
+  if(!methods::is(col, "character")) stop("Unknown color definition.")
+  if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
+  .lighter <- function(col, amount) {
+    new.col <- ((grDevices::col2rgb(col))+amount)/255
+    new.col[new.col[,1]>1,1] <- 1
+    return(grDevices::rgb(t(new.col)))  
+  }
+  
+  return(sapply(col, .lighter, amount))
 }
 
 #' darker
@@ -45,7 +52,7 @@ lighter <- function(col, amount=150) {
 #' 
 #' @usage darker(col, amount=150)
 #' 
-#' @param col (color) The original color
+#' @param col (color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.
 #' @param amount (integer, [0-255]) The fixed amount to add to each RGB channel (Defaults to 150).
 #' 
 #' @return
@@ -63,9 +70,16 @@ lighter <- function(col, amount=150) {
 
 #Given a color, returns a darker one
 darker <- function(col, amount=150) {
-  new.col <- ((grDevices::col2rgb(col))-amount)/255
-  new.col[new.col[,1]<0, 1] <- 0
-  return(grDevices::rgb(t(new.col)))  
+  #Colors must be specified by name or #RRGGBB(AA)
+  if(!methods::is(col, "character")) stop("Unknown color definition.")
+  if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
+  .darker <- function(col, amount) {
+    new.col <- ((grDevices::col2rgb(col))-amount)/255
+    new.col[new.col[,1]<0, 1] <- 0
+    return(grDevices::rgb(t(new.col)))
+  }
+  
+  return(sapply(col, .darker, amount))
 }
 
 
