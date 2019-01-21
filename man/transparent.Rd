@@ -4,7 +4,7 @@
 \alias{transparent}
 \title{transparent}
 \usage{
-transparent(col, amount=150)
+transparent(col, amount=0.5)
 }
 \arguments{
 \item{col}{(color) The original color. Might be specified as a color name or a "#RRGGBB(AA)" hex color definition.}
