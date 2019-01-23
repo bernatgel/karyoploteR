@@ -271,6 +271,99 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
 
 
 
+#' colByRegion
+#' 
+#' @description 
+#' Given a set of data elements, return a color for each one based on whether 
+#' they overlap a given set of regions. This might be useful, for example,  to
+#' set a different color for data points overlapping a certain region of
+#' interest.
+#' 
+#' @details 
+#' Given a set of data elements, return a color for each one based on whether 
+#' they overlap a given set of regions. The colors might be different for each
+#' region and can be specified either in the regions object itself or in 
+#' a separate \code{colors} parameter. If specified in \code{colors}, the values
+#' will be recycled as needed. 
+#' 
+#' 
+#' @usage colByRegion(data, regions, colors=NULL, default.col="black")
+#' 
+#' @param data Either a vector of characters or a GRanges object
+#' @param regions (GRanges or equivalent) A set of regions where the color will be modified. Internally it will be converted into a Genomic Ranges object by \code{\link[regioneR]{toGRanges}} (from regioneR package) and so it can be either a GRanges, a data.frame, a character or any other value type accepted by that function. If \code{colors} is NULL (the default) and regions has additional columns in addition to chr, start and end, if any has a name in c("color", "colors", "col", "cols") it will be used. Otherwise the first additional column will be used.
+#' @param colors (color) The colors to be used for each region. The content will be recycled if needed. If NULL, the colors are assumed to be available in the regions object. (defaults to NULL)
+#' @param default.col The default color to return for data elements not overlapping the regions. (defaults to "black")
+#' 
+#'
+#' @return
+#' A vector of colors
+#'
+#' @seealso \link{kpPoints}, \link{colByChr}, \link[regioneR]{toGRanges}
+#' 
+#' @examples
+#' 
+#' data <- toGRanges("chr1", c(1e6*1:245), c(1e6*1:245)+10)
+#' data$y <- rnorm(n = length(data), mean = 0.5, sd = 0.15)
+#' 
+#' regions <- toGRanges(c("chr1:10e6-20e6", "chr1:100e6-150e6"))
+#' regions$col <- c("red", "blue")
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.2)
+#' kpPoints(kp, data=data, r0=0.2, r1=0.4, col=colByRegion(data, regions = regions) )
+#' kpText(kp, data=data, r0=0.4, r1=0.6, col=colByRegion(data, regions = regions), label="A", cex=0.5 )
+#' kpBars(kp, data=data, y0=0, y1=data$y, r0=0.6, r1=0.8, border=colByRegion(data, regions = regions))
+#' #It might not work wor objects where R expects a single color such as lines. Segments should be used instead
+#' kpLines(kp, data=data, r0=0.8, r1=1, col=colByRegion(data, regions = regions) )
+#' 
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.25)
+#' kpPoints(kp, data=data, r0=0.25, r1=0.5, col=colByRegion(data, regions = regions, colors="green") )
+#' kpText(kp, data=data, r0=0.5, r1=0.75, col=colByRegion(data, regions = regions, color=c("gray", "gold")), label="A", cex=0.5 )
+#' kpBars(kp, data=data, y0=0, y1=data$y, r0=0.75, r1=1, border=colByRegion(data, regions = regions))
+#' 
+#' @export colByRegion
+#'
+#' @importFrom  GenomeInfoDb seqlevelsStyle
+
+colByRegion <- function(data, regions, colors=NULL, default.col="black") {
+  data <- toGRanges(data)
+  
+  regions <- toGRanges(regions)
+  
+  #Get the colors if needed
+  if(is.null(colors)) {
+    #Get the color from the regions GRanges
+    if(length(mcols(regions))>0) {
+      colors.column <- which(names(mcols(regions)) %in% c("color", "colors", "col", "cols"))[1]
+      #if no column has a valid name, use the first one
+      if(is.na(colors.column)) colors.column <- 1
+      colors <- mcols(regions)[,colors.column]
+    }
+  } else {
+    colors <- rep(colors, length.out=length(regions))
+  }
+  
+  if(!all(is.color(colors))) { stop("A valid color specification is needed. Either as a column of regions or in the 'colors' parameter") }
+  
+  #Make regions and data comparable
+  #WARNING: We are doing this here but nowhere else in the package. Should we?
+  GenomeInfoDb::seqlevelsStyle(regions) <- GenomeInfoDb::seqlevelsStyle(data)
+  
+  #Assign everything the default color and then change it for the data
+  #overlapping the regions
+  cols <- rep(default.col, length(data))
+  for(num.reg in seq_len(length(regions))) {
+    cols[overlapsAny(data, regions[num.reg])] <- colors[num.reg]
+  }
+  
+  return(cols)
+}
+
+
+
+
 #' is.color
 #' 
 #' @description 
