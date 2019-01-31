@@ -45,6 +45,53 @@ If you use karyoploteR in your research, please cite the [Bioinformatics paper](
 
 Bernat Gel & Eduard Serra. (2017). *karyoploteR: an R/Bioconductor package to plot customizable genomes displaying arbitrary data*. Bioinformatics, 31–33. [doi:10.1093/bioinformatics/btx346](https://doi.org/10.1093/bioinformatics/btx346)
 
+## A few example plots created with karyoploteR
+
+These images are all created with karyoploteR and are part of the documented 
+examples in the [karyoploteR's tutorial and examples page](https://bernatgel.github.io/karyoploter_tutorial/).
+Click on them to see how the code needed to create them.
+
+
+<p align="center">
+  <a href="https://bernatgel.github.io/karyoploter_tutorial/Examples/GeneExpression/GeneExpression.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial/Examples/GeneExpression/images/Figure13-1.png" width="40%"  alt="A karyoploteR example plotting differential expression results computed with RNA-seq data from Drosophila Melanogaster" title="Differential expression results computed with RNA-seq data from Drosophila Melanogaster" style="max-width:100%;margin-right:5%;" ></img>
+  </a>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/GeneDensityIdeograms/GeneDensityIdeograms.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/GeneDensityIdeograms/images/Figure9-1.png" width="40%"  alt="A karyoploteR example plotting the density of genes instead of the ideograms" title="Usiong the density of genes instead of ideograms"></img> 
+  </a>
+  <br>
+  <br>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/NucleotideFrequency/NucleotideFrequency.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/NucleotideFrequency/images/Figure11-1.png" width="40%"  alt="A karyoploteR example plotting the nucleotide frequency, genes and CpG-islands on a small genomic region" title="The nucleotide frequency, genes and CpG-islands on a small genomic region"></img>
+  </a>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/SNPArray/SNPArray.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/SNPArray/images/Figure4-1.png" width="40%"  alt="A karyoploteR example plotting raw SNP-array data" title="Raw SNP-array data"></img>
+  </a>
+  <br>
+  <br>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/PVivaxGenes/PVivaxGenes.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/PVivaxGenes/images/Figure6-1.png" width="40%"  alt="A karyoploteR example plotting the genes from Plasmodium Vivax PvP01 genome version" title="The genes from Plasmodium Vivax PvP01 genome version"></img>
+  </a>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/PlotGenes/PlotGenes.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/PlotGenes/images/Figure2-1.png" width="40%"  alt="A karyoploteR example plotting genes positioned on the genome" title="Genes positioned on the genome"></img>
+  </a>
+  <br>
+  <br>
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/Rainfall/Rainfall.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/Rainfall/images/Figure3-1.png" width="40%"  alt="A karyoploteR example plotting a rainfall plot showing the distances between consecutive somatic variants" title="A rainfall plot showing the distances between consecutive somatic variants"></img>
+  </a>  
+  <a href="https://bernatgel.github.io/karyoploter_tutorial//Examples/CpGIslands/CpGIslands.html" target="_blank">
+    <img src="https://bernatgel.github.io/karyoploter_tutorial//Examples/CpGIslands/images/Figure5-1.png" width="40%"  alt="A karyoploteR example plotting the density and positions of CpG islands along the genome" title="The density and positions of CpG islands along the genome"></img>
+  </a>
+</p>
+
+
+
+
+
+
+
+
 
 
 
