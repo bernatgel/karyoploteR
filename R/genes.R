@@ -4,6 +4,16 @@
 #  the conversion of gene identifiers to gene symbols
 ################################################################################
 
+#Dataframe tying the available OrgDb objects to the different identifiers of 
+#the organism they annotate
+.OrganismToOrgDb <- data.frame(
+  taxonomyId=c(9606),
+  organism=c("Homo sapiens"),
+  genome=c("hg")
+)
+
+
+
 #' makeGenesDataFromTxDb
 #' 
 #' @description 
@@ -63,6 +73,12 @@
 
 makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.transcripts.structure=TRUE) {
   res <- list()
+  
+  #get the metadata
+  res$metadata <- list()
+  res$metadata$organism <- organism(txdb)
+  res$metadata$taxonomyId <- taxonomyId(txdb)
+  res$metadata$genome <- setNames(genome(txdb)[1], NULL)
   
   #get the genes
   all.genes <- genes(txdb)
