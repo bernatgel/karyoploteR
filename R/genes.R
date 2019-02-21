@@ -6,10 +6,13 @@
 
 #Dataframe tying the available OrgDb objects to the different identifiers of 
 #the organism they annotate
+#Data extracted from https://bioconductor.org/packages/release/BiocViews.html#___OrgDb
 .OrganismToOrgDb <- data.frame(
   taxonomyId=c(9606),
   organism=c("Homo sapiens"),
-  genome=c("hg")
+  genome=c("hg"),
+  package=c("org.Hs.eg.db"),
+  stringsAsFactors=FALSE
 )
 
 
@@ -105,6 +108,41 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
   return(res)
 }
 
+
+addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL") {
+  if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
+  
+  if(is.character(orgDb) & orgDb=="auto") {
+    org <- NULL
+    if(!is.null(genes.data$metadata$taxonomyId)) {
+      org <- .OrganismToOrgDb[.OrganismToOrgDb$taxonomyId==genes.data$metadata$taxonomyId]
+    }
+    if(is.null(org) && !is.null(genes.data$metadata$genome)) {
+      #Use the genome name (prefix) to get the correct org line
+    }
+    
+    
+    if(!is.null(org)) {
+      loaded <- require(org$package, character.only = TRUE)
+      if(loaded==TRUE) orgDb <- get(org$package)
+    } else {
+      stop("It was not possible to identify the organism in order to select the appropiate OrgDb object. Please provide one manually")
+    }
+  }
+  if(!methods::is(orgDb, "OrgDb")) stop("orgDb must be either a valid OrgDb object or 'auto'")
+ 
+  #If we are here, we have a valid orgDb 
+  if(is.null(keys)) keys <- mcols(genes.data$genes)[,1]
+  
+  ss <- suppressMessages(select(orgDb, keys=keys, keytype=keytype, columns=names))
+  
+  genes.data$genes$name <- ss[,2]
+
+  return(genes.data)  
+}
+
+
+
 #TODO
 isValidData <- function(...) {
   return(TRUE)
@@ -118,7 +156,11 @@ getGeneNames <- function(genes, gene.names) {
   if(!is.null(gene.names)) {
     return(as.character(gene.names[names(genes)]))
   } else {
-    return(as.character(names(genes)))
+    if("name" %in% names(mcols(genes))) {
+      return(genes$name)
+    } else {
+      return(as.character(names(genes)))
+    }
   }
 }
 
