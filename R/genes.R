@@ -101,6 +101,7 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
       }
     }
   }
+  class(res) <- "GenesData"
   return(res)
 }
 
