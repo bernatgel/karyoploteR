@@ -79,6 +79,8 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
   if(missing(data)) stop("The parameter 'data' is required")
+  #TODO: If data is not a SimpleRleList, try to convert it to a GRanges before testing with is so other Region Set formats can be used
+  
   if(!methods::is(data, "GRanges") && !methods::is(data, "SimpleRleList")) stop("'data' must be a GRanges object or a SimpleRleList")
   
   #Compute (if needed) the coverage
@@ -90,6 +92,8 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
     data <- GenomeInfoDb::keepSeqlevels(data, karyoplot$chromosomes, pruning.mode="coarse")
     data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths) 
   }
+  
+  #TODO: 
   
 
   #Transform to plot
