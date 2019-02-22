@@ -32,7 +32,8 @@ Imports:
     digest,
     bezier,
     GenomicFeatures,
-    bamsignals
+    bamsignals,
+    AnnotationDbi
 Suggests:
     BiocStyle,
     knitr,

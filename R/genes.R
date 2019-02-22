@@ -70,18 +70,21 @@
 #'   
 #' @export makeGenesDataFromTxDb
 #' 
-#' @importFrom GenomicFeatures genes exons transcriptsBy cds
+#' @importFrom GenomicFeatures genes exons transcriptsBy cds organism
 #' @importFrom IRanges subsetByOverlaps
-#' 
+#' @importFrom AnnotationDbi taxonomyId select
+#' @importFrom GenomeInfoDb genome
+#'
 
 makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.transcripts.structure=TRUE) {
   res <- list()
   
   #get the metadata
   res$metadata <- list()
-  res$metadata$organism <- organism(txdb)
-  res$metadata$taxonomyId <- taxonomyId(txdb)
-  res$metadata$genome <- setNames(genome(txdb)[1], NULL)
+  res$metadata$organism <- GenomicFeatures::organism(txdb)
+  res$metadata$taxonomyId <- AnnotationDbi::taxonomyId(txdb)
+  res$metadata$genome <- setNames(GenomeInfoDb::genome(txdb)[1], NULL)
+  
   
   #get the genes
   all.genes <- genes(txdb)
@@ -134,12 +137,13 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
   #If we are here, we have a valid orgDb 
   if(is.null(keys)) keys <- mcols(genes.data$genes)[,1]
   
-  ss <- suppressMessages(select(orgDb, keys=keys, keytype=keytype, columns=names))
+  ss <- suppressMessages(AnnotationDbi::select(orgDb, keys=keys, keytype=keytype, columns=names))
   
   genes.data$genes$name <- ss[,2]
 
   return(genes.data)  
 }
+
 
 
 

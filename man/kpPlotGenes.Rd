@@ -7,7 +7,7 @@
 kpPlotGenes(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NULL,
                        add.gene.names=TRUE, gene.names=NULL, gene.name.position="top", gene.name.cex=1, gene.name.col=NULL,
                        plot.transcripts=TRUE, transcript.margin=0.5, transcript.col=NULL, transcript.border.col=NULL,
-                       add.transcript.names=TRUE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col=NULL,
+                       add.transcript.names=FALSE, transcript.names=NULL, transcript.name.position="left", transcript.name.cex=0.6, transcript.name.col=NULL,
                        plot.transcripts.structure=TRUE,
                        non.coding.exons.height=0.5, 
                        add.strand.marks=TRUE, mark.height=0.20, mark.width=1, mark.distance=4,
@@ -46,7 +46,7 @@ kpPlotGenes(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NUL
 
 \item{transcript.border.col}{(color) If transcripts are plotted (\code{plot.transcripts=TRUE}), the color used in the border the rectangles representing the transcripts. If NULL, the value of \code{col} will be used. If NA, no border will be drawn. (Defaults to NULL)}
 
-\item{add.transcript.names}{(boolean) Whether to add the names of the tramscripts to the plot.}
+\item{add.transcript.names}{(boolean) Whether to add the names of the tramscripts to the plot. (defaults to FALSE)}
 
 \item{transcript.names}{(named character) A named character vector with the labels of the transcripts. If not null, it will be used as a dictionary, so transcript ids should be names and desired labels the values. If NULL, the transcript ids will be used as labels. (defaults to null)}
 
