@@ -50,6 +50,8 @@
 #'  
 #' @export getCytobands
 #' 
+#' @importFrom biovizBase getIdeogram
+#' 
 
 
 getCytobands <- NULL #Neede so roxygen writes the documentation file
@@ -90,6 +92,7 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
   return(cytobands)
   
 }
+
 
 # 
 # #Code used to save the predownloaded Cytobands for some common genomes

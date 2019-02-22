@@ -35,43 +35,16 @@ getCytobandColors <- function(color.table=NULL, color.schema=c("circos", "bioviz
   
   color.schema <- match.arg(color.schema)
   
-  if(is.null(color.table)) {
-    if(color.schema=="biovizbase") {
-      color.table <- c(biovizBase::getBioColor("CYTOBAND"), border="black")
+  if(!is.null(color.table)) {
+    #TODO: Should we check if it makes sense or leave it to the user?
+    return(color.table)
+  } else {
+    if(color.schema %in% names(.karyoploter.colors$cytobands$schemas)) {
+      return(.karyoploter.colors$cytobands$schemas[[color.schema]])
     } else {
-      if(color.schema=="circos") {
-         color.table <- c(gneg="#FFFFFF",
-                         gpos25="#C8C8C8",
-                         gpos33="#D2D2D2",
-                         gpos50="#C8C8C8",
-                         gpos66="#A0A0A0",
-                         gpos75="#828282",
-                         gpos100="#000000",
-                         gpos="#000000",
-                         stalk="#647FA4", #repetitive areas
-                         acen="#D92F27", #centromeres
-                         gvar="#DCDCDC",
-                         border="black")
-      } else {
-        if(color.schema=="only.centromeres") {
-          color.table <- c(gneg="#C8C8C8",
-                           gpos25="#C8C8C8",
-                           gpos33="#C8C8C8",
-                           gpos50="#C8C8C8",
-                           gpos66="#C8C8C8",
-                           gpos75="#C8C8C8",
-                           gpos100="#C8C8C8",
-                           gpos="#C8C8C8",
-                           stalk="#C8C8C8", #repetitive areas
-                           acen="#D92F27", #centromeres
-                           gvar="#C8C8C8",
-                           border=NA)
-        }
-      }
+      stop("Unknown color.schema. Available schemas for cytobands are: ", paste0(names(.karyoploter.colors$cytobands$schemas), collapse = ", "))
     }
   }
-    
-  return(color.table)
+  #We should never reach this point. 
+  stop("Error in getCytobandColors")
 }
-
-

@@ -1,4 +1,79 @@
 ############  Colors  ###############
+
+############ Constants ##############
+
+#This structure contains the different color schemas used in karyoploteR
+.karyoploter.colors <- list(
+  cytobands=list(
+    schemas=list(
+      circos=c(gneg="#FFFFFF",
+               gpos25="#C8C8C8",
+               gpos33="#D2D2D2",
+               gpos50="#C8C8C8",
+               gpos66="#A0A0A0",
+               gpos75="#828282",
+               gpos100="#000000",
+               gpos="#000000",
+               stalk="#647FA4", #repetitive areas
+               acen="#D92F27", #centromeres
+               gvar="#DCDCDC",
+               border="black"),
+      only.centromeres=c(gneg="#C8C8C8",
+                         gpos25="#C8C8C8",
+                         gpos33="#C8C8C8",
+                         gpos50="#C8C8C8",
+                         gpos66="#C8C8C8",
+                         gpos75="#C8C8C8",
+                         gpos100="#C8C8C8",
+                         gpos="#C8C8C8",
+                         stalk="#C8C8C8", #repetitive areas
+                         acen="#D92F27", #centromeres
+                         gvar="#C8C8C8",
+                         border=NA),
+      biovizbase=c(gneg = "grey100", stalk = "brown3", acen = "brown4", gpos = "grey0", 
+                   gvar = "grey0", gpos1 = "#FFFFFF", gpos2 = "#FCFCFC", gpos3 = "#F9F9F9", 
+                   gpos4 = "#F7F7F7", gpos5 = "#F4F4F4", gpos6 = "#F2F2F2", gpos7 = "#EFEFEF", 
+                   gpos8 = "#ECECEC", gpos9 = "#EAEAEA", gpos10 = "#E7E7E7", gpos11 = "#E5E5E5", 
+                   gpos12 = "#E2E2E2", gpos13 = "#E0E0E0", gpos14 = "#DDDDDD", gpos15 = "#DADADA", 
+                   gpos16 = "#D8D8D8", gpos17 = "#D5D5D5", gpos18 = "#D3D3D3", gpos19 = "#D0D0D0", 
+                   gpos20 = "#CECECE", gpos21 = "#CBCBCB", gpos22 = "#C8C8C8", gpos23 = "#C6C6C6", 
+                   gpos24 = "#C3C3C3", gpos25 = "#C1C1C1", gpos26 = "#BEBEBE", gpos27 = "#BCBCBC", 
+                   gpos28 = "#B9B9B9", gpos29 = "#B6B6B6", gpos30 = "#B4B4B4", gpos31 = "#B1B1B1", 
+                   gpos32 = "#AFAFAF", gpos33 = "#ACACAC", gpos34 = "#AAAAAA", gpos35 = "#A7A7A7", 
+                   gpos36 = "#A4A4A4", gpos37 = "#A2A2A2", gpos38 = "#9F9F9F", gpos39 = "#9D9D9D", 
+                   gpos40 = "#9A9A9A", gpos41 = "#979797", gpos42 = "#959595", gpos43 = "#929292", 
+                   gpos44 = "#909090", gpos45 = "#8D8D8D", gpos46 = "#8B8B8B", gpos47 = "#888888", 
+                   gpos48 = "#858585", gpos49 = "#838383", gpos50 = "#808080", gpos51 = "#7E7E7E", 
+                   gpos52 = "#7B7B7B", gpos53 = "#797979", gpos54 = "#767676", gpos55 = "#737373", 
+                   gpos56 = "#717171", gpos57 = "#6E6E6E", gpos58 = "#6C6C6C", gpos59 = "#696969", 
+                   gpos60 = "#676767", gpos61 = "#646464", gpos62 = "#616161", gpos63 = "#5F5F5F", 
+                   gpos64 = "#5C5C5C", gpos65 = "#5A5A5A", gpos66 = "#575757", gpos67 = "#545454", 
+                   gpos68 = "#525252", gpos69 = "#4F4F4F", gpos70 = "#4D4D4D", gpos71 = "#4A4A4A", 
+                   gpos72 = "#484848", gpos73 = "#454545", gpos74 = "#424242", gpos75 = "#404040", 
+                   gpos76 = "#3D3D3D", gpos77 = "#3B3B3B", gpos78 = "#383838", gpos79 = "#363636", 
+                   gpos80 = "#333333", gpos81 = "#303030", gpos82 = "#2E2E2E", gpos83 = "#2B2B2B", 
+                   gpos84 = "#292929", gpos85 = "#262626", gpos86 = "#242424", gpos87 = "#212121", 
+                   gpos88 = "#1E1E1E", gpos89 = "#1C1C1C", gpos90 = "#191919", gpos91 = "#171717", 
+                   gpos92 = "#141414", gpos93 = "#121212", gpos94 = "#0F0F0F", gpos95 = "#0C0C0C", 
+                   gpos96 = "#0A0A0A", gpos97 = "#070707", gpos98 = "#050505", gpos99 = "#020202", 
+                   gpos100 = "#000000", border = "black")
+    )
+  ),
+  variants=list(
+    schemas=list(
+      cell21breast=c("C>A"="#4c64ae",
+        "C>G"="#000000",
+        "C>T"="#e40611",
+        "T>A"="#bf4a96",
+        "T>C"="#fbe800",
+        "T>G"="#6eb529",
+        "other"="#888888")
+    )
+  )
+)
+
+
+
 #' lighter
 #' 
 #' @description 

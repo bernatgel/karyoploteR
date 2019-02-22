@@ -106,8 +106,6 @@
 #' @importFrom S4Vectors runLength runValue
 #' @importFrom memoise memoise
 #' @importFrom rtracklayer ucscTableQuery
-#' @importFrom biovizBase getBioColor
-#' @importFrom biovizBase getIdeogram
 #' @importFrom IRanges overlapsAny
 #' @import methods
 #' @importFrom stats setNames

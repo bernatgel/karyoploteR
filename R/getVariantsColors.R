@@ -46,18 +46,14 @@ getVariantsColors <- function(ref, alt, color.table=NULL, color.schema=c("cell21
   if(!methods::is(alt, "character")) stop(paste0("In getVariantsColors: 'alt' must be a valid character object"))
   if(length(ref) != length(alt)) stop(paste0("In getVariantsColors: 'ref' and 'alt' must have the same length"))
   
-  color.schema <- match.arg(color.schema)
-  
   if(is.null(color.table)) {
-    if(color.schema=="cell21breast") {
-         color.table <- c("C>A"="#4c64ae",
-                          "C>G"="#000000",
-                         "C>T"="#e40611",
-                         "T>A"="#bf4a96",
-                         "T>C"="#fbe800",
-                         "T>G"="#6eb529",
-                         "other"="#888888")
-    } 
+    color.schema <- match.arg(color.schema)
+    
+    if(color.schema %in% names(.karyoploter.colors$variants$schemas)) {
+      color.table <- .karyoploter.colors$variants$schemas[[color.schema]]
+    } else {
+      stop("Unknown color.schema. Available schemas for variants are: ", paste0(names(.karyoploter.colors$variants$schemas), collapse = ", "))
+    }
   }
     
   comp <- c(G="C", A="T", C="G", T="A")
