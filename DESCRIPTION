@@ -41,6 +41,9 @@ Suggests:
     magrittr,
     BSgenome.Hsapiens.UCSC.hg19,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
+    TxDb.Mmusculus.UCSC.mm10.knownGene,
+    org.Hs.eg.db,
+    org.Mm.eg.db,
     pasillaBamSubset
 URL: https://github.com/bernatgel/karyoploteR
 BugReports: https://github.com/bernatgel/karyoploteR/issues

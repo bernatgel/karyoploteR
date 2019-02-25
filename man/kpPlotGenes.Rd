@@ -30,7 +30,7 @@ kpPlotGenes(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.border.col=NUL
 
 \item{add.gene.names}{(boolean) Whether to add the names of the genes to the plot.}
 
-\item{gene.names}{(named character vector) A named character vector with the labels of the genes. If not NULL, it will be used as a dictionary, so gene ids should be names and desired labels the values. If NULL, the gene ids will be used as labels. (defaults to null)}
+\item{gene.names}{(named character vector) A named character vector with the labels of the genes. If not NULL, it will be used as a dictionary, so gene ids should be names and desired labels the values. If NULL, if genes.data$genes$name exists, it will use it, otherwise it will use the mcols(genes.data$genes)[,1] as labels. (defaults to NULL)}
 
 \item{gene.name.position}{(character) The position of the gene name text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". (Defaults to "top")}
 
@@ -154,6 +154,14 @@ zoomed in karyoplots.
 
  kp <- plotKaryotype(genome="hg19", zoom=zoom)
  kpPlotGenes(kp, data=txdb, plot.transcripts.structure=FALSE, add.transcript.names=FALSE, gene.names=gene.names, r1=0.8, col="blue", marks.col="white", gene.name.col="black")
+ 
+ library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+ kp <- plotKaryotype(genome="mm10", zoom="chr1:10.5e6-12.5e6")
+ genes.data <- makeGenesDataFromTxDb(kp, txdb=TxDb.Mmusculus.UCSC.mm10.knownGene)
+ genes.data <- addGeneNames(genes.data)
+ genes.data <- mergeTranscripts(genes.data)
+ kpPlotGenes(kp, genes.data, r1=0.25, mark.height = 0.5, gene.name.position = "left")
+ 
  
 }
 \seealso{

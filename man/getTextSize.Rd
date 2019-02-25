@@ -43,10 +43,10 @@ kpRect(kp, chr="chr1", x0=70e6-text.size$width/2, x1=70e6+text.size$width/2,
            y0=0.5-text.size$height/2, y1=0.5+text.size$height/2)
  
 label <- "SHORT"
-kpText(kp, chr="chr1", x=170e6, y=0.2, labels=label, cex=3)
 text.size <- getTextSize(kp, labels=label, cex=3)
 kpRect(kp, chr="chr1", x0=170e6-text.size$width/2, x1=170e6+text.size$width/2,
-           y0=0.2-text.size$height/2, y1=0.2+text.size$height/2)
+           y0=0.2-text.size$height/2, y1=0.2+text.size$height/2, col="gold")
+kpText(kp, chr="chr1", x=170e6, y=0.2, labels=label, cex=3)
     
 label <- c("two_labels", "in a small data.panel=2")
 kpText(kp, chr="chr1", x=c(100e6, 170e6), y=c(0.4, 0.2), labels=label, cex=0.6, data.panel=2)

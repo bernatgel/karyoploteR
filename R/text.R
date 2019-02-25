@@ -74,3 +74,13 @@ getTextSize <- function(karyoplot, labels, cex=1, data.panel="1") {
     
   return(list(width=sw.in.bases, height=sh.in.runits))
 }
+
+
+
+
+
+#change NA's to "" in a char vector
+naToEmptyChar <- function(x) {
+  x[is.na(x)] <- ""
+  return(x)
+}
