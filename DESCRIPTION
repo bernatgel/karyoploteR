@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.9.11
+Version: 1.9.12
 Date: 2017-05-03
 Author: Bernat Gel <bgel@igtp.cat>
 Maintainer: Bernat Gel <bgel@igtp.cat>
