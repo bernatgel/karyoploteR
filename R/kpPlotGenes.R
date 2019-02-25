@@ -60,7 +60,7 @@
 #' @param gene.col  (color) If whole genes (as oposed to transcripts) are plotted (\code{plot.transcripts=FALSE}), the color used to fill the rectangles representing the genes. If NULL, the value of \code{col} will be used. (Defaults to NULL)
 #' @param gene.border.col  (color) If whole genes (as oposed to transcripts) are plotted (\code{plot.transcripts=FALSE}), the color used in the border of the rectangles representing the genes. If NULL, the value of \code{col} will be used. If NA, no border is drawn. (Defaults to NULL)
 #' @param add.gene.names  (boolean) Whether to add the names of the genes to the plot.
-#' @param gene.names  (named character vector) A named character vector with the labels of the genes. If not NULL, it will be used as a dictionary, so gene ids should be names and desired labels the values. If NULL, the gene ids will be used as labels. (defaults to null) 
+#' @param gene.names  (named character vector) A named character vector with the labels of the genes. If not NULL, it will be used as a dictionary, so gene ids should be names and desired labels the values. If NULL, if genes.data$genes$name exists, it will use it, otherwise it will use the mcols(genes.data$genes)[,1] as labels. (defaults to NULL) 
 #' @param gene.name.position (character) The position of the gene name text relative to the rectangle. Can be "left", "right", "top", "bottom" or "center". (Defaults to "top")
 #' @param gene.name.cex (numeric) The cex value to plot the gene names (defaults to 1)
 #' @param gene.name.col (color) The color of the gene labels. If NULL, it will use col. (defaults to NULL)
@@ -120,6 +120,14 @@
 #'  kp <- plotKaryotype(genome="hg19", zoom=zoom)
 #'  kpPlotGenes(kp, data=txdb, plot.transcripts.structure=FALSE, add.transcript.names=FALSE, gene.names=gene.names, r1=0.8, col="blue", marks.col="white", gene.name.col="black")
 #'  
+#'  library(TxDb.Mmusculus.UCSC.mm10.knownGene)
+#'  kp <- plotKaryotype(genome="mm10", zoom="chr1:10.5e6-12.5e6")
+#'  genes.data <- makeGenesDataFromTxDb(kp, txdb=TxDb.Mmusculus.UCSC.mm10.knownGene)
+#'  genes.data <- addGeneNames(genes.data)
+#'  genes.data <- mergeTranscripts(genes.data)
+#'  kpPlotGenes(kp, genes.data, r1=0.25, mark.height = 0.5, gene.name.position = "left")
+#'  
+#'  
 #'@export kpPlotGenes
 
 
@@ -141,17 +149,18 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
     if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
   #data
     if(missing(data)) stop("The parameter 'data' is required")
-    if(!methods::is(data, "TxDb")) {
-      if(!isValidData(data)) {
-        stop("'data' must be either a TxDb object or a list with the required slots. See ?kpPlotGenes for more information")  
-      }
-    } 
+  
   
   #If data is a TxDb object, build a list from it with the expected format
   if(methods::is(data, "TxDb")) {
     data <- tryCatch(makeGenesDataFromTxDb(karyoplot, data, plot.transcripts, plot.transcripts.structure),
                      error=function(e) {stop("Error: There was an error extracting the information from the TxDb object. ", e)})
   }
+  
+  if(!isValidData(data)) {
+    stop("'data' must be either a TxDb object or a list with the required slots. See ?kpPlotGenes for more information")  
+  }
+  
   
   #if there's nothing to plot, return
   if(length(data$genes)==0) {
@@ -187,16 +196,35 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
   if(is.null(marks.col)) { marks.col <- col}
 
   
+  #Get the gene.names if necessary
+  if(add.gene.names==TRUE) {
+    gene.labels <- getGeneNames(data$genes, gene.names)
+    gene.label.sizes <- getTextSize(karyoplot, labels=gene.labels, cex=gene.name.cex, data.panel = data.panel)
+  } else {
+    gene.labels <- character(0)
+  }
+  
+  
   #All parameters processed. Start working
   gene.pos <- list()
   transcript.pos <- list()
   
   
   if(plot.transcripts==FALSE) {
-    #Plot only the genes, with one rectangle per gene. Automatically position genes so they do not overlap
+    #Plot only the genes, with one rectangle per gene. Automatically position genes so they do not overlap if requested
     if(avoid.overlapping==TRUE) {
       genes.for.coverage <- data$genes
       strand(genes.for.coverage) <- "*"
+      
+      if(add.gene.names==TRUE) {
+        if(gene.name.position=="left") {
+          genes.for.coverage <- regioneR::extendRegions(genes.for.coverage, extend.start = gene.label.sizes$width*1.3)
+        }
+        if(gene.name.position=="right") {
+          genes.for.coverage <- regioneR::extendRegions(genes.for.coverage, extend.end = gene.label.sizes$width*1.3)
+        }
+      }
+      
       bins <- disjointBins(genes.for.coverage)
       num.layers <- max(bins)
       layer.height <- total.height/num.layers
@@ -209,7 +237,6 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
     }
     kpRect(karyoplot, data=data$genes, y0=y0, y1=y1, col=gene.col, border=gene.border.col, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping, ...)
     if(add.gene.names==TRUE) {
-      gene.labels <- getGeneNames(genes=data$genes, gene.names=gene.names)
       kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, position=gene.name.position, col=gene.name.col, cex=gene.name.cex, r0=r0, r1=r1, clipping=clipping, data.panel=data.panel, ...)
     }
     
@@ -228,8 +255,20 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
       
       #Treat all genes as if they have the same length as the gene, so each genes has its own "rectangular space" preserved
       num.transcripts.per.gene <- lengths(data$transcripts)
-      genes.for.coverage <- rep(data$genes, num.transcripts.per.gene)
+      genes.for.coverage <- data$genes
+      if(add.gene.names==TRUE) {
+        if(gene.name.position=="left") {
+          genes.for.coverage <- regioneR::extendRegions(genes.for.coverage, extend.start = gene.label.sizes$width*1.3)
+        }
+        if(gene.name.position=="right") {
+          genes.for.coverage <- regioneR::extendRegions(genes.for.coverage, extend.end = gene.label.sizes$width*1.3)
+        }
+      }
+      genes.for.coverage <- rep(genes.for.coverage, num.transcripts.per.gene)
       strand(genes.for.coverage) <- "*"
+      
+      
+      
       max.coverage <- max(max(coverage(genes.for.coverage)))
       
       bin.height <- total.height/max.coverage
@@ -312,7 +351,6 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
                         
     #Finally, plot the gene names if needed
     if(add.gene.names) {
-      gene.labels <- getGeneNames(data$genes, gene.names)
       y0 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,1])
       y1 <- unlist(do.call(rbind, gene.pos[as.character(names(data$genes))])[,2])
       kpPlotNames(karyoplot, data=data$genes, y0=y0, y1=y1, labels=gene.labels, col=gene.name.col, cex=gene.name.cex, position = gene.name.position, r0 = r0, r1=r1, clipping=clipping, data.panel=data.panel)

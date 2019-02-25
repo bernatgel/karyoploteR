@@ -8,10 +8,10 @@
 #the organism they annotate
 #Data extracted from https://bioconductor.org/packages/release/BiocViews.html#___OrgDb
 .OrganismToOrgDb <- data.frame(
-  taxonomyId=c(9606),
-  organism=c("Homo sapiens"),
-  genome=c("hg"),
-  package=c("org.Hs.eg.db"),
+  taxonomyId=c(9606, 10090),
+  organism=c("Homo sapiens", "Mus musculus"),
+  genome=c("hg", "mm"),
+  package=c("org.Hs.eg.db", "org.Mm.eg.db"),
   stringsAsFactors=FALSE
 )
 
@@ -118,7 +118,7 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
   if(is.character(orgDb) & orgDb=="auto") {
     org <- NULL
     if(!is.null(genes.data$metadata$taxonomyId)) {
-      org <- .OrganismToOrgDb[.OrganismToOrgDb$taxonomyId==genes.data$metadata$taxonomyId]
+      org <- .OrganismToOrgDb[.OrganismToOrgDb$taxonomyId==genes.data$metadata$taxonomyId,]
     }
     if(is.null(org) && !is.null(genes.data$metadata$genome)) {
       #Use the genome name (prefix) to get the correct org line
@@ -193,12 +193,16 @@ isValidData <- function(...) {
 
 getGeneNames <- function(genes, gene.names) {
   if(!is.null(gene.names)) {
-    return(as.character(gene.names[names(genes)]))
+    return(naToEmptyChar(as.character(gene.names[names(genes)])))
   } else {
     if("name" %in% names(mcols(genes))) {
-      return(genes$name)
+      return(naToEmptyChar(genes$name))
     } else {
-      return(as.character(names(genes)))
+      if(length(mcols(genes))>0) {
+        return(naToEmptyChar(as.character(mcols(genes)[,1])))
+      } else {
+        return(naToEmptyChar(as.character(names(genes))))
+      }
     }
   }
 }
