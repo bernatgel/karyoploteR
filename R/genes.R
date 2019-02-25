@@ -111,7 +111,7 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
   return(res)
 }
 
-
+#' @export addGeneNames
 addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL") {
   if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
   
@@ -144,6 +144,41 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
   return(genes.data)  
 }
 
+
+#' @export mergeTranscripts
+mergeTranscripts <- function(genes.data) { 
+  merged.data <- list()
+  merged.data$genes <- genes.data$genes
+  merged.data$transcripts <- list()
+  merged.data$coding.exons <- list()
+  merged.data$non.coding.exons <- list()
+  
+  for(ngene in seq_len(length(genes.data$genes))) {
+    g <- genes.data$genes[ngene]
+  
+    #Get the transcripts and get the total region overlapping any of them
+    tx <- genes.data$transcripts[[names(g)]]
+    
+    merged.tx <- regioneR::joinRegions(tx, 0)
+    merged.tx_id <- paste0(names(g), ".merged")
+    merged.tx$tx_id <- merged.tx_id
+    
+    merged.data$transcripts[[names(g)]] <- merged.tx
+    
+    #Get all coding exons and merge them
+    cod.ex <- do.call("c", lapply(tx$tx_id, function(tx_id) return(genes.data$coding.exons[[as.character(tx_id)]])))
+    cod.ex <- regioneR::joinRegions(cod.ex, 0)
+    
+    merged.data$coding.exons[[merged.tx_id]] <- cod.ex
+    
+    #Get all non-coding exons and merge them
+    ncod.ex <- do.call("c", lapply(tx$tx_id, function(tx_id) return(genes.data$non.coding.exons[[as.character(tx_id)]])))
+    ncod.ex <- regioneR::joinRegions(ncod.ex, 0)
+    
+    merged.data$non.coding.exons[[merged.tx_id]] <- ncod.ex
+  }
+  return(merged.data) 
+}
 
 
 
