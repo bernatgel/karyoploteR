@@ -198,7 +198,11 @@ getGeneNames <- function(genes, gene.names) {
     if("name" %in% names(mcols(genes))) {
       return(genes$name)
     } else {
-      return(as.character(names(genes)))
+      if(length(mcols(genes))>0) {
+        return(as.character(mcols(genes)[,1]))  
+      } else {
+        return(as.character(names(genes)))
+      }
     }
   }
 }
