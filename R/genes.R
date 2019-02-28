@@ -111,7 +111,58 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
   return(res)
 }
 
+
+
+#' addGeneNames
+#' 
+#' @description 
+#' Adds the gene names (defaults to symbols) to a GenesData object to 
+#' be used by kpPlotGenes
+#' 
+#' 
+#' @details 
+#' This function takes a valid data object and uses an OrgDb object to 
+#' find the gene names (symbols by default) and add them. Names are added 
+#' as a column named \code{names} to the \code{genes} element of GenesData 
+#' and they replace anything that was present there before.
+#' If no \code{ObjDb} object is given, the function will try to identify
+#' the correct organism using the data in \code{GenesData$metadata} and
+#' select the OrgDb object if available. If it cannot identify the organism 
+#' or there's no valid OrgDb for that organism it will fail with an error.
+#' Internally, the function uses a call to \code{AnnotationDbi::select} on
+#' the OrgDb. It is possible to specify the keys and keytypes as well as
+#' the column we want to use as names (defaults to SYMBOL for gene symbols).
+#' 
+#' @usage addGeneNames(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL")
+#' 
+#' @param genes.data (GenesData object) A valid genes.dat object like the ones obtained by \link{\code{makeGenesDataFromTxDb}}
+#' @param orgDb The orgDb object to use to extract the gene symbols. If "auto" the function will try to determine automatically the correct organism. See available obects at https://bioconductor.org/packages/release/BiocViews.html#___OrgDb (defaults to "auto")
+#' @param keys (character vector ) The keys to be used in the internal select statement to get the names. If NULL, the first column of \code{mcols(GenesData$genes)} will be used. (defaults to NULL)
+#' @param keytype (character) The keytype used in the internal select statement. (defaults to "ENTREZID", that is, gene_id)
+#' @param names The column to extract from orgDb to use as gene names. (deafults to "SYMBOL")
+#' 
+#' 
+#' @return
+#' The original GenesData object with one additional column named "names" in 
+#' \code{GenesData$genes$names}.
+#' 
+#'  
+#' @seealso \code{\link{kpPlotGenes}}, \code{\link{makeGenesDataFromTxDb}}
+#' 
+#' @examples
+#'  
+#' 
+#' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' 
+#' zoom <- toGRanges("chr17:29e6-30e6")
+#' kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, FALSE, FALSE)
+#' genes.data <- addGeneNames(genes.data)
+#' kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=FALSE, gene.name.position = "left")
+#'  
+#'   
 #' @export addGeneNames
+#' 
 addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL") {
   if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
   
@@ -121,6 +172,7 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
       org <- .OrganismToOrgDb[.OrganismToOrgDb$taxonomyId==genes.data$metadata$taxonomyId,]
     }
     if(is.null(org) && !is.null(genes.data$metadata$genome)) {
+      
       #Use the genome name (prefix) to get the correct org line
     }
     
