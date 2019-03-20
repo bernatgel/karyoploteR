@@ -43,6 +43,9 @@ and the user never needs to call it.
 kp <- plotKaryotype(ideogram.plotter = NULL)
 kpAddCytobandsAsLine(kp)
  
+kp <- plotKaryotype(ideogram.plotter = NULL, plot.type=2)
+kpAddCytobandsAsLine(kp)
+ 
 }
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{getCytobandColors}}, \code{\link{kpAddBaseNumbers}}, \code{\link{kpAddCytobandLabels}}

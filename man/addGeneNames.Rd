@@ -7,7 +7,7 @@
 addGeneNames(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL")
 }
 \arguments{
-\item{genes.data}{(GenesData object) A valid genes.dat object like the ones obtained by \link{\code{makeGenesDataFromTxDb}}}
+\item{genes.data}{(GenesData object) A valid genes.dat object like the ones obtained by \code{\link{makeGenesDataFromTxDb}}}
 
 \item{orgDb}{The orgDb object to use to extract the gene symbols. If "auto" the function will try to determine automatically the correct organism. See available obects at https://bioconductor.org/packages/release/BiocViews.html#___OrgDb (defaults to "auto")}
 

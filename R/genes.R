@@ -135,7 +135,7 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
 #' 
 #' @usage addGeneNames(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL")
 #' 
-#' @param genes.data (GenesData object) A valid genes.dat object like the ones obtained by \link{\code{makeGenesDataFromTxDb}}
+#' @param genes.data (GenesData object) A valid genes.dat object like the ones obtained by \code{\link{makeGenesDataFromTxDb}}
 #' @param orgDb The orgDb object to use to extract the gene symbols. If "auto" the function will try to determine automatically the correct organism. See available obects at https://bioconductor.org/packages/release/BiocViews.html#___OrgDb (defaults to "auto")
 #' @param keys (character vector ) The keys to be used in the internal select statement to get the names. If NULL, the first column of \code{mcols(GenesData$genes)} will be used. (defaults to NULL)
 #' @param keytype (character) The keytype used in the internal select statement. (defaults to "ENTREZID", that is, gene_id)
