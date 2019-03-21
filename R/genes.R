@@ -165,6 +165,7 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
 #' 
 addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID", names="SYMBOL") {
   if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
+  #TODO: check it's a valid genes.data
   
   if(is.character(orgDb) & orgDb=="auto") {
     org <- NULL
@@ -197,9 +198,55 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
 }
 
 
+
+#' mergeTranscripts
+#' 
+#' @description 
+#' Merges the transcripts of each gene and creates one transcript per gene with
+#' all exons and UTR regions combined
+#' 
+#' 
+#' @details 
+#' This function takes a valid data object and merges all transcripts from 
+#' each gene into a single transcript. This is useful to reduce the plot
+#' complexity while keeping partial information on transcript structure.#' 
+#' In this transcript, any region that is a coding exon in any transcript,
+#' will be an exon, any region that is a non-coding exon in any transcript
+#' and is not an exon in any transcript, will be a non-coding exon. 
+#' Anything between coding and non-coding exons will be introns.
+#' 
+#' @usage mergeTranscripts(genes.data)
+#' 
+#' @param genes.data (GenesData object) A valid genes.dat object like the ones obtained by \code{\link{makeGenesDataFromTxDb}}
+#' 
+#' @return
+#' The original GenesData object with a single transcript per gene 
+#' \code{GenesData$genes$names}.
+#' 
+#' @seealso \code{\link{kpPlotGenes}}, \code{\link{makeGenesDataFromTxDb}}
+#' 
+#' @examples
+#'  
+#' library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' 
+#' zoom <- toGRanges("chr17:29.4e6-29.8e6")
+#' kp <- plotKaryotype(genome="hg19", zoom=zoom)
+#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' genes.data <- addGeneNames(genes.data)
+#' kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=TRUE, gene.name.position = "left")
+#' genes.data.merged <- mergeTranscripts(genes.data)
+#' kpPlotGenes(kp, data=genes.data.merged, r0=0.6, r1=0.8, plot.transcripts=TRUE, gene.name.position = "left")
+#'  
 #' @export mergeTranscripts
 mergeTranscripts <- function(genes.data) { 
+  if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
+  #TODO: check it's a valid genes.data
+  
+  if(is.null(genes.data$transcripts)) stop("genes.data must have transcript information. If created with makeGenesDataFromTxDb,  plot.transcripts must be set to TRUE")
+  if(is.null(genes.data$coding.exons)) stop("genes.data must have exons information. If created with makeGenesDataFromTxDb,  plot.transcripts.structure must be set to TRUE")
+
   merged.data <- list()
+  class(merged.data) <- "GenesData"
   merged.data$genes <- genes.data$genes
   merged.data$transcripts <- list()
   merged.data$coding.exons <- list()
