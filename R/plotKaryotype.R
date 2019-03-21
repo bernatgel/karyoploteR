@@ -178,7 +178,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
   
   #And filter it
-  if(!is.null(chromosomes) && chromosomes != "all") {
+  if(!is.null(chromosomes) && any(chromosomes != "all")) {
     
     if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal", "auto"))) {
       if(is.character(genome)) {
