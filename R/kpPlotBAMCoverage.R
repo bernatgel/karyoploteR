@@ -91,7 +91,8 @@ plots. For larger regions, kpPlotBAMDensity is recommended.
 If you want to plot the coverage in a large region,
 please supply a larger value for 'max.valid.region.size'
 parameter.")
-    invisible(karyoplot)
+    karyoplot$latest.plot <- list(funct="kpPlotBAMCoverage", computed.values=list(max.coverage=NA))
+    return(invisible(karyoplot))
   }
   
   #Everything look correct. Start plotting.
