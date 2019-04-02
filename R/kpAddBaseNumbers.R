@@ -86,7 +86,8 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     #Major ticks
     num.ticks <- width(chr)/tick.dist + 1
   
-    tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1
+    tick.pos <- start(chr) + (tick.dist*(0:(num.ticks-1))) - 1 
+    tick.pos[1] <- start(chr)
     
     #if zoomed in, keep only the ticks in the plot region
     if(karyoplot$zoom==TRUE) {
@@ -97,6 +98,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     
     if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
       tick.labels <- sapply(tick.pos, toLabel, add.units=add.units, digits=digits)
+      
       
       xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos, data.panel="ideogram")$x
       y0plot <- mids(chr.name)-karyoplot$plot.params$ideogramheight/2
@@ -109,8 +111,8 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     }
     #Minor ticks
     if(minor.ticks) {
-      minor.num.ticks <- width(chr)/minor.tick.dist 
-      minor.tick.pos <- start(chr) + (minor.tick.dist*(0:(minor.num.ticks-1))) - 1
+      minor.num.ticks <- width(chr)/minor.tick.dist - 1
+      minor.tick.pos <- start(chr) + (minor.tick.dist*(1:(minor.num.ticks-1))) - 1
   
       #if zoomed in, keep only the ticks in the plot region
       if(karyoplot$zoom==TRUE) {
@@ -118,8 +120,8 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
         minor.tick.pos <- minor.tick.pos[minor.tick.pos >= start(karyoplot$plot.region) & minor.tick.pos<= end(karyoplot$plot.region)]
         }
       }
-      if(length(minor.tick.pos)>0) {  
-        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos, data.panel="ideogram")$x
+      if(length(minor.tick.pos)>0) { 
+        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos , data.panel="ideogram")$x
         y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
         if(is.null(minor.tick.col)) {
           graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
