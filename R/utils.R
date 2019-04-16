@@ -7,7 +7,7 @@
 # http://stackoverflow.com/questions/9335099/implementation-of-standard-recycling-rules
 recycle <- function(...){
   dotList <- list(...)
-  max.length <- max(sapply(dotList, length))
+  max.length <- max(vapply(dotList, length, FUN.VALUE=0))
   lapply(dotList, rep, length=max.length)
 }
 
@@ -15,7 +15,7 @@ recycle <- function(...){
 #Only recycles the first argument and returns it
 recycle.first <- function(...){
   dotList <- list(...)
-  max.length <- max(sapply(dotList, length))
+  max.length <- max(vapply(dotList, length, FUN.VALUE = 0))
   return(rep_len(dotList[[1]], length.out=max.length))
 }
 

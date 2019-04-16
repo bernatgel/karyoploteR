@@ -76,7 +76,7 @@ kpLines <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, y
                            data.panel=data.panel, ...)
   ccf <- karyoplot$coord.change.function
   
-  ss <- sapply(karyoplot$chromosomes, function(current.chr) {
+  ss <- lapply(karyoplot$chromosomes, function(current.chr) {
     in.chr <- which(pp$chr==current.chr)
     xplot <- ccf(chr=pp$chr[in.chr], x=pp$x[in.chr], data.panel=data.panel)$x
     yplot <- ccf(chr=pp$chr[in.chr], y=pp$y[in.chr], data.panel=data.panel)$y
