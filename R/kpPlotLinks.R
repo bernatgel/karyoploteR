@@ -103,7 +103,7 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
         }
         
   #Define the link ends
-    if(!is.null(data2) && !is.na(data2)) {
+    if(!is.null(data2) && !any(is.na(data2))) {
       if(!methods::is(data2, "GRanges")) {
         stop("If present, data2 must be a GRanges object")
       } else {
