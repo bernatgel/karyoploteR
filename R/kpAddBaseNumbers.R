@@ -112,7 +112,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     #Minor ticks
     if(minor.ticks) {
       minor.num.ticks <- width(chr)/minor.tick.dist - 1
-      minor.tick.pos <- start(chr) + (minor.tick.dist*(1:(minor.num.ticks-1))) - 1
+      minor.tick.pos <- start(chr) + (minor.tick.dist*(seq_len(minor.num.ticks-1))) - 1
   
       #if zoomed in, keep only the ticks in the plot region
       if(karyoplot$zoom==TRUE) {

@@ -294,7 +294,7 @@ addStrandMarks <- function(karyoplot, regs, transcript.height, mid.transcript,
   
   #Compute the mark.width relative to the mark.height. 
   #Adjust for the aspcet ratio of the plot coordinates (in points)
-  asp.usr <- diff(par("usr")[1:2])/diff(par("usr")[3:4])
+  asp.usr <- diff(par("usr")[c(1,2)])/diff(par("usr")[c(3,4)])
   #Adjust for the aspect ratio of the canvas (in "inches")
   asp.pin <- par("pin")[2]/par("pin")[1]
   

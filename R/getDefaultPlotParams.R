@@ -37,7 +37,7 @@
 
 
 getDefaultPlotParams <- function(plot.type) {
-  valid.plot.types <- c(1:7) #c(1:4)
+  valid.plot.types <- c(1,2,3,4,5,6,7) 
   
   if(!plot.type %in% valid.plot.types) {
     stop(paste0("plot.type is not valid. Select a valid value: ", 

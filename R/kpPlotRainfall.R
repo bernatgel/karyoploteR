@@ -71,7 +71,7 @@ kpPlotRainfall <- function(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, da
   for(chr in karyoplot$chromosomes) {
     if(length(data.per.chr)>0) {
       ss <- start(data.per.chr[[chr]])
-      feat.dist <- ss - c(1,ss[1:length(ss)-1])
+      feat.dist <- ss - c(1,ss[seq_len(length(ss))-1])
       feat.dist <- log10(feat.dist)
       distances[[chr]] <- feat.dist
       kpPoints(karyoplot, chr=chr, x=ss, y=feat.dist, col=data.per.chr[[chr]]$col, ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
