@@ -4,24 +4,26 @@
 \alias{kpAddLabels}
 \title{kpAddLabels}
 \usage{
-kpAddLabels(karyoplot, labels, r0=NULL, r1=NULL, label.margin=0.01, data.panel=1, pos=2, offset=0, ...)
+kpAddLabels(karyoplot, labels, label.margin=0.01,  side="left", pos=NULL, offset=0, r0=NULL, r1=NULL, data.panel=1, ...)
 }
 \arguments{
 \item{karyoplot}{a \code{karyoplot} object returned by a call to \code{plotKaryotype}}
 
 \item{labels}{(character) the text on the labels}
 
+\item{label.margin}{(numeric) the additional the margin between the labels the first base of the chromosome. In plot coordinates. Usual value might be 0.05. Can be negative. (defaults to 0.01)}
+
+\item{side}{("left" or "right") The side of the plot where to plot the labels. (defaults to "left")}
+
+\item{pos}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. If NULL, pos will be selected automatically based on "side" (Defaults to NULL)}
+
+\item{offset}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 0)}
+
 \item{r0}{(numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to position the label. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
-\item{label.margin}{(numeric) the additional the margin between the labels the first base of the chromosome. In plot coordinates. Usual value might be 0.05. Can be negative. (defaults to 0.01)}
-
 \item{data.panel}{(numeric) The identifier of the data panel where the labels are to be added. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
-
-\item{pos}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 2)}
-
-\item{offset}{(numeric) The standard graphical parameter. See \code{\link[graphics]{text}}. (Defaults to 0)}
 
 \item{...}{any additional parameter to be passed to the text plotting. All R base graphics params are passed along.}
 }
@@ -37,17 +39,24 @@ Given a KaryoPlot object, plot labels on the side of the data panels to help ide
 \examples{
 
 plot.params <- getDefaultPlotParams(plot.type=2)
-plot.params$leftmargin=0.2
+plot.params$leftmargin <- 0.2
+plot.params$rightmargin <- 0.2
 kp <- plotKaryotype("hg19", chromosomes=c("chr1", "chr2"), plot.type=2, plot.params = plot.params)
 #data panel 1
 kpDataBackground(kp, r0=0, r1=0.5, col="#FFDDDD")
 kpDataBackground(kp, r0=0.5, r1=1, col="#DDFFDD")
-kpAddLabels(kp, "Everything", label.margin = 0.1, srt=90, pos=3, cex=0.8)
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=3, cex=0.8)
 kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6)
 kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6)
 #data panel 2
 kpDataBackground(kp, col="#DDDDFF", data.panel = 2)
 kpAddLabels(kp, "BLUE", data.panel=2)
+
+#Plot on the right
+#data panel 1
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=1, cex=0.8, side="right")
+kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6, side="right")
+kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6, side="right")
  
 }
 \seealso{
