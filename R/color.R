@@ -98,13 +98,14 @@
 #'  
 #' lighter("red")
 #' lighter("#333333")
+#' lighter(c("red", 3, "#FF00FF"))
 #'  
 #' @export lighter
 #' 
 
 lighter <- function(col, amount=150) {
   #Colors must be specified by name or #RRGGBB(AA)
-  if(!methods::is(col, "character")) stop("Unknown color definition.")
+  if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
   .lighter <- function(col, amount) {
     new.col <- ((grDevices::col2rgb(col))+amount)/255
@@ -112,7 +113,7 @@ lighter <- function(col, amount=150) {
     return(grDevices::rgb(t(new.col)))  
   }
   
-  return(sapply(col, .lighter, amount))
+  return(vapply(col, .lighter, amount, FUN.VALUE = "A"))
 }
 
 #' darker
@@ -139,6 +140,7 @@ lighter <- function(col, amount=150) {
 #'  
 #' darker("red")
 #' darker("#333333")
+#' darker(c("red", 3, "#FF00FF"))
 #'  
 #' @export darker
 #'
@@ -146,7 +148,7 @@ lighter <- function(col, amount=150) {
 #Given a color, returns a darker one
 darker <- function(col, amount=150) {
   #Colors must be specified by name or #RRGGBB(AA)
-  if(!methods::is(col, "character")) stop("Unknown color definition.")
+  if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
   .darker <- function(col, amount) {
     new.col <- ((grDevices::col2rgb(col))-amount)/255
@@ -154,7 +156,7 @@ darker <- function(col, amount=150) {
     return(grDevices::rgb(t(new.col)))
   }
   
-  return(sapply(col, .darker, amount))
+  return(vapply(col, .darker, amount, FUN.VALUE = "A"))
 }
 
 
