@@ -465,6 +465,8 @@ colByRegion <- function(data, regions, colors=NULL, default.col="black") {
 #' is.color(NULL)
 #' is.color("not_a_color")
 #' is.color(3)
+#' 
+#' is.color(c("not_a_color", "red", 3, "#FF0000"))
 #'  
 #' @export is.color
 #' 
@@ -475,8 +477,10 @@ colByRegion <- function(data, regions, colors=NULL, default.col="black") {
 
 is.color <- function(x) {
   if(is.null(x)) return(FALSE)
-  sapply(x, function(X) {
+  return(setNames(vapply(x, function(X) {
     tryCatch(is.matrix(grDevices::col2rgb(X)), 
              error = function(e) FALSE)
-  })
+  },
+  FUN.VALUE = TRUE), NULL))
 }
+
