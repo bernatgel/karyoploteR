@@ -111,22 +111,24 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     }
     #Minor ticks
     if(minor.ticks) {
-      minor.num.ticks <- width(chr)/minor.tick.dist - 1
-      minor.tick.pos <- start(chr) + (minor.tick.dist*(seq_len(minor.num.ticks-1))) - 1
+      if(width(chr)>minor.tick.dist) {
+        minor.num.ticks <- floor(width(chr)/minor.tick.dist)
+        minor.tick.pos <- start(chr) + (minor.tick.dist*(seq_len(minor.num.ticks))) - 1
   
-      #if zoomed in, keep only the ticks in the plot region
-      if(karyoplot$zoom==TRUE) {
-        if(clipping==TRUE) {
-        minor.tick.pos <- minor.tick.pos[minor.tick.pos >= start(karyoplot$plot.region) & minor.tick.pos<= end(karyoplot$plot.region)]
+        #if zoomed in, keep only the ticks in the plot region
+        if(karyoplot$zoom==TRUE) {
+          if(clipping==TRUE) {
+          minor.tick.pos <- minor.tick.pos[minor.tick.pos >= start(karyoplot$plot.region) & minor.tick.pos<= end(karyoplot$plot.region)]
+          }
         }
-      }
-      if(length(minor.tick.pos)>0) { 
-        xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos , data.panel="ideogram")$x
-        y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
-        if(is.null(minor.tick.col)) {
-          graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
-        } else {
-          graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, col=minor.tick.col, ...)       
+        if(length(minor.tick.pos)>0) { 
+          xplot <- ccf(chr=rep(chr.name, length(minor.tick.pos)), x=minor.tick.pos , data.panel="ideogram")$x
+          y0plot <- mids(chr.name) - karyoplot$plot.params$ideogramheight/2
+          if(is.null(minor.tick.col)) {
+            graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, ...)       
+          } else {
+            graphics::segments(x0=xplot, x1=xplot, y0=y0plot, y1=y0plot-minor.tick.len, col=minor.tick.col, ...)       
+          }
         }
       }
     }
