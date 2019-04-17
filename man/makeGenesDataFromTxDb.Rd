@@ -4,12 +4,12 @@
 \alias{makeGenesDataFromTxDb}
 \title{makeGenesDataFromTxDb}
 \usage{
-makeGenesDataFromTxDb(karyoplot, txdb, plot.transcripts=TRUE, plot.transcripts.structure=TRUE)
+makeGenesDataFromTxDb(txdb, karyoplot=NULL, plot.transcripts=TRUE, plot.transcripts.structure=TRUE)
 }
 \arguments{
-\item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}}
-
 \item{txdb}{(a TxDb object) The transcript database object from which the data will be extracted.}
+
+\item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}. If present, genes data will be restricted to the visible region in the plot. If NULL, all genes will be included. (defaults to NULL)}
 
 \item{plot.transcripts}{(boolean) TRUE if transcripts are needed in addition to the genes. (defaults to TRUE)}
 
@@ -50,7 +50,9 @@ library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 zoom <- toGRanges("chr17", 32.6e6, 33.2e6)
 kp <- plotKaryotype(genome="hg19", zoom=zoom)
 
-genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, TRUE, TRUE)
+genes.data <- makeGenesDataFromTxDb(TxDb.Hsapiens.UCSC.hg19.knownGene, 
+                 karyoplot=kp, plot.transcripts=TRUE, 
+                 plot.transcripts.structure=TRUE)
   
 }
 \seealso{

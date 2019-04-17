@@ -122,7 +122,7 @@
 #'  
 #'  library(TxDb.Mmusculus.UCSC.mm10.knownGene)
 #'  kp <- plotKaryotype(genome="mm10", zoom="chr1:10.5e6-12.5e6")
-#'  genes.data <- makeGenesDataFromTxDb(kp, txdb=TxDb.Mmusculus.UCSC.mm10.knownGene)
+#'  genes.data <- makeGenesDataFromTxDb(txdb=TxDb.Mmusculus.UCSC.mm10.knownGene, karyoplot=kp)
 #'  genes.data <- addGeneNames(genes.data)
 #'  genes.data <- mergeTranscripts(genes.data)
 #'  kpPlotGenes(kp, genes.data, r1=0.25, mark.height = 0.5, gene.name.position = "left")
@@ -153,7 +153,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
   
   #If data is a TxDb object, build a list from it with the expected format
   if(methods::is(data, "TxDb")) {
-    data <- tryCatch(makeGenesDataFromTxDb(karyoplot, data, plot.transcripts, plot.transcripts.structure),
+    data <- tryCatch(makeGenesDataFromTxDb(data, karyoplot=karyoplot, plot.transcripts, plot.transcripts.structure),
                      error=function(e) {stop("Error: There was an error extracting the information from the TxDb object. ", e)})
   }
   

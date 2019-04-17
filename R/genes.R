@@ -35,10 +35,10 @@
 #' function is only expected to be used when the user want to manipulate the 
 #' results somehow (i.e. removing some of the genes).
 #' 
-#' @usage makeGenesDataFromTxDb(karyoplot, txdb, plot.transcripts=TRUE, plot.transcripts.structure=TRUE)
+#' @usage makeGenesDataFromTxDb(txdb, karyoplot=NULL, plot.transcripts=TRUE, plot.transcripts.structure=TRUE)
 #' 
-#' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param txdb (a TxDb object) The transcript database object from which the data will be extracted.
+#' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}. If present, genes data will be restricted to the visible region in the plot. If NULL, all genes will be included. (defaults to NULL)
 #' @param plot.transcripts (boolean) TRUE if transcripts are needed in addition to the genes. (defaults to TRUE)
 #' @param plot.transcripts.structure (boolean) TRUE if the coding and non-coding exons are needed in addition to the genes and transcripts. (defaults to TRUE)
 #' 
@@ -66,7 +66,9 @@
 #' zoom <- toGRanges("chr17", 32.6e6, 33.2e6)
 #' kp <- plotKaryotype(genome="hg19", zoom=zoom)
 #' 
-#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, TRUE, TRUE)
+#' genes.data <- makeGenesDataFromTxDb(TxDb.Hsapiens.UCSC.hg19.knownGene, 
+#'                  karyoplot=kp, plot.transcripts=TRUE, 
+#'                  plot.transcripts.structure=TRUE)
 #'   
 #' @export makeGenesDataFromTxDb
 #' 
@@ -76,7 +78,7 @@
 #' @importFrom GenomeInfoDb genome
 #'
 
-makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.transcripts.structure=TRUE) {
+makeGenesDataFromTxDb <- function(txdb, karyoplot=NULL, plot.transcripts=TRUE, plot.transcripts.structure=TRUE) {
   res <- list()
   
   #get the metadata
@@ -88,7 +90,11 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
   
   #get the genes
   all.genes <- genes(txdb)
-  res[["genes"]] <- subsetByOverlaps(all.genes, karyoplot$plot.region)
+  if(!is.null(karyoplot)) { #Subset the genes to the visible region only
+    res[["genes"]] <- subsetByOverlaps(all.genes, karyoplot$plot.region)
+  } else { #If we have no karyoplot, use all genes
+    res[["genes"]] <- all.genes
+  }
   
   if(plot.transcripts==TRUE) {
     #Extract the transcripts of each gene
@@ -156,9 +162,12 @@ makeGenesDataFromTxDb <- function(karyoplot, txdb, plot.transcripts=TRUE, plot.t
 #' 
 #' zoom <- toGRanges("chr17:29e6-30e6")
 #' kp <- plotKaryotype(genome="hg19", zoom=zoom)
-#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, FALSE, FALSE)
+#' genes.data <- makeGenesDataFromTxDb(TxDb.Hsapiens.UCSC.hg19.knownGene, 
+#'                  karyoplot=kp, plot.transcripts=FALSE,
+#'                  plot.transcripts.structure=FALSE)
 #' genes.data <- addGeneNames(genes.data)
-#' kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=FALSE, gene.name.position = "left")
+#' kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=FALSE,
+#'             gene.name.position = "left")
 #'  
 #'   
 #' @export addGeneNames
@@ -231,7 +240,7 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
 #' 
 #' zoom <- toGRanges("chr17:29.4e6-29.8e6")
 #' kp <- plotKaryotype(genome="hg19", zoom=zoom)
-#' genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene)
+#' genes.data <- makeGenesDataFromTxDb(TxDb.Hsapiens.UCSC.hg19.knownGene, karyoplot=kp)
 #' genes.data <- addGeneNames(genes.data)
 #' kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=TRUE, gene.name.position = "left")
 #' genes.data.merged <- mergeTranscripts(genes.data)

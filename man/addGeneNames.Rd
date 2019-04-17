@@ -45,9 +45,12 @@ library(TxDb.Hsapiens.UCSC.hg19.knownGene)
 
 zoom <- toGRanges("chr17:29e6-30e6")
 kp <- plotKaryotype(genome="hg19", zoom=zoom)
-genes.data <- makeGenesDataFromTxDb(kp, TxDb.Hsapiens.UCSC.hg19.knownGene, FALSE, FALSE)
+genes.data <- makeGenesDataFromTxDb(TxDb.Hsapiens.UCSC.hg19.knownGene, 
+                 karyoplot=kp, plot.transcripts=FALSE,
+                 plot.transcripts.structure=FALSE)
 genes.data <- addGeneNames(genes.data)
-kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=FALSE, gene.name.position = "left")
+kpPlotGenes(kp, data=genes.data, r1=0.5, plot.transcripts=FALSE,
+            gene.name.position = "left")
  
   
 }
