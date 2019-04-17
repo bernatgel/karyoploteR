@@ -26,6 +26,7 @@ it back to a color.
  
 darker("red")
 darker("#333333")
+darker(c("red", 3, "#FF00FF"))
  
 }
 \seealso{

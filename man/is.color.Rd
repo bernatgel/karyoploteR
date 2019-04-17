@@ -27,5 +27,7 @@ is.color(NA)
 is.color(NULL)
 is.color("not_a_color")
 is.color(3)
+
+is.color(c("not_a_color", "red", 3, "#FF0000"))
  
 }
