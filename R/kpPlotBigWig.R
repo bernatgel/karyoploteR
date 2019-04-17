@@ -22,7 +22,7 @@
 #' only adjusting the \code{col} and \code{border} parameters. 
 #' 
 #' 
-#' @usage kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
+#' @usage kpPlotBigWig(karyoplot, data, ymin=NULL, ymax="global", data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) 
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.
 #' @param data    (a \code{BigWigFile} or character) The path to a bigwig file (either local or a URL to a remote file) or a \code{BigWigFile} object.
@@ -30,7 +30,7 @@
 #' @param r0    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param r1    (numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)
 #' @param ymin    (numeric) The minimum value to be plotted on the data panel. If NULL, the minimum between 0 and the minimum value in the WHOLE GENOME will be used. (deafults to NULL)
-#' @param ymax    (numeric) The maximum value to be plotted on the data.panel. If NULL the maximum between 0 and maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)
+#' @param ymax    (numeric or c("global", "per.chr", "visible.region")) The maximum value to be plotted on the data.panel. It can be either a numeric value or one of c("global", "per.chr", "per.region"). "Global" will set ymax to the maximum value in the whole data file. "per.chr" will set ymax to the maximum value in each chromosome. "visible.region" will set ymax to the maximum value in the visible region. (defaults to "global")
 #' @param col  (color) The fill color of the area. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no area will be drawn. (defaults to NULL)
 #' @param border  (color) The color of the line enclosing the area. If NULL the color will be assigned automatically, either a darker version of the color used for the area or black if col=NA. If NA no border will be drawn. (Defaults to NULL)
 #' @param clipping  (boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)
@@ -53,10 +53,12 @@
 #'   seqlevelsStyle(brca.genes) <- "UCSC"
 #' 
 #'   kp <- plotKaryotype(zoom = brca.genes[1])
-#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.3)
-#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.4, r1=0.7, border="red", lwd=2)
-#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.8, r1=1, ymin=0, ymax=500, border="gold", col=NA)
-#'   kpAxis(kp, r0=0.8, r1=1, ymin=0, ymax=500)
+#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.2)
+#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.25, r1=0.45, border="red", lwd=2)
+#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.5, r1=0.7, ymin=0, ymax=1000, border="gold", col=NA)
+#'   kpAxis(kp, r0=0.5, r1=0.7, ymin=0, ymax=1000)
+#'   kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.75, r1=0.95, ymin=0, ymax="visible.region", border="orchid", col=NA)
+#'   kpAxis(kp, r0=0.75, r1=0.95, ymin=0, ymax=kp$latest.plot$computed.values$ymax)
 #' }
 #' 
 #' 
@@ -66,7 +68,7 @@
 #' 
 
 
-kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, 
+kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax="global", data.panel=1, 
                          r0=NULL, r1=NULL, 
                          col=NULL, border=NULL, clipping=TRUE, ...) {
   
@@ -83,6 +85,12 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1,
     data <- rtracklayer::BigWigFile(data)
   }
   
+  #Check ymax
+  if(is.null(ymax)) ymax <- "global"
+  if(!all(is.numeric(ymax))) {
+    ymax <- match.arg(ymax, choices = c("global", "per.chr", "visible.region"))
+  }
+  
   
   #Check seqinfo(data) to validate at least some intersection between the genome
   #and data chromosome names
@@ -96,15 +104,23 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1,
             paste0(karyoplot$chromosomes, collapse=","), "). Nothing will be plotted")
   }
   
-  #TODO: Add a parameter to define if the ymin/ymax values should take into account: the visible regions, the visible chromosomes or the whole genome.
-  # The whole genome and whole chromosomes can be computed using the statistics in the file and accessed using summary, but it seems
-  # region values must be computed after loading the data.
-  
   #if ymax is NULL, set it to the maximum of the file on the whole genome using
   # the summary info from BigWigFile or 0 if all values are negative
-  if(is.null(ymax)) {
-    ymax <- max(0, max(mcols(unlist(summary(data, type="max")))[,1]))
-  }
+  if(all(is.numeric(ymax))) {
+    ymax <- setNames(rep(ymax, length.out=length(karyoplot$plot.region)),
+                     as.character(seqnames(karyoplot$plot.region)))
+  } else {
+    if(ymax=="global") {
+      max.vals <- unlist(summary(data, type="max"))
+      ymax <- setNames(rep(max(0, max(mcols(max.vals)[,1])), length(max.vals)), as.character(seqnames(max.vals)))
+    }
+    if(ymax=="per.chr") {
+      max.vals <- unlist(summary(data, type="max"))
+      ymax <- setNames(mcols(max.vals)[,1], as.character(seqnames(max.vals)))
+    }
+  }    
+
+  
   #if ymin is NULL, set it to the minimum of the file on the whole genome or 0 
   #if all values are above 0
   if(is.null(ymin)) {
@@ -121,12 +137,23 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1,
   for(i in seq_along(plot.region)) {
     #Note: remove unneeded seqlevels when calling import to avoid a warning about unknown seqlevels
     wig.data <- rtracklayer::import(data, format = "bigWig", selection=plot.region[i])
-    kpArea(karyoplot, data = wig.data, y=wig.data$score, ymin=ymin, ymax=ymax,
+    if(all(is.numeric(ymax))) {
+      region.ymax <- ymax[as.character(seqnames(plot.region[i]))]
+    } else {
+      if(ymax == "visible.region") {
+        region.ymax <- max(0, max(mcols(wig.data)[,1]))
+      } else {
+        stop("Unexpected ymax value")
+      }
+    }
+    kpArea(karyoplot, data = wig.data, y=wig.data$score, 
+           ymin=ymin, ymax=region.ymax,
            data.panel=data.panel, r0=r0, r1=r1,
            col=col, border=border, clipping=TRUE, ...)
   }
   
-  karyoplot$latest.plot <- list(funct="kpPlotBigWig", computed.values=list(ymax=ymax, ymin=ymin))
+  #TODO: Should return all ymax values instead of using only the last one
+  karyoplot$latest.plot <- list(funct="kpPlotBigWig", computed.values=list(ymax=region.ymax, ymin=ymin))
   
   
   invisible(karyoplot)

@@ -4,7 +4,7 @@
 \alias{kpPlotBigWig}
 \title{kpPlotBigWig}
 \usage{
-kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
+kpPlotBigWig(karyoplot, data, ymin=NULL, ymax="global", data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -13,7 +13,7 @@ kpPlotBigWig(karyoplot, data, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NU
 
 \item{ymin}{(numeric) The minimum value to be plotted on the data panel. If NULL, the minimum between 0 and the minimum value in the WHOLE GENOME will be used. (deafults to NULL)}
 
-\item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum between 0 and maximum value in the BigWigFile for the WHOLE GENOME is used. (defaults to NULL)}
+\item{ymax}{(numeric or c("global", "per.chr", "visible.region")) The maximum value to be plotted on the data.panel. It can be either a numeric value or one of c("global", "per.chr", "per.region"). "Global" will set ymax to the maximum value in the whole data file. "per.chr" will set ymax to the maximum value in each chromosome. "visible.region" will set ymax to the maximum value in the visible region. (defaults to "global")}
 
 \item{data.panel}{(numeric) The identifier of the data panel where the data is to be plotted. The available data panels depend on the plot type selected in the call to \code{\link{plotKaryotype}}. (defaults to 1)}
 
@@ -63,10 +63,12 @@ if (.Platform$OS.type != "windows") {
   seqlevelsStyle(brca.genes) <- "UCSC"
 
   kp <- plotKaryotype(zoom = brca.genes[1])
-  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.3)
-  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.4, r1=0.7, border="red", lwd=2)
-  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.8, r1=1, ymin=0, ymax=500, border="gold", col=NA)
-  kpAxis(kp, r0=0.8, r1=1, ymin=0, ymax=500)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0, r1=0.2)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.25, r1=0.45, border="red", lwd=2)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.5, r1=0.7, ymin=0, ymax=1000, border="gold", col=NA)
+  kpAxis(kp, r0=0.5, r1=0.7, ymin=0, ymax=1000)
+  kp <- kpPlotBigWig(kp, data=bigwig.file, r0=0.75, r1=0.95, ymin=0, ymax="visible.region", border="orchid", col=NA)
+  kpAxis(kp, r0=0.75, r1=0.95, ymin=0, ymax=kp$latest.plot$computed.values$ymax)
 }
 
 
