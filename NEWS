@@ -10,7 +10,7 @@ NEW FEATURES
     automatically get gene symbols from OrgDb objects. Improved transcript
     and gene positioning. Added a function to merge all transcripts of a gene
     into one.
-    o kpPlotBigWig can now adjust the `ymax` value based on the global maximum,
+    o kpPlotBigWig can now adjust the ymax value based on the global maximum,
     per chromosome or taking into account only the visible region.
 
 SIGNIFICANT USER-VISIBLE CHANGES
