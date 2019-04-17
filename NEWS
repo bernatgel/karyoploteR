@@ -8,12 +8,15 @@ NEW FEATURES
     chromosome, position, overlapping of regions...
     o Improved gene and transcript plotting functions. Added functions to
     automatically get gene symbols from OrgDb objects. Improved transcript
-    and gene positioning.
+    and gene positioning. Added a function to merge all transcripts of a gene
+    into one.
 
 SIGNIFICANT USER-VISIBLE CHANGES
     o It is now posible to add labels to the right-hand side of chromosomes
     with kpAddLabels
     o Improved documentation and vignette
+    o makeGenesDataFromTxDb does not need a karyoplot anymore. Changed parameter
+    order.
     
 BUG-FIXES
     o It is now possible to use cex in plotKaryotype to specify chromosome name sizes 
