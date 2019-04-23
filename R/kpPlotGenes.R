@@ -167,7 +167,7 @@ kpPlotGenes <- function(karyoplot, data, gene.margin=0.3, gene.col=NULL, gene.bo
     #add an empty "latest.plot" information
     #TODO
     #and return
-    invisible(karyoplot)
+    return(invisible(karyoplot))
   }
   
   if(length(data$genes)>20 & plot.transcripts==TRUE & plot.transcripts.structure==TRUE) {
