@@ -110,17 +110,16 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax="global", data.panel=1
     ymax <- setNames(rep(ymax, length.out=length(karyoplot$plot.region)),
                      as.character(seqnames(karyoplot$plot.region)))
   } else {
-    if(ymax=="global") {
+    if(length(ymax)==1 && ymax=="global") {
       max.vals <- unlist(summary(data, type="max"))
       ymax <- setNames(rep(max(0, max(mcols(max.vals)[,1])), length(max.vals)), as.character(seqnames(max.vals)))
     }
-    if(ymax=="per.chr") {
+    if(length(ymax)==1 && ymax=="per.chr") {
       max.vals <- unlist(summary(data, type="max"))
       ymax <- setNames(mcols(max.vals)[,1], as.character(seqnames(max.vals)))
     }
   }    
 
-  
   #if ymin is NULL, set it to the minimum of the file on the whole genome or 0 
   #if all values are above 0
   if(is.null(ymin)) {
@@ -140,7 +139,7 @@ kpPlotBigWig <- function(karyoplot, data, ymin=NULL, ymax="global", data.panel=1
     if(all(is.numeric(ymax))) {
       region.ymax <- ymax[as.character(seqnames(plot.region[i]))]
     } else {
-      if(ymax == "visible.region") {
+      if(length(ymax)==1 && ymax == "visible.region") {
         region.ymax <- max(0, max(mcols(wig.data)[,1]))
       } else {
         stop("Unexpected ymax value")
