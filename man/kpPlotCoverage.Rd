@@ -28,7 +28,7 @@ kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL,
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
 }
 \value{
-Returns the original karyoplot object, unchanged.
+Returns the original karyoplot object with the data computed (max.coverage, ymax) stored in latest.plot.
 }
 \description{
 Given a \code{GRanges} object, plot the coverage along the genome.
@@ -76,5 +76,5 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
  
 }
 \seealso{
-\code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}
+\code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}},  \code{\link{kpPlotBAMCoverage}}, \code{\link{kpPlotDensity}}
 }

@@ -29,9 +29,9 @@
 #' 
 #' @return
 #' 
-#' Returns the original karyoplot object, unchanged.
+#' Returns the original karyoplot object with the data computed (max.coverage, ymax) stored in latest.plot.
 #'  
-#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}}
+#' @seealso \code{\link{plotKaryotype}}, \code{\link{kpPlotRegions}}, \code{\link{kpBars}},  \code{\link{kpPlotBAMCoverage}}, \code{\link{kpPlotDensity}}
 #' 
 #' 
 #' @examples
