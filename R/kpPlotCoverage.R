@@ -121,5 +121,8 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
            col=col, border=col, clipping=clipping, ...)
   }
   
+  karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.lvl)),
+                                                                                ymax=ymax))
+  
   invisible(karyoplot)
 }
