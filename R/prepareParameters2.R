@@ -25,7 +25,7 @@
 #'  
 #' @param function.name (character) The name of the function calling \code{prepareParameters2}. Only user for error reporting.
 #' @param karyoplot (KaryoPlot) A karyoplot object.
-#' @param data A GRanges
+#' @param data A GRanges. It can be NULL or a GRanges.
 #' @param chr A character representing the chromosome names.
 #' @param x The position in the chromosome in number of bases.
 #' @param y The value to be plotted.
@@ -73,6 +73,7 @@ prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=
  
   if(!is.null(data)) {
     if(all(!is.na(data))) {
+      if(!methods::is(data, "GRanges")) stop("Is data is not NULL it must be a GRanges object. Maybe toGRanges can be useful for this.")
       #use the values in 'data' only if the individual parameters (chr, x and y) are nothing (null or NA)
       if(is.null(chr) || all(is.na(chr))) {
         chr <- as.character(seqnames(data))
