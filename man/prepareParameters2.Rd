@@ -11,7 +11,7 @@ prepareParameters2(function.name, karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL
 
 \item{karyoplot}{(KaryoPlot) A karyoplot object.}
 
-\item{data}{A GRanges}
+\item{data}{A GRanges. It can be NULL or a GRanges.}
 
 \item{chr}{A character representing the chromosome names.}
 

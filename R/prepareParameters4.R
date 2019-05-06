@@ -75,6 +75,7 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
  
   if(!is.null(data)) {
     if(all(!is.na(data))) {
+      if(!methods::is(data, "GRanges")) stop("Is data is not NULL it must be a GRanges object. Maybe toGRanges can be useful for this.")
       if(is.null(chr) || all(is.na(chr))) {
         chr <- as.character(seqnames(data))
       }
