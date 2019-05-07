@@ -163,7 +163,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
       }
     }
     if(is.null(gr.genome)) {
-      gr.genome <- getGenomeAndMask(genome=genome, mask=NA)$genome
+      gr.genome <- regioneR::getGenomeAndMask(genome=genome, mask=NA)$genome
     }
   }
   
