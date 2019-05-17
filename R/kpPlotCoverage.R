@@ -93,9 +93,7 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
     data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths) 
   }
   
-  #TODO: 
   
-
   #Transform to plot
   ends <- cumsum(S4Vectors::runLength(data))
   valid.chrs <- lapply(ends, length)>0 #remove the chromosomes with no data
@@ -104,25 +102,46 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   
   starts <- lapply(ends, function(x) {return(c(1, (x[-length(x)]+1)))})
   
+  #convert into a GRanges
+  coverage.gr <- lapply(names(ends), 
+    function(chr) {
+      return(toGRanges(
+              data.frame(chr, starts[[chr]], ends[[chr]],
+                         coverage.lvl=coverage.lvl[[chr]])
+              )
+             )})
+  coverage.gr <- suppressWarnings(do.call(c, coverage.gr))
+  
   if(show.0.cov==FALSE) {
-    to.keep <- coverage.lvl!=0
-    coverage.lvl <- coverage.lvl[to.keep]
-    starts <- IRanges::IntegerList(starts)[to.keep]
-    ends <- IRanges::IntegerList(ends)[to.keep]
+    coverage.gr <- coverage.gr[coverage.gr$coverage.lvl!=0]
   }
   
+  if(is.null(ymax)) ymax <- max(max(coverage.gr$coverage.lvl))
   
-  if(is.null(ymax)) ymax <- max(max(coverage.lvl))
   
-  for(chr in names(ends)) {
-    kpBars(karyoplot=karyoplot, chr=chr, x0=starts[[chr]], x1=ends[[chr]], 
-           y0=0, y1=coverage.lvl[[chr]], ymin=0, ymax=ymax, 
-           r0=r0, r1=r1, data.panel=data.panel,
-           col=col, border=col, clipping=clipping, ...)
-  }
+  kpBars(karyoplot=karyoplot, data=coverage.gr,
+         y0=0, y1=coverage.gr$coverage.lvl, ymin=0, ymax=ymax,
+         r0=r0, r1=r1, data.panel=data.panel,
+         col="#FFAAAAAA", border=NA, clipping=clipping, ...)
+
   
-  karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.lvl)),
-                                                                                ymax=ymax))
+  #NOTE: To plot with kpArea we need to build a more complex structure so
+  #the actual coverage (flat tops) is drawn. I think it makes more sense to 
+  #just use kpBars
+  
+    # cov.start <- coverage.gr
+    # end(cov.start) <- start(cov.start)
+    # cov.end <- coverage.gr
+    # start(cov.end) <- end(cov.end)
+    # cov.to.plot <- sort(c(cov.start, cov.end))
+    # kpArea(karyoplot=karyoplot, data=cov.to.plot, y=cov.to.plot$coverage.lvl,
+    #        ymin=0, ymax=ymax,
+    #        r0=r0, r1=r1, data.panel=data.panel,
+    #        col=col, border=col, clipping=clipping)
+   
+  karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.gr$coverage.lvl)),
+                                                                            coverage=coverage.gr,
+                                                                            ymax=ymax))
   
   invisible(karyoplot)
 }
