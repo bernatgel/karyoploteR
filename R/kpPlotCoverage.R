@@ -93,36 +93,18 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
     data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths) 
   }
   
-  
-  #Transform to plot
-  ends <- cumsum(S4Vectors::runLength(data))
-  valid.chrs <- lapply(ends, length)>0 #remove the chromosomes with no data
-  ends <- ends[valid.chrs] 
-  coverage.lvl <- S4Vectors::runValue(data)[valid.chrs]
-  
-  starts <- lapply(ends, function(x) {return(c(1, (x[-length(x)]+1)))})
-  
-  #convert into a GRanges
-  coverage.gr <- lapply(names(ends), 
-    function(chr) {
-      return(toGRanges(
-              data.frame(chr, starts[[chr]], ends[[chr]],
-                         coverage.lvl=coverage.lvl[[chr]])
-              )
-             )})
-  coverage.gr <- suppressWarnings(do.call(c, coverage.gr))
-  
+  coverage.gr <- toGRanges(data)
+ 
   if(show.0.cov==FALSE) {
-    coverage.gr <- coverage.gr[coverage.gr$coverage.lvl!=0]
+    coverage.gr <- coverage.gr[coverage.gr$coverage!=0]
   }
   
-  if(is.null(ymax)) ymax <- max(max(coverage.gr$coverage.lvl))
-  
+  if(is.null(ymax)) ymax <- max(max(coverage.gr$coverage))
   
   kpBars(karyoplot=karyoplot, data=coverage.gr,
-         y0=0, y1=coverage.gr$coverage.lvl, ymin=0, ymax=ymax,
+         y0=0, y1=coverage.gr$coverage, ymin=0, ymax=ymax,
          r0=r0, r1=r1, data.panel=data.panel,
-         col="#FFAAAAAA", border=NA, clipping=clipping, ...)
+         col=col, border=col, clipping=clipping, ...)
 
   
   #NOTE: To plot with kpArea we need to build a more complex structure so
@@ -139,7 +121,7 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
     #        r0=r0, r1=r1, data.panel=data.panel,
     #        col=col, border=col, clipping=clipping)
    
-  karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.gr$coverage.lvl)),
+  karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.gr$coverage)),
                                                                             coverage=coverage.gr,
                                                                             ymax=ymax))
   
