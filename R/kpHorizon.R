@@ -62,23 +62,67 @@ kpHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=
                     data.panel=1, r0=NULL, r1=NULL, col=c("blue", "white", "red"), border=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
  
-  
+  #Normalize the parameters
   pp <- prepareParameters2("kpHorizon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
                            ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
  
-  #Falta trobar les interseccions amb 0!
-  #ex. que passa amb x=0,y=-2  x=10e6,y=2
-  #i "injectar-les" a les dades
+  #First, find the intersections of our data with 0 and inject these positions
+  #into the data to break any 0-crossing segments
+  #find 0's
+    shift <- function(l) {return(c(l[2:length(l)], FALSE))}
+    int.0 <- which(pp$y>0 & shift(pp$y<0) | pp$y<0 & shift(pp$y>0))
+      #kpPoints(kp, chr=pp$chr[int.0], x=pp$x[int.0], y=pp$y[int.0], ymin=-10, ymax=10, col="red")
+    ydist <- pp$y[int.0+1] - pp$y[int.0]
+    xdist <- pp$x[int.0+1] - pp$x[int.0]
+    pos.0 <- pp$x[int.0] + (0-pp$y[int.0])/ydist*xdist #This is the 0's
+      #kpPoints(kp, chr=pp$chr[int.0], x=pos.0, y=0, col="blue", ymin=-10, ymax=10)
+  #Inject into the data
+    data <- sort(c(toGRanges(pp$chr, pp$x, pp$x, y=pp$y),
+                   toGRanges(pp$chr[int.0], pos.0, pos.0, y=0)
+                ))
+    pos.0 <- which(data$y==0)
+    
+    IMPORTANT: to propoerly plot this, we need to inject also the points crossing the lines
+    
+
+    #TODO: Moure a colors. Exportar? Potser si, ja posats...
+    horizon.colors <- function(col, num.parts) {
+      ramp <- colorRampPalette(col)
+      pal <- ramp(num.parts*2+1)
+      return(list(neg=rev(pal[1:num.parts]),
+                  pos=pal[(num.parts+2):(2*num.parts+1)]
+            ))
+    }
+    
+    colors <- horizon.colors(col, num.parts)
+    
+  #Iterate through the pos/neg regions
+    
+    #TODO: Properly define a partition assigning a group numbering to each point and use tapply to plot
   
-  #Donada la línia, simplement anar buscant els punts on x0<0 i x1>0 i a l'inversa. Llavors calcular el punt de tall.
-  shift <- function(l) {return(c(l[2:length(l)], FALSE))}
-  int.0 <- which(pp$y>0 & shift(pp$y<0) | pp$y<0 & shift(pp$y>0))
-  
-  pp$y[int.0] 
-  
-  
+    last.pos <- 1
+    for(curr.pos in pos.0) {
+      d <- data[c(last.pos:curr.pos)]
+      if(d$y[2]>0) { #if a positive range d$y[1] will be 0 usually
+        range.cols <- colors$pos
+      } else { #if a negative range
+        range.cols <- colors$neg
+        d$y <- abs(d$y)
+      }
+      for(i in seq_len(num.parts)) {
+        y.bot <- abs((i-1)*(ymin/num.parts))
+        y.top <- abs((i)*(ymin/num.parts))
+        y.i <- d$y
+        y.i[y.i<y.bot] <- y.bot
+        y.i[y.i>y.top] <- y.top    
+        kpArea(karyoplot, d, y=y.i, ymin = y.bot, ymax=y.top, col = range.cols[i], border=NA, base.y = y.bot)
+      }
+      last.pos <- curr.pos
+    }
+    
+    
   #top
-  cols <- colorRamp(col[c(2,3)])
+  
   for(i in seq_len(num.parts)) {
     y.bot <- (i-1)*(ymax/num.parts)
     y.top <- (i)*(ymax/num.parts)
