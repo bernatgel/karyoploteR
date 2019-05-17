@@ -4,7 +4,8 @@
 # karyoploteR - An R/Biocondutor package to plot arbitrary data along the genome
 
 
-![karyoploteR Example](https://raw.githubusercontent.com/bernatgel/karyoploter_examples/master/Examples/Examples/MultipleDataTypes/figure/Figure-1.png "Example of plot created with karyoploteR")
+![karyoploteR Example](https://raw.githubusercontent.com/bernatgel/karyoploter_tutorial/master/docs/Examples/MultipleDataTypes/images/Figure-1.png
+ "Example of plot created with karyoploteR")
 
 ## Description
 
