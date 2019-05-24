@@ -69,6 +69,14 @@
         "T>G"="#6eb529",
         "other"="#888888")
     )
+  ),
+  horizon=list(
+    schemas=list(
+      redblue6=c("#b51010", "#e73131", "#f7ad9c", "#a5c6de", "#4284c6" "#005aad")
+      #Maybe just specify the center, top and bottom color and use colorramp palette to create
+      # a palette of N colors?
+      #Can we have both? Have an external function that creates a palette?
+    )
   )
 )
 
