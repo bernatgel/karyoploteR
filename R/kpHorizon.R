@@ -58,43 +58,49 @@
 
 #QUESTION: How should axis and kpHorizon relate? Should we return the values in latest plot and help creating a legend for it? )with no axis?
 
-kpHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...) {
+kpHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=3, ymin=NULL, ymax=NULL,
+                    data.panel=1, r0=NULL, r1=NULL, col=c("blue", "white", "red"), border=NULL, clipping=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
  
-  #COLORS
-    #Specify the missing colors if possible
-    if(is.null(col) && (is.null(border) || is.na(border))) {
-      col <- "gray70"
-    }
-    if(is.na(col) && is.null(border)) {
-      border <- "black"
-    }
-   
-    if(is.null(border) && !is.null(col) && !is.na(col)) {
-      border=darker(col, amount = 100)
-    }
-    if(is.null(col) && !is.null(border) && !is.na(border)) {
-      col=lighter(border)
-    }
-    
   
   pp <- prepareParameters2("kpHorizon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
                            ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
+ 
+  #Falta trobar les interseccions amb 0!
+  #ex. que passa amb x=0,y=-2  x=10e6,y=2
+  #i "injectar-les" a les dades
   
-  for(current.chr in karyoplot$chromosomes) {
-    in.chr <- which(pp$chr==current.chr)
-    
-    if(!is.na(col)) { #Plot the polygon only if we have a color for it
-      #prepare data for the polygon (basically add on initial and one final point at the base level)
-      pol.chr <- c(current.chr, pp$chr[in.chr], current.chr)
-      pol.x <- c(pp$x[in.chr][1], pp$x[in.chr], pp$x[in.chr][length(pp$x[in.chr])])
-      pol.y <- c(base.y, pp$y[in.chr], base.y)
-      
-      kpPolygon(karyoplot, chr=pol.chr, x=pol.x, y=pol.y, col=col, border=NA, ymin=ymin, ymax=ymax,
-                data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
-    }
-    
+  #Donada la línia, simplement anar buscant els punts on x0<0 i x1>0 i a l'inversa. Llavors calcular el punt de tall.
+  shift <- function(l) {return(c(l[2:length(l)], FALSE))}
+  int.0 <- which(pp$y>0 & shift(pp$y<0) | pp$y<0 & shift(pp$y>0))
+  
+  pp$y[int.0] 
+  
+  
+  #top
+  cols <- colorRamp(col[c(2,3)])
+  for(i in seq_len(num.parts)) {
+    y.bot <- (i-1)*(ymax/num.parts)
+    y.top <- (i)*(ymax/num.parts)
+    y.i <- pp$y
+    y.i[y.i<y.bot] <- y.bot
+    y.i[y.i>y.top] <- y.top    
+    kpArea(karyoplot, chr=pp$chr, x=pp$x, y=y.i, ymin = y.bot, ymax=y.top, col = grDevices::rgb(cols(i*(1/num.parts))/255), border=NA, base.y = y.bot)
+  }
+  
+  #bottom
+  cols <- colorRamp(col[c(2,1)])
+  for(i in seq_len(num.parts)) {
+    y.bot <- (i-1)*(ymin/num.parts)
+    y.top <- (i)*(ymin/num.parts)
+    y.i <- pp$y
+    y.i[y.i<y.bot] <- y.bot
+    y.i[y.i>y.top] <- y.top    
+    kpArea(karyoplot, chr=pp$chr, x=pp$x, y=y.i, ymin = y.bot, ymax=y.top, col = grDevices::rgb(cols(i*(1/num.parts))/255), border=NA, base.y = y.bot)
+  }
+  
+  
+     
     if(!is.na(border)) { #Plot the line only if we have a color for it
       kpLines(karyoplot, chr=pp$chr[in.chr], x= pp$x[in.chr], y=pp$y[in.chr], col=border,
               ymin=ymin, ymax=ymax, data.panel=data.panel, r0=r0, r1=r1, clipping=clipping, ...)
