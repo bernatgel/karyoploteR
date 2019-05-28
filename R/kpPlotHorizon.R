@@ -58,8 +58,8 @@
 
 #QUESTION: How should axis and kpHorizon relate? Should we return the values in latest plot and help creating a legend for it? )with no axis?
 
-kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=3, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, col=c("blue", "white", "red"), border=NULL, clipping=TRUE, ...) {
+kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=3, breaks=NULL, ymin=NULL, ymax=NULL,
+                    data.panel=1, r0=NULL, r1=NULL, col="redblue6", border=NULL, clipping=TRUE, ...) {
   #Check parameters
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotHorizon: 'karyoplot' must be a valid 'KaryoPlot' object"))
   
@@ -72,6 +72,29 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
   #And build a GRanges with the normalized data for easier management later on
   data <- toGRanges(pp$chr, pp$x, pp$x, y=pp$y)
   
+  #Define undefined parameters
+    #ymin and ymax
+    if(is.null(ymin)) {
+      ymin <- min(0, min(data$y))
+    }
+    if(is.null(ymax)) {
+      ymax <- max(0, max(data$y))
+    }
+  
+    #breaks
+    if(is.null(breaks)) {
+      if(is.null(num.parts)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
+      if(!is.numeric(num.parts) || (round(num.parts)!=num.parts) || num.parts<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
+      breaks <- list(pos=seq_len(num.parts-1)*ymax/num.parts,
+                     neg=seq_len(num.parts-1)*ymin/num.parts)
+    } else {
+      if(!is.list(breaks) || !setequal(names(breaks), c("pos", "neg")) || !all(lapply(breaks, methods::is, "numeric"))) {
+        stop("In kpPlotHorizon: breaks must be either NULL or a list with two numeric vectors called 'pos' and 'neg'")
+      }
+    }
+  
+  
+  #TODO: move to utils and export
   shift <- function(l) {return(c(l[2:length(l)], FALSE))}
   findIntersections <- function(data, thr) {
     isec <- which((data$y>thr & shift(data$y<thr) | data$y<thr & shift(data$y>thr))
@@ -85,10 +108,7 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
     return(toGRanges(data.frame(as.character(seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
   }
   
-  #TODO: add a breaks parameter. If present, num.parts is ignored.
-  breaks <- list(pos=seq_len(num.parts-1)*ymax/num.parts,
-                 neg=seq_len(num.parts-1)*ymin/num.parts)
- 
+
   #Find the intersections of the data lines with the breaks and 0 and 
   #inject them into the data
   for(thr in c(breaks$neg, 0, breaks$pos)) {
@@ -99,8 +119,9 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
   
   #kpPoints(kp, data[data$y %in% c(breaks$neg, 0, breaks$pos)], col="green", ymin=-10, ymax=10)
   
-    #TODO: Moure a colors. Exportar? Potser si, ja posats...
+  #TODO: move to colors and export
   horizon.colors <- function(col, num.parts) {
+    if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
     ramp <- colorRampPalette(col)
     pal <- ramp(num.parts*2+1)
     return(list(neg=rev(pal[1:num.parts]),
