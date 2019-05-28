@@ -65,7 +65,26 @@ kpHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=
   #Normalize the parameters
   pp <- prepareParameters2("kpHorizon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
                            ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
+  
+  dd <- toGRanges(pp$chr, pp$x, pp$x, y=pp$y)
+  
+  shift <- function(l) {return(c(l[2:length(l)], FALSE))}
+  findIntersections <- function(data, thr) {
+    isec <- which((data$y>thr & shift(data$y<thr) | data$y<thr & shift(data$y>thr)) & (seqnames(data)==seqnames(data+1)))
+      #kpPoints(kp, chr=pp$chr[int.0], x=pp$x[int.0], y=pp$y[int.0], ymin=-10, ymax=10, col="red")
+    ydist <- data$y[isec+1] - data$y[isec]
+    xdist <- start(data)[isec+1] - start(data)[isec]
+    pos.isec <- start(data)[isec] + (thr-data$y[isec])/ydist*xdist
+      #kpPoints(kp, chr=pp$chr[int.0], x=pos.0, y=0, col="blue", ymin=-10, ymax=10)
+    return(toGRanges(as.character(seqnames(data[isec])), start(data[isec]), end(data[isec]), y=thr))
+  }
  
+  #Inject into the data
+  data <- sort(c(toGRanges(data$chr, data$x, data$x, y=data$y),
+                 toGRanges(data$chr[isec], pos.0, pos.0, y=0)
+  ))
+  pos.0 <- which(data$y==0)
+  
   #First, find the intersections of our data with 0 and inject these positions
   #into the data to break any 0-crossing segments
   #find 0's
