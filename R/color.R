@@ -492,3 +492,20 @@ is.color <- function(x) {
   FUN.VALUE = TRUE), NULL))
 }
 
+
+
+
+
+############################# Function specific color seleectors ##############################
+#TODO: Document
+#' @export horizonColors
+#' 
+horizonColors <- function(col, num.parts) {
+  if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
+  ramp <- colorRampPalette(col)
+  pal <- ramp(num.parts*2+1)
+  return(list(neg=rev(pal[1:num.parts]),
+              pos=pal[(num.parts+2):(2*num.parts+1)]
+  ))
+}
+

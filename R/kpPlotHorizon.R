@@ -34,23 +34,39 @@
 #' @seealso \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}, \code{\link{kpPlotRibbon}}
 #' 
 #' @examples
-#'  
+#'
+#'
+#' data.points <- toGRanges(data.frame(chr=c("chr1", "chr1"), start=c(1, 100), end=c(1, 100), y=c(-2, 2)))
+#' kp <- plotKaryotype(zoom=toGRanges("chr1:1-100"))
+#' kpLines(kp, data.points, r0=0, r1=0.5, ymin=-2, ymax=2)
+#' kpAbline(kp, h=c(-2,-1,0,1,2), col="#AAAAAA", r0=0, r1=0.5, ymin=-2, ymax=2)
+#' kpAxis(kp, r0=0, r1=0.5, ymin=-2, ymax=2)
+#' kpPlotHorizon(kp, data.points, r0=0.55, r1=1)
+#'
+#'
+#' data.points <- toGRanges(data.frame(chr="chr1", start=1:100, end=1:100))
+#' data.points$y <- sin(start(data.points)/2)
+#' kp <- plotKaryotype(zoom=toGRanges("chr1:1-100"))
+#' kpLines(kp, data.points, r0=0, r1=0.5, ymin=-1, ymax=1)
+#' kpAbline(kp, h=c(-1,0,1), col="#AAAAAA", r0=0, r1=0.5, ymin=-1, ymax=1)
+#' kpAxis(kp, r0=0, r1=0.5, ymin=-1, ymax=1)
+#' kpPlotHorizon(kp, data.points, r0=0.55, r1=1)
+#'
+#'
 #' set.seed(1000)
 #' data.points <- sort(createRandomRegions(nregions=500, mask=NA))
-#' mcols(data.points) <- data.frame(y=runif(500, min=0, max=1))
+#' mcols(data.points) <- data.frame(y=runif(500, min=-3, max=3))
 #' 
-#' kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
-#'   kpDataBackground(kp, data.panel=1)
-#'   kpDataBackground(kp, data.panel=2)
-#' 
-#'   kpPlotHorizon(kp, data=data.points)
-#'   kpPlotHorizon(kp, data=data.points, col="lightgray", border="red", lty=2, r0=0, r1=0.5)
-#'   kpPlotHorizon(kp, data=data.points, border="red", data.panel=2, r0=0, r1=0.5)
-#'   kpPlotHorizon(kp, data=data.points, border="blue", data.panel=2, r0=0, r1=0.5, base.y=1)
+#' kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+#' kpPlotHorizon(kp, data=data.points)
 #'
-#'   kpPlotHorizon(kp, data=data.points, border="gold", data.panel=2, r0=0.5, r1=1, base.y=0.5)
-#' 
-#' 
+#' kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+#' kpPlotHorizon(kp, data=data.points, num.breaks=2, r0=0.01, r1=0.2)
+#' kpPlotHorizon(kp, data=data.points, num.breaks=3, r0=0.21, r1=0.4)
+#' kpPlotHorizon(kp, data=data.points, num.breaks=5, r0=0.42, r1=0.6)
+#' kpPlotHorizon(kp, data=data.points, num.breaks=9, r0=0.61, r1=0.8)
+#' kpPlotHorizon(kp, data=data.points, num.breaks=15, r0=0.81, r1=1)
+#' kpLines(kp, data=data.points, ymin=-3, ymax=3)
 #'  
 #' @export kpPlotHorizon
 #' 
@@ -58,13 +74,10 @@
 
 #QUESTION: How should axis and kpHorizon relate? Should we return the values in latest plot and help creating a legend for it? )with no axis?
 
-kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=3, breaks=NULL, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=NULL, r1=NULL, col="redblue6", border=NULL, clipping=TRUE, ...) {
+kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.breaks=3, breaks=NULL, ymin=NULL, ymax=NULL,
+                    data.panel=1, r0=0, r1=1, col="redblue6", border=NULL, clipping=TRUE, ...) {
   #Check parameters
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotHorizon: 'karyoplot' must be a valid 'KaryoPlot' object"))
-  
-  
-  
   
   #Normalize the parameters
   pp <- prepareParameters2("kpPlotHorizon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
@@ -83,16 +96,15 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
   
     #breaks
     if(is.null(breaks)) {
-      if(is.null(num.parts)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
-      if(!is.numeric(num.parts) || (round(num.parts)!=num.parts) || num.parts<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
-      breaks <- list(pos=seq_len(num.parts-1)*ymax/num.parts,
-                     neg=seq_len(num.parts-1)*ymin/num.parts)
+      if(is.null(num.breaks)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
+      if(!is.numeric(num.breaks) || (round(num.breaks)!=num.breaks) || num.breaks<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
+      breaks <- list(pos=seq_len(num.breaks-1)*ymax/num.breaks,
+                     neg=seq_len(num.breaks-1)*ymin/num.breaks)
     } else {
       if(!is.list(breaks) || !setequal(names(breaks), c("pos", "neg")) || !all(lapply(breaks, methods::is, "numeric"))) {
         stop("In kpPlotHorizon: breaks must be either NULL or a list with two numeric vectors called 'pos' and 'neg'")
       }
     }
-  
   
 
   #Find the intersections of the data lines with the breaks and 0 and 
@@ -103,19 +115,7 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
   }
   data <- sort(data)
   
-  #kpPoints(kp, data[data$y %in% c(breaks$neg, 0, breaks$pos)], col="green", ymin=-10, ymax=10)
-  
-  #TODO: move to colors and export
-  horizon.colors <- function(col, num.parts) {
-    if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
-    ramp <- colorRampPalette(col)
-    pal <- ramp(num.parts*2+1)
-    return(list(neg=rev(pal[1:num.parts]),
-                pos=pal[(num.parts+2):(2*num.parts+1)]
-          ))
-  }
-  
-  colors <- horizon.colors(col, num.parts)
+  colors <- horizonColors(col, num.breaks)
   
   #Iterate through the pos/neg regions
   for(posneg in c("pos", "neg")) {
