@@ -185,3 +185,56 @@ autotrack <- function(current.track, total.tracks, margin=0.05, r0=0, r1=1) {
 }
 
 
+
+
+
+############  Intersections  ###############
+
+#' findIntersections
+#' 
+#' @description 
+#' Finds the intersections of a data line with a given threshold
+#' 
+#' @details 
+#' Given a GRanges with an mcol with name "y" representing the values. This function
+#' will return a GRanges with the points intersecting a specific value "thr". 
+#' 
+#' @note Important: It will only return the intersection points where the line crosses
+#'  the threshold but not if a data point lies exactly at the threshold.
+#' 
+#' @usage findIntersections(data, thr)
+#' 
+#' @param data  (GRanges with y mcol) A GRanges with the data points
+#' @param thr  (numeric) The value at wich we want to calculate the intersections
+#'
+#' @return
+#' A GRanges representing the intersection points between the data line and the threshold.
+#' It will return an empty GRanges if the line does not intersect the threshold.  
+#' 
+#' @examples
+#'
+#' d <- toGRanges(c("1:1-1", "1:5-5", "1:15-15"))
+#' d$y <- c(-2, 3, 1)
+#'  
+#' findIntersections(d, 1.5)  
+#' findIntersections(d, 0)  
+#' findIntersections(d, 5)  
+#'
+#' @export findIntersections
+#'
+
+#shiftl: Utility function to shift logical vectors one position to the left
+shiftl <- function(l) {return(c(l[2:length(l)], FALSE))}
+findIntersections <- function(data, thr) {
+  isec <- which((data$y>thr & shiftl(data$y<thr) | data$y<thr & shiftl(data$y>thr))
+                & (seqnames(data)==seqnames(data+1)))
+  if(length(isec)==0) return(GRanges())
+  #kpPoints(kp, data[isec], ymin=-10, ymax=10, col="red")
+  ydist <- data$y[isec+1] - data$y[isec]
+  xdist <- start(data)[isec+1] - start(data)[isec]
+  pos.isec <- start(data)[isec] + (thr-data$y[isec])/ydist*xdist
+  #kpPoints(kp, chr=pp$chr[int.0], x=pos.0, y=0, col="blue", ymin=-10, ymax=10)
+  return(toGRanges(data.frame(as.character(seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
+}
+
+

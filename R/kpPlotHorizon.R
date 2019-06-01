@@ -94,20 +94,6 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
     }
   
   
-  #TODO: move to utils and export
-  shift <- function(l) {return(c(l[2:length(l)], FALSE))}
-  findIntersections <- function(data, thr) {
-    isec <- which((data$y>thr & shift(data$y<thr) | data$y<thr & shift(data$y>thr))
-                  & (seqnames(data)==seqnames(data+1)))
-    if(length(isec)==0) return(GRanges())
-      #kpPoints(kp, data[isec], ymin=-10, ymax=10, col="red")
-    ydist <- data$y[isec+1] - data$y[isec]
-    xdist <- start(data)[isec+1] - start(data)[isec]
-    pos.isec <- start(data)[isec] + (thr-data$y[isec])/ydist*xdist
-      #kpPoints(kp, chr=pp$chr[int.0], x=pos.0, y=0, col="blue", ymin=-10, ymax=10)
-    return(toGRanges(data.frame(as.character(seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
-  }
-  
 
   #Find the intersections of the data lines with the breaks and 0 and 
   #inject them into the data
