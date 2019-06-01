@@ -72,11 +72,34 @@
   ),
   horizon=list(
     schemas=list(
-      redblue6=c("#b51010", "#e73131", "#f7ad9c", "#ffffff", "#a5c6de", "#4284c6", "#005aad")
-     
+      redblue6=c("#b51010", "#e73131", "#f7ad9c", "#ffffff", "#a5c6de", "#4284c6", "#005aad"),
+      bluepurple10=list("#CAE5FF", "#AAD6FF", "#89C6FF", "#AAD6FF", "#CAE5FF", "#AFD2E9", "#9D96B8", "#9a7197", "#886176", "#7C5869")
     )
   )
 )
+
+
+cols <- list(c("green", "blue", "red"), c("gold", "orchid"))
+plotPalettes <- function(cols) {
+  if(!is.list(cols)) {
+    cols <- list(cols)
+  }
+  if(is.null(names(cols))) names(cols) <- paste0("Palette", seq_along(cols))
+  
+  #TODO: check every element in the list is a vector of colors
+  
+  plot(type="n", x=0, xlim=c(0, 10*max(unlist(lapply(cols, length)))), ylim=c(0, 10*length(cols)))
+  axis(2, at = 4+(seq_along(cols)-1)*10, labels=names(cols), las=2)   
+  
+  for(npal in seq_along(cols)) {
+    pp <- cols[[length(cols) - npal + 1]]
+    rect(xleft=10*(seq_along(pp)-1), xright=8+10*(seq_along(pp)-1), 
+         ybottom = (npal-1)*10, ytop = 8+(npal-1)*10, col=pp)
+    
+    #text(x = 0, y=4+(npal-1)*10, labels = names(cols)[length(cols) - npal + 1] )     
+  }
+  
+}
 
 
 
