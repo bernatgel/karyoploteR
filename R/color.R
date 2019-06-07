@@ -570,10 +570,12 @@ is.color <- function(x) {
 #' 
 horizonColors <- function(col, num.parts) {
   if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
-  ramp <- colorRampPalette(col)
-  pal <- ramp(num.parts*2+1)
-  return(list(neg=rev(pal[1:num.parts]),
-              pos=pal[(num.parts+2):(2*num.parts+1)]
+  ramp <- colorRamp(col, alpha=TRUE)
+  num.cols <- num.parts*2
+  cols <- ramp(1/(num.cols)*c(0:num.cols))/255
+  cols <- rgb(cols, alpha = cols[,4])
+  return(list(neg=rev(cols[1:num.parts]),
+              pos=cols[(num.parts+2):(2*num.parts+1)]
   ))
 }
 
