@@ -2,21 +2,16 @@
 #' 
 #' @description 
 #' 
-#' Plots a line joining the data points along the genome and fills the Horizon below the line.
+#' Plot a horizon plot, an area-like plot where different value levels are
+#' plotted in different colors.
 #' 
 #' @details 
 #'  
-#' This is a karyoploteR low-level plotting functions. Given a set of positions 
-#' on the genome (chromosome and base) and a value (y) for each of them, it 
-#' plots a line joining them and shades the Horizon below them. Data can be 
-#' provided via a \code{GRanges} object (\code{data}), independent parameters 
-#' for chr, x and y or a combination of both. A number of parameters can be used
-#' to define exactly where and how the line and Horizon are drawn. In addition, 
-#' via the ellipsis operator (\code{...}), \code{kpPlotHorizon} accepts any parameter 
-#' valid for \code{\link[graphics]{lines}} and \code{\link[graphics]{polygon}}
-#' (e.g. \code{lwd}, \code{lty}, \code{col}, \code{density}...) The lines are drawn in a per 
-#' chromosome basis, so it is not possible to draw lines encompassing more than 
-#' one chromosome.
+#' kpPlotHorizon will create a horizon plot, a plot usually used in time series,
+#' that will represent a wiggle value (coverage, methylation, expression...) 
+#' that we'd usually plot with a line or area in a fraction of the vertical
+#' space used by these function (usually in 1/6, but that's configurable).
+#' To do that, 
 #' 
 #   https://docs.datawatch.com/designer/tutorial/desktop/Horizon_Graph.htm
 #'
