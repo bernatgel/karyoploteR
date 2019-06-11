@@ -565,7 +565,34 @@ is.color <- function(x) {
 
 
 ############################# Function specific color seleectors ##############################
-#TODO: Document
+#' horizonColors
+#' 
+#' @description 
+#' Returns the oclor structure needed by kpPlotHorizon
+#' 
+#' @details 
+#' This function transforms an array of colors into a list of colors 
+#' **internally** needed by kpPlotHorizon: a list with two elements, "neg" 
+#' and "pos", each an array of colors of length num.parts. If col is 
+#' a character of length one, it is interpreted as the name of a color scheme.
+#' 
+#' 
+#' horizonColors(col, num.parts) 
+#' 
+#' @param col (array of colors) An array of colors
+#' @param num.parts (positive integer) The number of colors to generate for pos and neg
+#' 
+#' @return
+#' A list with 2 elements, pos and neg, each with num.parts colors
+#' 
+#' 
+#' @examples
+#'  
+#' horizonColors("redblue6", 3)
+#' horizonColors("redblue6", 6)
+#' horizonColors(c("red", "blue"), 3)
+#' horizonColors(c("red", "#FFFFFF00", "blue"), 3)
+#'  
 #' @export horizonColors
 #' 
 horizonColors <- function(col, num.parts) {
@@ -578,4 +605,3 @@ horizonColors <- function(col, num.parts) {
               pos=cols[(num.parts+2):(2*num.parts+1)]
   ))
 }
-
