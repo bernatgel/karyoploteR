@@ -41,6 +41,7 @@ Suggests:
     testthat,
     magrittr,
     BSgenome.Hsapiens.UCSC.hg19,
+    BSgenome.Hsapiens.UCSC.hg19.masked,
     TxDb.Hsapiens.UCSC.hg19.knownGene,
     TxDb.Mmusculus.UCSC.mm10.knownGene,
     org.Hs.eg.db,
