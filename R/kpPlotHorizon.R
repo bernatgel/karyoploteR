@@ -110,7 +110,15 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.br
   }
   data <- sort(data)
   
-  colors <- horizonColors(col, num.breaks)
+  if(is.list(col) && c("pos", "neg" %in% names(col))) {
+    if(all(is.color(col$neg)) && all(is.color(col$pos))) {
+      colors <- col
+    } else {
+      stop("in kpPlotHorizon: col$neg and col$pos must be valid colors. ")
+    }
+  } else {
+    colors <- horizonColors(col, num.breaks)
+  }
   
   #Iterate through the pos/neg regions
   for(posneg in c("pos", "neg")) {
