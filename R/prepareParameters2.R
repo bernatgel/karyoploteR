@@ -53,19 +53,53 @@
 #' @export prepareParameters2
 #' 
 
+#Internal function. Not exported. Used to validate and preprocess r0 and r1
+preprocess_r0_r1 <- function(karyoplot, r0, r1, data.panel) {
+  
+  #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
+  if(!is.null(r0) && is.null(r1)) { #Maybe r0 contains the r0 and r1 information
+    #It might be a list
+    if(is.list(r0) && 
+       !is.null(r0$r0) && !is.null(r1) &&
+       is.numeric(r0$r0) && is.numeric(r0$r1)) {
+      r1 <- r0$r1
+      r0 <- r0$r0
+    } else {
+      #It might be a two element array
+      if(is.numeric(r0) && length(r0)==2) {
+        if(all(c("r0", "r1") %in% names(r0))) {
+          r1 <- r0["r1"]
+          r0 <- r0["r0"]
+        } else {
+          r1 <- setNames(r0[2], NULL)
+          r0 <- setNames(r0[1], NULL)
+        }
+      }
+    }
+  } 
+  if(is.null(r0) || is.na(r0)) {
+    r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  }
+  if(is.null(r1) || is.na(r1)) {
+    r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  }
+
+  
+  #Finally, check that r0 and r1 are valid numbers
+  if(!(is.numeric(r0) && length(r0)==1)) stop("Invalid r0 specification. Check karyoploteR's documentation for more information.")
+  if(!(is.numeric(r1) && length(r1)==1)) stop("Invalid r1 specification. Check karyoploteR's documentation for more information.")
+  
+  return(list(r0=r0, r1=r1))  
+}
 
 prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
     
-  #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  
+  rs <- preprocess_r0_r1(karyoplot = karyoplot, r0=r0, r1=r1, data.panel=data.panel)
   
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
-  
-  if(is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
   if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
@@ -124,7 +158,7 @@ prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=
   
   
   #scale y to fit in the [r0, r1] range
-  y <- (y*(r1-r0))+r0
+  y <- (y*(rs$r1-rs$r0))+rs$r0
   
   if(filter.data) {
     in.visible.chrs <- chr %in% karyoplot$chromosomes
