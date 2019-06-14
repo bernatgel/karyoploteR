@@ -25,14 +25,6 @@ test_that("preprocess_r0_r1 works as expected", {
   expect_equal(preprocess_r0_r1(kp, r0=list(r0=0.2, r1=NULL), r1=NULL, data.panel = 1), list(r0=0.2, r1=1))
   
   
-  
-  expect_equal(preprocess_r0_r1(kp, r0=NA, r1=NA, data.panel = 1), list(r0=0, r1=1))
-  expect_equal(preprocess_r0_r1(kp, r0=0.2, r1=NA, data.panel = 1), list(r0=0.2, r1=1))
-  expect_equal(preprocess_r0_r1(kp, r0=list(r0=NA, r1=0.8), r1=NA, data.panel = 1), list(r0=0, r1=0.8))
-  expect_equal(preprocess_r0_r1(kp, r0=list(r0=NA, r1=NA), r1=NA, data.panel = 1), list(r0=0, r1=1))
-  expect_equal(preprocess_r0_r1(kp, r0=list(r0=0.2, r1=NA), r1=NA, data.panel = 1), list(r0=0.2, r1=1))
-  
-  
   #Errors
   #TODO: some of these will error on condition (for is.na) longer than 1 in if. Could return better error messages
   expect_error(preprocess_r0_r1(kp, r0=NA, r1=0.8, data.panel = 1))
