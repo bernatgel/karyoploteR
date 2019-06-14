@@ -51,6 +51,12 @@ combination of both. A number of parameters can be used to define exactly where
 and how the points are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpPoints}
 accepts any parameter valid for \code{points} (e.g. \code{pch}, \code{cex}, \code{col}, ...)
 }
+\note{
+The parameter r0 can be used to specifyu r0 and r1 together. If r1 is 
+NULL and r0 is either a list with two elements called r0 and r1 or a numeric
+vector of length 2, this values will be used for r0 and r1. This might be
+useful when working with \code{\link{autotrack}} to compute r0 and r1.
+}
 \examples{
  
 set.seed(1000)
@@ -72,8 +78,8 @@ kp <- plotKaryotype("hg19", plot.type=2, chromosomes=c("chr1", "chr2"))
 
   #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
   kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
-  kpPoints(kp, data=data.points, r0=0, r1=0.3, data.panel=2, pch=".", cex=3)
-
+  #and we can specify r0 and r1 in r0
+  kpPoints(kp, data=data.points, r0=list(r0=0, r1=0.3), data.panel=2, pch=".", cex=3)
   kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
   kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y),
           ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)

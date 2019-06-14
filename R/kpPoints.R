@@ -32,6 +32,11 @@
 #' @param cex    (numeric) the relative size of the glyphs as defined at \code{\link{par}}. (defaults to 0.5)
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
+#' 
+#' @note The parameter r0 can be used to specifyu r0 and r1 together. If r1 is 
+#' NULL and r0 is either a list with two elements called r0 and r1 or a numeric
+#' vector of length 2, this values will be used for r0 and r1. This might be
+#' useful when working with \code{\link{autotrack}} to compute r0 and r1.
 #'  
 #' @return
 #' 
@@ -61,8 +66,8 @@
 #' 
 #'   #plotting in the data.panel=2 and using r0 and r1, ymin and ymax
 #'   kpLines(kp, data=data.points, col="red", r0=0, r1=0.3, data.panel=2)
-#'   kpPoints(kp, data=data.points, r0=0, r1=0.3, data.panel=2, pch=".", cex=3)
-#' 
+#'   #and we can specify r0 and r1 in r0
+#'   kpPoints(kp, data=data.points, r0=list(r0=0, r1=0.3), data.panel=2, pch=".", cex=3)
 #'   kpLines(kp, data=data.points, col="blue", r0=0.4, r1=0.7, data.panel=2)
 #'   kpLines(kp, data=data.points, col="blue", y=-1*(data.points$y),
 #'           ymin=-1, ymax=0, r0=0.7, r1=1, data.panel=2)
