@@ -59,15 +59,10 @@
 prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, filter.data=TRUE, ...) {
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In ", function.name, ": 'karyoplot' must be a valid 'KaryoPlot' object"))
   
-  #if null or NA, get the r0 and r1 and ymin-ymax from the plot params
-  if(is.null(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.null(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  rs <- preprocess_r0_r1(karyoplot = karyoplot, r0=r0, r1=r1, data.panel=data.panel)
   
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
-  
-  if(is.na(r0)) r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
-  if(is.na(r1)) r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
   if(is.na(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.na(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
@@ -141,8 +136,8 @@ prepareParameters4 <- function(function.name, karyoplot, data=NULL, chr=NULL, x0
   y1 <- (y1 - ymin)/(ymax - ymin)
   
   #scale y to fit in the [r0, r1] range
-  y0 <- (y0*(r1-r0))+r0
-  y1 <- (y1*(r1-r0))+r0
+  y0 <- (y0*(rs$r1-rs$r0))+rs$r0
+  y1 <- (y1*(rs$r1-rs$r0))+rs$r0
   
   if(filter.data) {
     in.visible.chrs <- chr %in% karyoplot$chromosomes
