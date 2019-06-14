@@ -185,3 +185,43 @@ autotrack <- function(current.track, total.tracks, margin=0.05, r0=0, r1=1) {
 }
 
 
+
+
+
+#Internal function. Not exported. Used to validate and preprocess r0 and r1
+preprocess_r0_r1 <- function(karyoplot, r0, r1, data.panel) {
+  
+  if(!is.null(r0) && is.null(r1)) { #Maybe r0 contains the r0 and r1 information
+    #It might be a list
+    if(is.list(r0) && 
+       utils::hasName(r0, "r0") && utils::hasName(r0, "r1") &&
+       (is.null(r0$r0) || is.numeric(r0$r0)) && (is.null(r0$r1) || is.numeric(r0$r1))) {
+      r1 <- r0$r1
+      r0 <- r0$r0
+    } else {
+      #It might be a two element array
+      if(is.numeric(r0) && length(r0)>=2) {
+        if(all(c("r0", "r1") %in% names(r0))) {
+          r1 <- setNames(r0["r1"], NULL)
+          r0 <- setNames(r0["r0"], NULL)
+        } else {
+          r1 <- setNames(r0[2], NULL)
+          r0 <- setNames(r0[1], NULL)
+        }
+      }
+    }
+  } 
+  if(is.null(r0)) {
+    r0 <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
+  }
+  if(is.null(r1)) {
+    r1 <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
+  }
+  
+  
+  #Finally, check that r0 and r1 are valid numbers
+  if(!(is.numeric(r0) && length(r0)==1)) stop("Invalid r0 specification. Check karyoploteR's documentation for more information.")
+  if(!(is.numeric(r1) && length(r1)==1)) stop("Invalid r1 specification. Check karyoploteR's documentation for more information.")
+  
+  return(list(r0=r0, r1=r1))  
+}
