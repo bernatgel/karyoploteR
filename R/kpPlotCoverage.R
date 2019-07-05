@@ -122,7 +122,7 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   kpBars(karyoplot=karyoplot, data=coverage.gr,
          y0=0, y1=coverage.gr$coverage.lvl, ymin=0, ymax=ymax,
          r0=r0, r1=r1, data.panel=data.panel,
-         col="#FFAAAAAA", border=NA, clipping=clipping, ...)
+         col=col, border=NA, clipping=clipping, ...)
 
   
   #NOTE: To plot with kpArea we need to build a more complex structure so
