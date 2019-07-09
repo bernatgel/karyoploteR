@@ -8,10 +8,10 @@
 #the organism they annotate
 #Data extracted from https://bioconductor.org/packages/release/BiocViews.html#___OrgDb
 .OrganismToOrgDb <- data.frame(
-  taxonomyId=c(9606, 10090),
-  organism=c("Homo sapiens", "Mus musculus"),
-  genome=c("hg", "mm"),
-  package=c("org.Hs.eg.db", "org.Mm.eg.db"),
+  taxonomyId=c(9606, 10090, 7227),
+  organism=c("Homo sapiens", "Mus musculus", "Drosophila melanogaster"),
+  genome=c("hg", "mm", "dm"),
+  package=c("org.Hs.eg.db", "org.Mm.eg.db", "org.Dm.eg.db"),
   stringsAsFactors=FALSE
 )
 
