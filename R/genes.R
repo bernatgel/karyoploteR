@@ -176,7 +176,7 @@ addGeneNames <- function(genes.data, orgDb="auto", keys=NULL, keytype="ENTREZID"
   if(!methods::is(genes.data, "GenesData")) stop("genes.data must be a valid object of the GenesData class")
   #TODO: check it's a valid genes.data
   
-  if(is.character(orgDb) & orgDb=="auto") {
+  if(is.character(orgDb) && orgDb=="auto") {
     org <- NULL
     if(!is.null(genes.data$metadata$taxonomyId)) {
       org <- .OrganismToOrgDb[.OrganismToOrgDb$taxonomyId==genes.data$metadata$taxonomyId,]
