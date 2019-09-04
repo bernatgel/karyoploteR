@@ -107,6 +107,7 @@ lighter <- function(col, amount=150) {
   #Colors must be specified by name or #RRGGBB(AA)
   if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
+  if(amount>255 || amount<0) stop("amount must be a number between 0 and 255")
   .lighter <- function(col, amount) {
     if(is.na(col)) return(NA)
     new.col <- ((grDevices::col2rgb(col))+amount)/255
@@ -151,6 +152,8 @@ darker <- function(col, amount=150) {
   #Colors must be specified by name or #RRGGBB(AA)
   if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
+  if(amount>255 || amount<0) stop("amount must be a number between 0 and 255")
+  
   .darker <- function(col, amount) {
     if(is.na(col)) return(NA)
     new.col <- ((grDevices::col2rgb(col))-amount)/255
