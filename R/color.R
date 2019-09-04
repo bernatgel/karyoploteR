@@ -108,6 +108,7 @@ lighter <- function(col, amount=150) {
   if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
   .lighter <- function(col, amount) {
+    if(is.na(col)) return(NA)
     new.col <- ((grDevices::col2rgb(col))+amount)/255
     new.col[new.col[,1]>1,1] <- 1
     return(grDevices::rgb(t(new.col)))  
@@ -151,6 +152,7 @@ darker <- function(col, amount=150) {
   if(!all(is.color(col))) stop("All elements in col must be valid colors. Use is.col(col) to check it.")
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
   .darker <- function(col, amount) {
+    if(is.na(col)) return(NA)
     new.col <- ((grDevices::col2rgb(col))-amount)/255
     new.col[new.col[,1]<0, 1] <- 0
     return(grDevices::rgb(t(new.col)))
@@ -195,7 +197,9 @@ transparent <- function(col, amount=0.5) {
   if(!methods::is(amount, "numeric") || length(amount)!=1) stop("amount must be a single number")
   if(amount>1 || amount<0) stop("amount must be a number between 0 and 1")
   
-  return(grDevices::adjustcolor(col, alpha.f = (1-amount)))
+  transp.col <- grDevices::adjustcolor(col, alpha.f = (1-amount))
+  transp.col[is.na(col)] <- NA
+  return(transp.col)
 }
 
 
