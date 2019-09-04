@@ -490,3 +490,40 @@ is.color <- function(x) {
   FUN.VALUE = TRUE), NULL))
 }
 
+
+
+
+
+
+#TODO: Document and export?
+
+#Preprocess col and border to assign one based on the other if any is NULL
+preprocessColors <- function(col=NULL, border=NULL, default.col="gray70", amount=100) {
+  #If both NULL, return the default values
+  if(is.null(col) && is.null(border)) {
+    return(list(col=default.col, border=darker(default.col, amount = amount)))
+  }
+  
+  if(is.null(border)) {
+    if(all(is.na(col))) {
+      border <- darker(default.col, amount = amount)
+    } else {
+      border <- darker(col, amount = amount)
+    }
+  }
+  
+  if(is.null(col)) {
+    if(all(is.na(border))) {
+      col <- default.col
+    } else {
+      col <- lighter(border, amount = amount)
+    }
+  }
+  
+
+  return(list(col=col, border=border))
+}
+
+
+
+
