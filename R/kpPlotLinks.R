@@ -119,7 +119,7 @@ kpPlotLinks <- function(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data
   
   
   #remove any links with at least one end out of the plotted regions
-  to.keep <- overlapsAny(data, kp$genome) & overlapsAny(data2, kp$genome)
+  to.keep <- overlapsAny(data, karyoplot$genome) & overlapsAny(data2, karyoplot$genome)
   if(any(!to.keep)) {
     data <- data[to.keep]
     data2 <- data2[to.keep]
