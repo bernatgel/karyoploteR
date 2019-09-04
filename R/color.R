@@ -114,7 +114,7 @@ lighter <- function(col, amount=150) {
     return(grDevices::rgb(t(new.col)))  
   }
   
-  return(vapply(col, .lighter, amount, FUN.VALUE = "A"))
+  return(unlist(lapply(col, .lighter, amount)))
 }
 
 #' darker
@@ -158,7 +158,7 @@ darker <- function(col, amount=150) {
     return(grDevices::rgb(t(new.col)))
   }
   
-  return(vapply(col, .darker, amount, FUN.VALUE = "A"))
+  return(unlist(lapply(col, .darker, amount)))
 }
 
 
