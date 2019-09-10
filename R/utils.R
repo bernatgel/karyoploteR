@@ -225,3 +225,55 @@ preprocess_r0_r1 <- function(karyoplot, r0, r1, data.panel) {
   
   return(list(r0=r0, r1=r1))  
 }
+
+
+
+############  Intersections  ###############
+
+
+#' findIntersections
+#' 
+#' @description 
+#' Finds the intersections of a data line with a given threshold
+#' 
+#' @details 
+#' Given a GRanges with an mcol with name "y" representing the values. This function
+#' will return a GRanges with the points intersecting a specific value "thr". 
+#' 
+#' @note Important: It will only return the intersection points where the line crosses
+#'  the threshold but not if a data point lies exactly at the threshold.
+#' 
+#' @usage findIntersections(data, thr)
+#' 
+#' @param data  (GRanges with y mcol) A GRanges with the data points
+#' @param thr  (numeric) The value at wich we want to calculate the intersections
+#'
+#' @return
+#' A GRanges representing the intersection points between the data line and the threshold.
+#' It will return an empty GRanges if the line does not intersect the threshold.  
+#' 
+#' @examples
+#'
+#' d <- toGRanges(c("1:1-1", "1:5-5", "1:15-15"))
+#' d$y <- c(-2, 3, 1)
+#'  
+#' findIntersections(d, 1.5)  
+#' findIntersections(d, 0)  
+#' findIntersections(d, 5)  
+#'
+#' @export findIntersections
+#' @importFrom IRanges which
+findIntersections <- function(data, thr) {
+  #we nee IRanges which because the logical query return an Rle encoded logical
+  isec <- IRanges::which((data$y>thr & shiftl(data$y<thr) | data$y<thr & shiftl(data$y>thr))
+                & (GenomeInfoDb::seqnames(data)==GenomeInfoDb::seqnames(data+1)))
+  if(length(isec)==0) return(GRanges())
+  ydist <- data$y[isec+1] - data$y[isec]
+  xdist <- GenomicRanges::start(data)[isec+1] - GenomicRanges::start(data)[isec]
+  pos.isec <- GenomicRanges::start(data)[isec] + (thr-data$y[isec])/ydist*xdist
+  return(regioneR::toGRanges(data.frame(as.character(GenomeInfoDb::seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
+}
+
+#shiftl: Utility function to shift logical vectors one position to the left
+shiftl <- function(l) {return(c(l[2:length(l)], FALSE))}
+

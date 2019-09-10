@@ -69,10 +69,84 @@
         "T>G"="#6eb529",
         "other"="#888888")
     )
+  ),
+  horizon=list(
+    schemas=list(
+      redblue6=c("#b51010", "#e73131", "#f7ad9c", "#ffffff", "#a5c6de", "#4284c6", "#005aad"),
+      bluepurple10=c("#CAE5FF", "#AAD6FF", "#89C6FF", "#AAD6FF", "#CAE5FF", "#AFD2E9", "#9D96B8", "#9a7197", "#886176", "#7C5869"),
+      bluegold3=c("#4284c6", "white", "gold")
+    )
   )
 )
 
-
+#' plotPalette
+#' 
+#' @description 
+#' Create a plot of the palette.
+#' 
+#' @details 
+#' Creates a simple plot with a rectangle for every color of every palette.
+#' cols must be either a vector of colors (in any format accepted by 
+#' karyoploteR::"is.color") or a list of such vectors.
+#' The names of the list elements will be treated as the palette names, if
+#' the list has no names, palettes will be called "Pallete1", "Palette2", ...
+#' 
+#' @usage plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...)
+#' 
+#' @param cols (color vector or list of color vectors) The colors to plot
+#' @param add.color.name (logical) Wether to add or not the names of the colors, their definition.
+#' @param palette.names.col (color) The color of the palette names (defaults to "black")
+#' @param palette.names.cex (numeric) The cex value (size) for the palette names (defaults to 1)
+#' @param palette.names.srt (numeric) The srt value (rotation) for the palette names (defaults to 0)
+#' @param color.names.col (color) The color of the color names (defaults to "black")
+#' @param color.names.cex (numeric) The cex value (size) for the color names  (defaults to 1)
+#' @param color.names.srt (numeric) The srt value (rotation) for the color names (defaults to 0)
+#' @param border (color) The color of the border of the palette rectangles. If NA, no border. (defaults to NA)
+#' @param ... Any additional plotting parameters
+#' 
+#' @return
+#' nothing
+#' 
+#' 
+#' @examples
+#'  
+#' plotPalettes(c("red", "blue", "yellow", "green"))
+#' palettes <- list("P1"=c("red", "#000000", lighter("gold")), 
+#'                  "P2"=c("orchid", "yellow"))
+#' plotPalettes(palettes, color.names.col=c("blue", "green", "red"), border="black", color.names.srt=45)
+#' 
+#' @export plotPalettes
+#' 
+plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...) {
+  if(!is.list(cols)) {
+    cols <- list(cols)
+  }
+  if(any(!unlist(lapply(cols, is.color)))) stop("All elements in cols must be valid colors.")
+  
+  #Set the palette names if not available
+  if(is.null(names(cols))) names(cols) <- paste0("Palette", seq_along(cols))
+  
+  #create an empty plot
+  graphics::plot(x=0, type="n", 
+       xlim=c(0, 10*max(unlist(lapply(cols, length)))), ylim=c(0, 10*length(cols)),
+       ylab="", xlab="", axes=FALSE, xaxs="i", yaxs="i")
+  
+  #Add the names of the palettes as y labels
+  graphics::axis(2, at = 4+(seq_along(cols)-1)*10, labels=rev(names(cols)), las=2, 
+                 lwd = 0, cex=palette.names.cex, col=palette.names.col, srt=palette.names.srt)   
+  
+  #Plot the palettes as rectangles
+  for(npal in seq_along(cols)) {
+    pp <- cols[[length(cols) - npal + 1]]
+    graphics::rect(xleft=10*(seq_along(pp)-1), xright=8+10*(seq_along(pp)-1), 
+         ybottom = (npal-1)*10, ytop = 8+(npal-1)*10, col=pp, border = border, ...)
+    if(add.color.name) {
+      graphics::text(x=4+10*(seq_along(pp)-1), y=4+(npal-1)*10, 
+                     labels=as.character(pp), col=color.names.col,
+                     cex=color.names.cex, srt=color.names.srt)
+    }
+  }
+}
 
 #' lighter
 #' 
@@ -530,3 +604,49 @@ preprocessColors <- function(col=NULL, border=NULL, default.col="gray70", amount
 
 
 
+
+
+
+
+############################# Function specific color seleectors ##############################
+#' horizonColors
+#' 
+#' @description 
+#' Returns the oclor structure needed by kpPlotHorizon
+#' 
+#' @details 
+#' This function transforms an array of colors into a list of colors 
+#' **internally** needed by kpPlotHorizon: a list with two elements, "neg" 
+#' and "pos", each an array of colors of length num.parts. If col is 
+#' a character of length one, it is interpreted as the name of a color scheme.
+#' 
+#' 
+#' horizonColors(col, num.parts) 
+#' 
+#' @param col (array of colors) An array of colors
+#' @param num.parts (positive integer) The number of colors to generate for pos and neg
+#' 
+#' @return
+#' A list with 2 elements, pos and neg, each with num.parts colors
+#' 
+#' 
+#' @examples
+#'  
+#' horizonColors("redblue6", 3)
+#' horizonColors("redblue6", 6)
+#' horizonColors("bluegold3", 2)
+#' horizonColors(c("red", "blue"), 3)
+#' horizonColors(c("red", "#FFFFFF00", "blue"), 3)
+#'  
+#' @export horizonColors
+#' @importFrom grDevices colorRamp
+horizonColors <- function(col, num.parts) {
+  if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
+  ramp <- grDevices::colorRamp(col, alpha=TRUE)
+  num.cols <- num.parts*2
+  cols <- ramp(1/(num.cols)*c(0:num.cols))/255
+  cols <- grDevices::rgb(cols, alpha = cols[,4])
+  return(list(neg=rev(cols[1:num.parts]),
+              pos=cols[(num.parts+2):(2*num.parts+1)]
+  ))
+}

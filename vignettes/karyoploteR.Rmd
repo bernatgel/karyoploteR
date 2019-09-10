@@ -142,23 +142,27 @@ And then plot them in different ways.
 The interface for the higher level plotting functions is a little different and they usually take Bioconductor objects (`GRanges`, etc...). As an example of these plotting functions we can create and plot 10 sets of 2000 random regions and see their coverage on the genome. In addition, we will plot the masked regions of the genomes where no random region should be.
 
 ```{r}
-  n <- 10
-  kp <- plotKaryotype(plot.type=2)
-  kpPlotRegions(kp, data=getGenomeAndMask("hg19")$mask, r0=0,
-                r1=1, col="lightgray", border="lightgray")
-  
+  n <- 10 #number of sets of random regions
+  #Create random regions
   all.regions <- lapply(seq_len(n), function(i) {
     filterChromosomes(createRandomRegions(nregions=2000, length.mean=100000))
   })
+  #join all regions into a single GRanges for coverage plotting
+  joined.regions <- do.call(c, all.regions)
   
-  #using invisible to ignore the return of kpPlotRegions
+  #Create the plot  
+  kp <- plotKaryotype(plot.type=2)
+  #Plot the masked regions
+  kpPlotRegions(kp, data=getGenomeAndMask("hg19")$mask, r0=0,
+                r1=1, col="lightgray", border="lightgray")
+  #Plot the random regions (using invisible to ignore the return value)
   invisible(lapply(seq_len(n), function(i) {
     kpPlotRegions(kp, all.regions[[i]], 
                   r0=(1/n)*(i-1), r1=(1/n)*i)
   }))
-  kpPlotCoverage(kp, data=do.call(c, all.regions), 
+  #Plot the coverage of random regions
+  kpPlotCoverage(kp, data=joined.regions, 
                  data.panel=2, col="#AAAAFF")
-
 ```
 
 
