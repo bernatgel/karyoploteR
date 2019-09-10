@@ -30,12 +30,17 @@ analysis is one of these fields where good visualisation tools can be of great h
 
 `r BiocStyle::Biocpkg("karyoploteR")` is based on base R graphics and mimicks its interface. You first create a plot with `plotKaryotype` and then sequentially call a number of functions (`kpLines`, `kpPoints`, `kpBars`...) to add data to the plot. 
 
-`r BiocStyle::Biocpkg("karyoploteR")` is a plotting tool and only a plotting tool. That means that it is not able to download or retrieve any data. The downside of this is that the user is responsible of getting the data into R. The upside is that it is not tied to any data provider and thus can be used to plot genomic data coming from anywhere. The only exception to this are the ideograms cytobands, that by default are plotted using predownloaded data from UCSC. 
+`r BiocStyle::Biocpkg("karyoploteR")` is a plotting tool and only a plotting tool. That means that it is not able to download or retrieve any data. The downside of this is that the user is responsible of getting the data into R. The upside is that it is not tied to any data provider and thus can be used to plot genomic data coming from anywhere. The only exception to this are the ideograms cytobands, that by default are plotted using pre-downloaded data from UCSC. 
 
+# Tutorial and Examples
+
+In addition to this vignette, an detailed step-by-step tutorial and a set of 
+complex examples with complete code are available at
+[https://bernatgel.github.io/karyoploter_tutorial/]
 
 # Quick Start
 
-The basic idea behind `r BiocStyle::Biocpkg("karyoploteR")` has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using `plotKaryotype` and then add the data plots as required. To add the data there are functions based on the R base graphics low-level primitives -e.g `kpPoints`, `kpLines`, `kpSegments`, `kpRects`... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. `kpPlotRegions`, `kpPlotCoverage`...-.
+The basic idea behind `r BiocStyle::Biocpkg("karyoploteR")` has been to create a plotting system inspired by the R base graphics. Therefore, the basic workflow to create a karyoplot is to start with an empty plot with no data apart from the ideograms themselves using `plotKaryotype` and then add the data plots as required. To add the data there are functions based on the R base graphics low-level primitives -e.g `kpPoints`, `kpLines`, `kpSegments`, `kpRect`... - that can be used to plot virtually anything along the genome and other functions at a higher level useful to plot more specific genomic data types -e.g. `kpPlotRegions`, `kpPlotCoverage`...-.
 
 This is a first simple example plotting a set of regions representing copy-number gains and losses using the `kpPlotRegions` function:
 
