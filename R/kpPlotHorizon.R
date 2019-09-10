@@ -16,7 +16,7 @@
 #' (with negative value colors) and plot all parts in the same vertical space.
 #' 
 #' A more detailed explanation of horizon plots can be found at  
-#' https://docs.datawatch.com/designer/tutorial/desktop/Horizon_Graph.htm 
+#' https://flowingdata.com/2015/07/02/changing-price-of-food-items-and-horizon-graphs/ 
 #' and a more detailed explanation of the horizon plots implemented in 
 #' karyoploteR together with an explicative animation can be found at
 #' https://bernatgel.github.io/karyoploter_tutorial/ 

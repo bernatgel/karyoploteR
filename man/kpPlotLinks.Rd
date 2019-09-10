@@ -13,7 +13,7 @@ kpPlotLinks(karyoplot, data, data2=NULL, y=0, arch.height=NULL, data.panel=1, r0
 
 \item{data2}{(a \code{GRanges}) A GRanges object with the link end regions. If null, the end of the regions will be extracted from mcols(data). (Defaults to NULL)}
 
-\item{y}{(numeric) The y value where the links should be plotted (Defaults to 0)}
+\item{y}{(numeric) The y value where the origin and end of the links should be plotted (Defaults to 0)}
 
 \item{arch.height}{(numeric) The approximate arch height in links in the same chromosome in "y" scale. If NULL, it defaults to the whole span of the data panel.Also affects the curvature of links between chromosomes (Defaults to NULL)}
 
