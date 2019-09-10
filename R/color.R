@@ -91,7 +91,7 @@
 #' The names of the list elements will be treated as the palette names, if
 #' the list has no names, palettes will be called "Pallete1", "Palette2", ...
 #' 
-#' @usage plotPalettes(cols, add.color.name=TRUE, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0,  border=NA, ...)
+#' @usage plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...)
 #' 
 #' @param cols (color vector or list of color vectors) The colors to plot
 #' @param add.color.name (logical) Wether to add or not the names of the colors, their definition.
@@ -110,7 +110,7 @@
 #' 
 #' @examples
 #'  
-#' plotPalettes(c("red", "blue", "yellow", "green")
+#' plotPalettes(c("red", "blue", "yellow", "green"))
 #' palettes <- list("P1"=c("red", "#000000", lighter("gold")), 
 #'                  "P2"=c("orchid", "yellow"))
 #' plotPalettes(palettes, color.names.col=c("blue", "green", "red"), border="black", color.names.srt=45)
@@ -590,17 +590,18 @@ is.color <- function(x) {
 #'  
 #' horizonColors("redblue6", 3)
 #' horizonColors("redblue6", 6)
+#' horizonColors("bluegold3", 2)
 #' horizonColors(c("red", "blue"), 3)
 #' horizonColors(c("red", "#FFFFFF00", "blue"), 3)
 #'  
 #' @export horizonColors
-#' 
+#' @importFrom grDevices colorRamp
 horizonColors <- function(col, num.parts) {
   if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
-  ramp <- colorRamp(col, alpha=TRUE)
+  ramp <- grDevices::colorRamp(col, alpha=TRUE)
   num.cols <- num.parts*2
   cols <- ramp(1/(num.cols)*c(0:num.cols))/255
-  cols <- rgb(cols, alpha = cols[,4])
+  cols <- grDevices::rgb(cols, alpha = cols[,4])
   return(list(neg=rev(cols[1:num.parts]),
               pos=cols[(num.parts+2):(2*num.parts+1)]
   ))

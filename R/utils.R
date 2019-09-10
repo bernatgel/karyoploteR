@@ -190,6 +190,7 @@ autotrack <- function(current.track, total.tracks, margin=0.05, r0=0, r1=1) {
 
 ############  Intersections  ###############
 
+
 #' findIntersections
 #' 
 #' @description 
@@ -221,20 +222,18 @@ autotrack <- function(current.track, total.tracks, margin=0.05, r0=0, r1=1) {
 #' findIntersections(d, 5)  
 #'
 #' @export findIntersections
-#'
+#' @importFrom IRanges which
+findIntersections <- function(data, thr) {
+  #we nee IRanges which because the logical query return an Rle encoded logical
+  isec <- IRanges::which((data$y>thr & shiftl(data$y<thr) | data$y<thr & shiftl(data$y>thr))
+                & (GenomeInfoDb::seqnames(data)==GenomeInfoDb::seqnames(data+1)))
+  if(length(isec)==0) return(GRanges())
+  ydist <- data$y[isec+1] - data$y[isec]
+  xdist <- GenomicRanges::start(data)[isec+1] - GenomicRanges::start(data)[isec]
+  pos.isec <- GenomicRanges::start(data)[isec] + (thr-data$y[isec])/ydist*xdist
+  return(regioneR::toGRanges(data.frame(as.character(GenomeInfoDb::seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
+}
 
 #shiftl: Utility function to shift logical vectors one position to the left
 shiftl <- function(l) {return(c(l[2:length(l)], FALSE))}
-findIntersections <- function(data, thr) {
-  isec <- which((data$y>thr & shiftl(data$y<thr) | data$y<thr & shiftl(data$y>thr))
-                & (seqnames(data)==seqnames(data+1)))
-  if(length(isec)==0) return(GRanges())
-  #kpPoints(kp, data[isec], ymin=-10, ymax=10, col="red")
-  ydist <- data$y[isec+1] - data$y[isec]
-  xdist <- start(data)[isec+1] - start(data)[isec]
-  pos.isec <- start(data)[isec] + (thr-data$y[isec])/ydist*xdist
-  #kpPoints(kp, chr=pp$chr[int.0], x=pos.0, y=0, col="blue", ymin=-10, ymax=10)
-  return(toGRanges(data.frame(as.character(seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
-}
-
 

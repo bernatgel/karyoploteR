@@ -11,16 +11,27 @@
 #' that will represent a wiggle value (coverage, methylation, expression...) 
 #' that we'd usually plot with a line or area in a fraction of the vertical
 #' space used by these function (usually in 1/6, but that's configurable).
-#' To do that, 
+#' To do that, it will cut the \code{y} space into N parts and assign a 
+#' different color to each one, flip the negative values into the positive space
+#' (with negative value colors) and plot all parts in the same vertical space.
 #' 
-#   https://docs.datawatch.com/designer/tutorial/desktop/Horizon_Graph.htm
-#'
-#' @usage kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
+#' A more detailed explanation of horizon plots can be found at  
+#' https://docs.datawatch.com/designer/tutorial/desktop/Horizon_Graph.htm 
+#' and a more detailed explanation of the horizon plots implemented in 
+#' karyoploteR together with an explicative animation can be found at
+#' https://bernatgel.github.io/karyoploter_tutorial/ 
+#' 
+#' 
+#' @usage kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, 
+#'                      num.parts=3, breaks=NULL, ymin=NULL, ymax=NULL,
+#'                      data.panel=1, r0=0, r1=1, col="redblue6", 
+#'                      border=NA, clipping=TRUE, ...)
 #' 
 #' @inheritParams kpPoints 
-#' @param base.y  (numeric) The y value at wich the polygon will be closed. (defaults to 0)
-#' @param col  (color) The fill color of the Horizon. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no Horizon will be drawn. (defaults to NULL)
-#' @param border  (color) The color of the line enclosing the Horizon. If NULL the color will be assigned automatically, either a darker version of the color used for the Horizon or black if col=NA. If NA no border will be drawn. (Defaults to NULL)
+#' @param num.parts (numeric) The number of parts into which the positive and the negative y spaces will be cut. Only used if \code{breaks} is NULL. (defaults to 3)
+#' @param breaks (numeric vector or list) A numeric vector of a list with two numeric vectors named "pos" and "neg". The exact break points where the y space will be cut. If NULL, the breaks will be automatically computed using num.parts. (defaults to NULL)
+#' @param col  (character, color vector or list) The palette name to be used, a color vector with the color to be used to define the color gradients or a list with two color vectors named "pos" and "neg". Available palettes are: redblue6, bluepurple10 and bluegold3 (defaults to "redblue6")
+#' @param border  (color) The color of the line delimiting the filled areas. If NULL the color will be assigned automatically to a darker version of the color used for the area. If NA no border will be drawn. (Defaults to NA)
 #' 
 #' @return
 #' 
@@ -56,21 +67,32 @@
 #' kpPlotHorizon(kp, data=data.points)
 #'
 #' kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
-#' kpPlotHorizon(kp, data=data.points, num.breaks=2, r0=0.01, r1=0.2)
-#' kpPlotHorizon(kp, data=data.points, num.breaks=3, r0=0.21, r1=0.4)
-#' kpPlotHorizon(kp, data=data.points, num.breaks=5, r0=0.42, r1=0.6)
-#' kpPlotHorizon(kp, data=data.points, num.breaks=9, r0=0.61, r1=0.8)
-#' kpPlotHorizon(kp, data=data.points, num.breaks=15, r0=0.81, r1=1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=1, r0=autotrack(1, 6)$r0, r1=autotrack(1, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=2, r0=autotrack(2, 6)$r0, r1=autotrack(2, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=3, r0=autotrack(3, 6)$r0, r1=autotrack(3, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=5, r0=autotrack(4, 6)$r0, r1=autotrack(4, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=9, r0=autotrack(5, 6)$r0, r1=autotrack(5, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, num.parts=15, r0=autotrack(6, 6)$r0, r1=autotrack(6, 6)$r1)
 #' kpLines(kp, data=data.points, ymin=-3, ymax=3)
+#' kpAbline(kp, h=0, ymin=-3, ymax=3)
 #'  
+#' kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+#' kpPlotHorizon(kp, data=data.points, num.parts=4, r0=autotrack(1, 6)$r0, r1=autotrack(1, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, col="redblue6", num.parts=4, r0=autotrack(2, 6)$r0, r1=autotrack(2, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, col="bluepurple10", num.parts=4, r0=autotrack(3, 6)$r0, r1=autotrack(3, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, col="bluegold3", num.parts=4, r0=autotrack(4, 6)$r0, r1=autotrack(4, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, col=c("red", "black", "green"), num.parts=4, r0=autotrack(5, 6)$r0, r1=autotrack(5, 6)$r1)
+#' kpPlotHorizon(kp, data=data.points, col=c("red", "yellow"), num.parts=4, r0=autotrack(6, 6)$r0, r1=autotrack(6, 6)$r1)
+#' 
+#'
 #' @export kpPlotHorizon
 #' 
 
 
-#QUESTION: How should axis and kpHorizon relate? Should we return the values in latest plot and help creating a legend for it? )with no axis?
+#QUESTION: How should axis and kpHorizon relate? Should we return the values in latest plot and help creating a legend for it? with no axis?
 
-kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.breaks=3, breaks=NULL, ymin=NULL, ymax=NULL,
-                    data.panel=1, r0=0, r1=1, col="redblue6", border=NULL, clipping=TRUE, ...) {
+kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.parts=3, breaks=NULL, ymin=NULL, ymax=NULL,
+                    data.panel=1, r0=0, r1=1, col="redblue6", border=NA, clipping=TRUE, ...) {
   #Check parameters
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotHorizon: 'karyoplot' must be a valid 'KaryoPlot' object"))
   
@@ -91,13 +113,18 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.br
   
     #breaks
     if(is.null(breaks)) {
-      if(is.null(num.breaks)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
-      if(!is.numeric(num.breaks) || (round(num.breaks)!=num.breaks) || num.breaks<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
-      breaks <- list(pos=seq_len(num.breaks-1)*ymax/num.breaks,
-                     neg=seq_len(num.breaks-1)*ymin/num.breaks)
+      if(is.null(num.parts)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
+      if(!is.numeric(num.parts) || (round(num.parts)!=num.parts) || num.parts<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
+      breaks <- list(pos=seq_len(num.parts-1)*ymax/num.parts,
+                     neg=seq_len(num.parts-1)*ymin/num.parts)
     } else {
       if(!is.list(breaks) || !setequal(names(breaks), c("pos", "neg")) || !all(lapply(breaks, methods::is, "numeric"))) {
-        stop("In kpPlotHorizon: breaks must be either NULL or a list with two numeric vectors called 'pos' and 'neg'")
+        #If it's a numeric vector, arrange it into a valid list separating positive and negative values
+        if(length(breaks)==0 || (length(breaks)>0 && all(is.numeric(breaks)))) {
+          breaks <- list(pos=sort(unique(breaks[breaks>0])), neg=sort(unique(breaks[breaks<0])))
+        } else {
+          stop("In kpPlotHorizon: breaks must be either NULL, a numeric vector or a list with two numeric vectors called 'pos' and 'neg'")
+        }
       }
     }
   
@@ -117,13 +144,13 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.br
       stop("in kpPlotHorizon: col$neg and col$pos must be valid colors. ")
     }
   } else {
-    colors <- horizonColors(col, num.breaks)
+    colors <- horizonColors(col, max(length(breaks$pos), length(breaks$neg))+1) #num.parts)
   }
   
   #Iterate through the pos/neg regions
   for(posneg in c("pos", "neg")) {
     cols <- colors[[posneg]]
-    for(nbreak in seq_len(length(breaks$pos)+1)) {
+    for(nbreak in seq_len(length(breaks[[posneg]])+1)) {
       thr.1 <- c(0, breaks[[posneg]])[nbreak]
       thr.2 <- c(breaks[[posneg]], ifelse(posneg=="pos", ymax, ymin))[nbreak]
       
@@ -131,11 +158,11 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.br
       if(posneg=="pos") {
         d$y[d$y>thr.2] <- thr.2
         d$y[d$y<thr.1] <- thr.1
-        kpArea(karyoplot, d, ymin = thr.1, ymax=thr.2, col = cols[nbreak], border=NA, base.y = thr.1, r0=r0, r1=r1)
+        kpArea(karyoplot, d, ymin = thr.1, ymax=thr.2, col = cols[nbreak], border=border, base.y = thr.1, r0=r0, r1=r1)
       } else {
         d$y[d$y>thr.1] <- thr.1
         d$y[d$y<thr.2] <- thr.2
-        kpArea(karyoplot, d, ymin = thr.2, ymax=thr.1, col = cols[nbreak], border=NA, base.y = thr.1, r0=r1, r1=r0)
+        kpArea(karyoplot, d, ymin = thr.2, ymax=thr.1, col = cols[nbreak], border=border, base.y = thr.1, r0=r1, r1=r0)
       }
     }
   }

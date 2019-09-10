@@ -4,7 +4,10 @@
 \alias{kpPlotHorizon}
 \title{kpPlotHorizon}
 \usage{
-kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
+kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, 
+                     num.parts=3, breaks=NULL, ymin=NULL, ymax=NULL,
+                     data.panel=1, r0=0, r1=1, col="redblue6", 
+                     border=NA, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -17,6 +20,10 @@ kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NUL
 
 \item{y}{(a numeric vector) A numeric vector with the values of the data points. If \code{y} is not NULL, it is used instead of any data column in \code{data}. (defaults to NULL)}
 
+\item{num.parts}{(numeric) The number of parts into which the positive and the negative y spaces will be cut. Only used if \code{breaks} is NULL. (defaults to 3)}
+
+\item{breaks}{(numeric vector or list) A numeric vector of a list with two numeric vectors named "pos" and "neg". The exact break points where the y space will be cut. If NULL, the breaks will be automatically computed using num.parts. (defaults to NULL)}
+
 \item{ymin}{(numeric) The minimum value of \code{y} to be plotted. If NULL, it is set to the min value of the selected data panel. (defaults to NULL)}
 
 \item{ymax}{(numeric) The maximum value of \code{y} to be plotted. If NULL, it is set to the max value of the selected data panel. (defaults to NULL)}
@@ -27,15 +34,13 @@ kpPlotHorizon(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NUL
 
 \item{r1}{(numeric) r0 and r1 define the vertical range of the data panel to be used to draw this plot. They can be used to split the data panel in different vertical ranges (similar to tracks in a genome browser) to plot differents data. If NULL, they are set to the min and max of the data panel, it is, to use all the available space. (defaults to NULL)}
 
-\item{col}{(color) The fill color of the Horizon. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no Horizon will be drawn. (defaults to NULL)}
+\item{col}{(character, color vector or list) The palette name to be used, a color vector with the color to be used to define the color gradients or a list with two color vectors named "pos" and "neg". Available palettes are: redblue6, bluepurple10 and bluegold3 (defaults to "redblue6")}
 
-\item{border}{(color) The color of the line enclosing the Horizon. If NULL the color will be assigned automatically, either a darker version of the color used for the Horizon or black if col=NA. If NA no border will be drawn. (Defaults to NULL)}
+\item{border}{(color) The color of the line delimiting the filled areas. If NULL the color will be assigned automatically to a darker version of the color used for the area. If NA no border will be drawn. (Defaults to NA)}
 
 \item{clipping}{(boolean) Only used if zooming is active. If TRUE, the data representation will be not drawn out of the drawing area (i.e. in margins, etc) even if the data overflows the drawing area. If FALSE, the data representation may overflow into the margins of the plot. (defaults to TRUE)}
 
 \item{...}{The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions.}
-
-\item{base.y}{(numeric) The y value at wich the polygon will be closed. (defaults to 0)}
 }
 \value{
 Returns the original karyoplot object, unchanged.
@@ -49,7 +54,15 @@ kpPlotHorizon will create a horizon plot, a plot usually used in time series,
 that will represent a wiggle value (coverage, methylation, expression...) 
 that we'd usually plot with a line or area in a fraction of the vertical
 space used by these function (usually in 1/6, but that's configurable).
-To do that,
+To do that, it will cut the \code{y} space into N parts and assign a 
+different color to each one, flip the negative values into the positive space
+(with negative value colors) and plot all parts in the same vertical space.
+
+A more detailed explanation of horizon plots can be found at  
+https://docs.datawatch.com/designer/tutorial/desktop/Horizon_Graph.htm 
+and a more detailed explanation of the horizon plots implemented in 
+karyoploteR together with an explicative animation can be found at
+https://bernatgel.github.io/karyoploter_tutorial/
 }
 \examples{
 
@@ -79,13 +92,24 @@ kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
 kpPlotHorizon(kp, data=data.points)
 
 kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
-kpPlotHorizon(kp, data=data.points, num.breaks=2, r0=0.01, r1=0.2)
-kpPlotHorizon(kp, data=data.points, num.breaks=3, r0=0.21, r1=0.4)
-kpPlotHorizon(kp, data=data.points, num.breaks=5, r0=0.42, r1=0.6)
-kpPlotHorizon(kp, data=data.points, num.breaks=9, r0=0.61, r1=0.8)
-kpPlotHorizon(kp, data=data.points, num.breaks=15, r0=0.81, r1=1)
+kpPlotHorizon(kp, data=data.points, num.parts=1, r0=autotrack(1, 6)$r0, r1=autotrack(1, 6)$r1)
+kpPlotHorizon(kp, data=data.points, num.parts=2, r0=autotrack(2, 6)$r0, r1=autotrack(2, 6)$r1)
+kpPlotHorizon(kp, data=data.points, num.parts=3, r0=autotrack(3, 6)$r0, r1=autotrack(3, 6)$r1)
+kpPlotHorizon(kp, data=data.points, num.parts=5, r0=autotrack(4, 6)$r0, r1=autotrack(4, 6)$r1)
+kpPlotHorizon(kp, data=data.points, num.parts=9, r0=autotrack(5, 6)$r0, r1=autotrack(5, 6)$r1)
+kpPlotHorizon(kp, data=data.points, num.parts=15, r0=autotrack(6, 6)$r0, r1=autotrack(6, 6)$r1)
 kpLines(kp, data=data.points, ymin=-3, ymax=3)
+kpAbline(kp, h=0, ymin=-3, ymax=3)
  
+kp <- plotKaryotype(chromosomes=c("chr1", "chr2"))
+kpPlotHorizon(kp, data=data.points, num.parts=4, r0=autotrack(1, 6)$r0, r1=autotrack(1, 6)$r1)
+kpPlotHorizon(kp, data=data.points, col="redblue6", num.parts=4, r0=autotrack(2, 6)$r0, r1=autotrack(2, 6)$r1)
+kpPlotHorizon(kp, data=data.points, col="bluepurple10", num.parts=4, r0=autotrack(3, 6)$r0, r1=autotrack(3, 6)$r1)
+kpPlotHorizon(kp, data=data.points, col="bluegold3", num.parts=4, r0=autotrack(4, 6)$r0, r1=autotrack(4, 6)$r1)
+kpPlotHorizon(kp, data=data.points, col=c("red", "black", "green"), num.parts=4, r0=autotrack(5, 6)$r0, r1=autotrack(5, 6)$r1)
+kpPlotHorizon(kp, data=data.points, col=c("red", "yellow"), num.parts=4, r0=autotrack(6, 6)$r0, r1=autotrack(6, 6)$r1)
+
+
 }
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{kpLines}}, \code{\link{kpText}}, \code{\link{kpPlotRibbon}}

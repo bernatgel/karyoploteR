@@ -30,6 +30,7 @@ horizonColors(col, num.parts)
  
 horizonColors("redblue6", 3)
 horizonColors("redblue6", 6)
+horizonColors("bluegold3", 2)
 horizonColors(c("red", "blue"), 3)
 horizonColors(c("red", "#FFFFFF00", "blue"), 3)
  
