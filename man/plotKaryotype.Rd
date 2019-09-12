@@ -7,7 +7,7 @@
 plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", zoom=NULL, cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 }
 \arguments{
-\item{genome}{The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")}
+\item{genome}{The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a Seqinfo object, a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")}
 
 \item{plot.type}{The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)}
 
@@ -65,7 +65,7 @@ This is the main function of \code{karyoploteR}. It creates the basic empty plot
 rand.data <- createRandomRegions(genome="hg19", nregions=10000, length.mean=1, 
                                  length.sd=0, mask=NA, non.overlapping=TRUE)
 mcols(rand.data) <- data.frame(y=rnorm(n=10000, mean = 0.5, sd=0.1))
-
+ 
 #The simplest way, with all default parameters
 kp <- plotKaryotype()
 kpPoints(kp, rand.data, pch=".")
@@ -76,6 +76,7 @@ kpDataBackground(kp, data.panel = 1, color = "lightgreen")
 kpDataBackground(kp, data.panel = 2, color = "lightblue")
 kpPoints(kp, rand.data, pch=".", data.panel = 1)
 kpPoints(kp, rand.data, pch=".", data.panel = 2)
+
 
 #Or we can use a different organism, 
 kp <- plotKaryotype(genome = "mm10")

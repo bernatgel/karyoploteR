@@ -2,12 +2,18 @@ library(karyoploteR)
 context("Main plotKaryotype function")
 
 #Test plotKaryotype
-test_that("the function fails as expected with invalid parameters", {
+test_that("plotKaryotype works with different genome definitions", {
   
   valid.genome <- toGRanges(data.frame(chr=c("1"), start=c(1), end=1000))
-  invalid.genome <- toGRanges(data.frame(chr=c("1"), start=c(1,1), end=1000))
+  invalid.genome <- toGRanges(data.frame(chr=c("1"), start=c(1,1), end=1000)) #repeted chr names
+  
+  require(BSgenome.Hsapiens.UCSC.hg19)
   
   expect_silent(plotKaryotype())
+  expect_silent(plotKaryotype(genome="hg19"))
+  expect_silent(plotKaryotype(genome="mm10"))
+  expect_silent(plotKaryotype(genome=BSgenome.Hsapiens.UCSC.hg19))
+  expect_silent(plotKaryotype(genome=seqinfo(BSgenome.Hsapiens.UCSC.hg19)))
   expect_silent(plotKaryotype(genome=valid.genome))
   expect_silent(plotKaryotype(genome=valid.genome, cex=2))
   expect_silent(plotKaryotype(genome=valid.genome, zoom=toGRanges(data.frame("1", 5, 20))))

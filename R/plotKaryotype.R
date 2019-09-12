@@ -33,7 +33,7 @@
 #' 
 #' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", zoom=NULL, cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
 #' 
-#' @param genome    The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")
+#' @param genome    The genome to plot. It can be either a UCSC style genome name (hg19, mm10, etc), a BSgenome, a Seqinfo object, a GRanges object with the chromosomes as ranges or in general any genome specification accepted by \code{\link[regioneR]{getGenomeAndMask}}. (defaults to "hg19")
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
 #' @param ideogram.plotter    The function to be used to plot the ideograms. Only one function is included with the package, \code{kpAddCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{kpAddCytobands})
 #' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})
@@ -58,7 +58,7 @@
 #' rand.data <- createRandomRegions(genome="hg19", nregions=10000, length.mean=1, 
 #'                                  length.sd=0, mask=NA, non.overlapping=TRUE)
 #' mcols(rand.data) <- data.frame(y=rnorm(n=10000, mean = 0.5, sd=0.1))
-#' 
+#'  
 #' #The simplest way, with all default parameters
 #' kp <- plotKaryotype()
 #' kpPoints(kp, rand.data, pch=".")
@@ -69,6 +69,7 @@
 #' kpDataBackground(kp, data.panel = 2, color = "lightblue")
 #' kpPoints(kp, rand.data, pch=".", data.panel = 1)
 #' kpPoints(kp, rand.data, pch=".", data.panel = 2)
+#' 
 #' 
 #' #Or we can use a different organism, 
 #' kp <- plotKaryotype(genome = "mm10")
@@ -122,7 +123,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   #Parameters Check
   #TODO: Finish checks
   #genome
-  
+  if(is.null(genome)) stop("genome cannot be NULL.")
   #plot.type
   
   
@@ -153,19 +154,32 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   #Get the genome
   #If the user has given us a valid GRanges as genome, use it directly
   #if it's something else, try with the cache or rely on regioneR::getGenomeAndMask
-  if(is(genome, "GRanges")) {
+  gr.genome <- NULL
+  genome.name <- NULL
+  if(methods::is(genome, "GRanges")) {
     gr.genome <- genome
   } else {
-    gr.genome <- NULL
-    if(is(genome, "character") & use.cache==TRUE) { #Get the genome from the cache, if available
-      if(genome %in% names(data.cache[["genomes"]])) {
-        gr.genome <- data.cache[["genomes"]][[genome]]
+    if(methods::is(genome, "BSgenome")) {
+      genome <- seqinfo(genome)
+    }
+    if(methods::is(genome, "Seqinfo")) {
+      gr.genome <- as(genome, "GRanges")
+      genome.name <- genome(genome)[1]
+    } else {
+      if(methods::is(genome, "character") & use.cache==TRUE) { #Get the genome from the cache, if available
+        if(genome %in% names(data.cache[["genomes"]])) {
+          gr.genome <- data.cache[["genomes"]][[genome]]
+          genome.name <- genome
+        }
       }
     }
-    if(is.null(gr.genome)) {
-      gr.genome <- regioneR::getGenomeAndMask(genome=genome, mask=NA)$genome
-    }
   }
+  if(is.null(gr.genome)) {
+    gr.genome <- tryCatch(regioneR::getGenomeAndMask(genome=genome, mask=NA)$genome,
+                          error=function(e) {stop("It was not possible to identify or load the requested genome. ", e)}
+    )
+  }
+
   
   #If zoom is set, change the chromosome parameter to the name of the chomosome
   #we are zooming in, so everything else is automatically filtered out.
@@ -181,9 +195,9 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   if(!is.null(chromosomes) && any(chromosomes != "all")) {
     
     if(length(chromosomes)==1 && (chromosomes %in% c("canonical", "autosomal", "auto"))) {
-      if(is.character(genome)) {
+      if(!is.null(genome.name) && is.character(genome.name)) {
         if(chromosomes=="auto") chromosomes <- "canonical"   #Set it to canonical to perform the actual filtering
-        tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, organism=genome, chr.type=chromosomes)},
+        tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, organism=genome.name, chr.type=chromosomes)},
                  error=function(e) {
                    message("WARNING: There was an error when filtering the chromosomes and selecting only ", chromosomes, " chromosomes.  Falling back to using the unfiltered genome. \n", e)
                  })
@@ -213,10 +227,6 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
   
   
-  
-  
-  
-    
   #Check the genome has no problems (repeated chromosomes, etc...)
   chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
   if(any(duplicated(chr.names))) {
@@ -228,14 +238,16 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
-    if(is.character(genome)) {
-      cytobands <- getCytobands(genome)
-      #if there are cytobands, filter the cytobands using the current genome
-      if(!is.null(cytobands) && length(cytobands)>0) {
-        cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome), pruning.mode="coarse")
-      }
+    if(!is.null(genome.name) && all(is.character(genome.name))) {
+      cytobands <- getCytobands(genome.name)
     } else {
-      #message("No valid genome specified and no cytobands provided. No cytobands will be passed to the ideogram plotter.")
+      if(all(is.character(genome))) {
+        cytobands <- getCytobands(genome)
+      } 
+    }
+    #if there are cytobands, filter the cytobands using the current genome
+    if(!is.null(cytobands) && length(cytobands)>0) {
+      cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome), pruning.mode="coarse")
     }
   }
 
@@ -244,8 +256,8 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     kp <- list()
     class(kp) <- "KaryoPlot"
     kp$plot.params <- plot.params
-    if(is.character(genome)) {
-      kp$genome.name <- genome
+    if(!is.null(genome.name)) {
+      kp$genome.name <- genome.name
     } else {
       kp$genome.name <- "custom"
     }
