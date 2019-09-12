@@ -96,6 +96,10 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
   #Check parameters
   if(!methods::is(karyoplot, "KaryoPlot")) stop(paste0("In kpPlotHorizon: 'karyoplot' must be a valid 'KaryoPlot' object"))
   
+  #Preprocess the r's (needed to manipulate the later)
+  rs <- preprocess_r0_r1(karyoplot = karyoplot, r0=r0, r1=r1, data.panel=data.panel)
+  
+  
   #Normalize the parameters
   pp <- prepareParameters2("kpPlotHorizon", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
                            ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
@@ -158,11 +162,11 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
       if(posneg=="pos") {
         d$y[d$y>thr.2] <- thr.2
         d$y[d$y<thr.1] <- thr.1
-        kpArea(karyoplot, d, ymin = thr.1, ymax=thr.2, col = cols[nbreak], border=border, base.y = thr.1, r0=r0, r1=r1)
+        kpArea(karyoplot, d, ymin = thr.1, ymax=thr.2, col = cols[nbreak], border=border, base.y = thr.1, r0=rs$r0, r1=rs$r1)
       } else {
         d$y[d$y>thr.1] <- thr.1
         d$y[d$y<thr.2] <- thr.2
-        kpArea(karyoplot, d, ymin = thr.2, ymax=thr.1, col = cols[nbreak], border=border, base.y = thr.1, r0=r1, r1=r0)
+        kpArea(karyoplot, d, ymin = thr.2, ymax=thr.1, col = cols[nbreak], border=border, base.y = thr.1, r0=rs$r1, r1=rs$r0)
       }
     }
   }
