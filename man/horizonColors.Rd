@@ -15,7 +15,7 @@ horizonColors(col, num.parts)
 A list with 2 elements, pos and neg, each with num.parts colors
 }
 \description{
-Returns the oclor structure needed by kpPlotHorizon
+Returns the color structure needed by kpPlotHorizon
 }
 \details{
 This function transforms an array of colors into a list of colors 

@@ -79,6 +79,28 @@
   )
 )
 
+
+#' getColorSchemas
+#' 
+#' @description 
+#' Return a structure with the color schemas included in karyoploteR
+#' 
+#' @usage getColorSchemas()
+#' 
+#' @return
+#' A list with the color schemas included in karyoploteR for cytobands,
+#' variants, horizons...
+#' 
+#' @examples
+#'  
+#' getColorSchemas()
+#'  
+#' @export is.color
+getColorSchemas <- function() {
+  return(.karyoploter.colors)
+}
+
+
 #' plotPalette
 #' 
 #' @description 
@@ -612,7 +634,7 @@ preprocessColors <- function(col=NULL, border=NULL, default.col="gray70", amount
 #' horizonColors
 #' 
 #' @description 
-#' Returns the oclor structure needed by kpPlotHorizon
+#' Returns the color structure needed by kpPlotHorizon
 #' 
 #' @details 
 #' This function transforms an array of colors into a list of colors 
