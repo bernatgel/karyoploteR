@@ -102,7 +102,7 @@
 #'  
 #' getColorSchemas()
 #'  
-#' @export is.color
+#' @export getColorSchemas
 getColorSchemas <- function() {
   return(.karyoploter.colors)
 }
@@ -120,7 +120,7 @@ getColorSchemas <- function() {
 #' The names of the list elements will be treated as the palette names, if
 #' the list has no names, palettes will be called "Pallete1", "Palette2", ...
 #' 
-#' @usage plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...)
+#' @usage plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="auto", color.names.cex=1, color.names.srt=0, ...)
 #' 
 #' @param cols (color vector or list of color vectors) The colors to plot
 #' @param add.color.name (logical) Wether to add or not the names of the colors, their definition.

@@ -4,7 +4,7 @@
 \alias{kpPlotCoverage}
 \title{kpCoverage}
 \usage{
-kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", ymax=NULL, clipping=TRUE, ...)
+kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", border=NULL, ymax=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
@@ -21,7 +21,7 @@ kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL,
 
 \item{col}{(color) The background color of the regions. (defaults to "#0e87eb")}
 
-\item{border}{(color) The color of the bars used to plot the coverage. If NULL, col is used. (defaults to NULL)}
+\item{border}{(color) The color of the border used to plot the coverage. If NULL, NA (no border) is used. (defaults to NULL)}
 
 \item{ymax}{(numeric) The maximum value to be plotted on the data.panel. If NULL the maximum coverage is used. (defaults to NULL)}
 

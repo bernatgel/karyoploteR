@@ -4,7 +4,7 @@
 \alias{plotPalettes}
 \title{plotPalette}
 \usage{
-plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...)
+plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="auto", color.names.cex=1, color.names.srt=0, ...)
 }
 \arguments{
 \item{cols}{(color vector or list of color vectors) The colors to plot}
