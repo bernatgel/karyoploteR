@@ -74,7 +74,14 @@
     schemas=list(
       redblue6=c("#b51010", "#e73131", "#f7ad9c", "#ffffff", "#a5c6de", "#4284c6", "#005aad"),
       bluepurple10=c("#CAE5FF", "#AAD6FF", "#89C6FF", "#AAD6FF", "#CAE5FF", "#AFD2E9", "#9D96B8", "#9a7197", "#886176", "#7C5869"),
-      bluegold3=c("#4284c6", "white", "gold")
+      bluegold3=c("#4284c6", "white", "gold"),
+      greenorange=c("olivedrab3", "white", "orange2"),
+      greenred=c("green", "white", "red"),
+      greenblackred=c("green", "black", "red"),
+      blueorange=c("deepskyblue", "white", "orangered"),
+      blueblackorange=c("deepskyblue", "black", "orangered"),
+      purplegreen=c("darkorchid1", "white", "chartreuse3"),
+      purpleblackgreen=c("darkorchid1", "black", "chartreuse3")
     )
   )
 )
