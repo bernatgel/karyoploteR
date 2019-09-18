@@ -19,7 +19,7 @@ plotPalettes(cols, add.color.name=TRUE, border=NA, palette.names.col="black", pa
 
 \item{palette.names.srt}{(numeric) The srt value (rotation) for the palette names (defaults to 0)}
 
-\item{color.names.col}{(color) The color of the color names (defaults to "black")}
+\item{color.names.col}{(color) The color of the color names. If auto, it will be blak for light colors and white for the dark ones (defaults to "auto")}
 
 \item{color.names.cex}{(numeric) The cex value (size) for the color names  (defaults to 1)}
 

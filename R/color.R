@@ -127,7 +127,7 @@ getColorSchemas <- function() {
 #' @param palette.names.col (color) The color of the palette names (defaults to "black")
 #' @param palette.names.cex (numeric) The cex value (size) for the palette names (defaults to 1)
 #' @param palette.names.srt (numeric) The srt value (rotation) for the palette names (defaults to 0)
-#' @param color.names.col (color) The color of the color names (defaults to "black")
+#' @param color.names.col (color) The color of the color names. If auto, it will be blak for light colors and white for the dark ones (defaults to "auto")
 #' @param color.names.cex (numeric) The cex value (size) for the color names  (defaults to 1)
 #' @param color.names.srt (numeric) The srt value (rotation) for the color names (defaults to 0)
 #' @param border (color) The color of the border of the palette rectangles. If NA, no border. (defaults to NA)
@@ -146,7 +146,7 @@ getColorSchemas <- function() {
 #' 
 #' @export plotPalettes
 #' 
-plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="black", color.names.cex=1, color.names.srt=0, ...) {
+plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col="black", palette.names.cex=1, palette.names.srt=0, color.names.col="auto", color.names.cex=1, color.names.srt=0, ...) {
   if(!is.list(cols)) {
     cols <- list(cols)
   }
@@ -170,8 +170,13 @@ plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col
     graphics::rect(xleft=10*(seq_along(pp)-1), xright=8+10*(seq_along(pp)-1), 
          ybottom = (npal-1)*10, ytop = 8+(npal-1)*10, col=pp, border = border, ...)
     if(add.color.name) {
+      #if name colors are auto set as: black as default, white for darker colors
+      if(color.names.col=="auto") {
+        names.col <- rep("black", length(pp))
+        names.col[colSums(col2rgb(pp))<100] <- "white"
+      }
       graphics::text(x=4+10*(seq_along(pp)-1), y=4+(npal-1)*10, 
-                     labels=as.character(pp), col=color.names.col,
+                     labels=as.character(pp), col=names.col,
                      cex=color.names.cex, srt=color.names.srt)
     }
   }
@@ -669,6 +674,7 @@ preprocessColors <- function(col=NULL, border=NULL, default.col="gray70", amount
 #'  
 #' @export horizonColors
 #' @importFrom grDevices colorRamp
+#' 
 horizonColors <- function(col, num.parts) {
   if(is.character(col) && length(col)==1) col <- .karyoploter.colors$horizon$schemas[[col]]
   ramp <- grDevices::colorRamp(col, alpha=TRUE)
