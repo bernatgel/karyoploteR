@@ -150,19 +150,18 @@ The interface for the higher level plotting functions is a little different and 
   #join all regions into a single GRanges for coverage plotting
   joined.regions <- do.call(c, all.regions)
   
-  #Create the plot  
+  #Create the plot
   kp <- plotKaryotype(plot.type=2)
   #Plot the masked regions
   kpPlotRegions(kp, data=getGenomeAndMask("hg19")$mask, r0=0,
-                r1=1, col="lightgray", border="lightgray")
+               r1=1, col="lightgray", border="lightgray")
   #Plot the random regions (using invisible to ignore the return value)
   invisible(lapply(seq_len(n), function(i) {
-    kpPlotRegions(kp, all.regions[[i]], 
+    kpPlotRegions(kp, all.regions[[i]],
                   r0=(1/n)*(i-1), r1=(1/n)*i)
   }))
   #Plot the coverage of random regions
-  kpPlotCoverage(kp, data=joined.regions, 
-                 data.panel=2, col="#AAAAFF")
+  kpPlotCoverage(kp, data=joined.regions, data.panel=2, col="#AAAAFF")
 ```
 
 
