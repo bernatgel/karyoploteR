@@ -143,6 +143,7 @@ getColorSchemas <- function() {
 #' palettes <- list("P1"=c("red", "#000000", lighter("gold")), 
 #'                  "P2"=c("orchid", "yellow"))
 #' plotPalettes(palettes, color.names.col=c("blue", "green", "red"), border="black", color.names.srt=45)
+#' plotPalettes(palettes, color.names.col="auto", border="black", color.names.srt=45)
 #' 
 #' @export plotPalettes
 #' 
@@ -174,6 +175,8 @@ plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col
       if(color.names.col=="auto") {
         names.col <- rep("black", length(pp))
         names.col[colSums(col2rgb(pp))<100] <- "white"
+      } else {
+        names.col <- color.names.col
       }
       graphics::text(x=4+10*(seq_along(pp)-1), y=4+(npal-1)*10, 
                      labels=as.character(pp), col=names.col,

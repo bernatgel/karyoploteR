@@ -46,5 +46,6 @@ plotPalettes(c("red", "blue", "yellow", "green"))
 palettes <- list("P1"=c("red", "#000000", lighter("gold")), 
                  "P2"=c("orchid", "yellow"))
 plotPalettes(palettes, color.names.col=c("blue", "green", "red"), border="black", color.names.srt=45)
+plotPalettes(palettes, color.names.col="auto", border="black", color.names.srt=45)
 
 }
