@@ -446,8 +446,11 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
   #Process color
   cols <- NULL
   if(!is.null(colors)) {
-    color.sets <- c(.karyoploter.colors$chromosomes$schemas, "rainbow"=rainbow(n=length(all.chrs)))
+    color.sets <- .karyoploter.colors$chromosomes$schemas
+    #And add rainbow, which depends on the number of chromosomes
+    color.sets[["rainbow"]] <- rainbow(n=length(all.chrs))
 
+message("color.sets: ", paste0(names(color.sets), collapse = ","))
     if(is.character(colors) && length(colors)==1L && colors %in% names(color.sets)) { #Name of a color set
       colors <- color.sets[[colors]]
     } 
