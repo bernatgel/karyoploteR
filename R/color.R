@@ -59,6 +59,20 @@
                    gpos100 = "#000000", border = "black")
     )
   ),
+  chromosomes=list(
+    schemas=list(
+      "2grays"=c("#888888", "#444444"),
+      "2blues"=c("#6caeff", "#2b5d9b"),
+      "blackgreen"=c("black", "green"),
+      "greengray"=c("#c6ffb7", "#888888"),
+      "brewer.set1"=c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"),
+      "brewer.set2"=c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"),
+      "brewer.set3"=c("#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F"),
+      "brewer.pastel1"=c("#FBB4AE", "#B3CDE3", "#CCEBC5", "#DECBE4", "#FED9A6", "#FFFFCC", "#E5D8BD", "#FDDAEC", "#F2F2F2"),
+      "brewer.pastel2"=c("#B3E2CD", "#FDCDAC", "#CBD5E8", "#F4CAE4", "#E6F5C9", "#FFF2AE", "#F1E2CC", "#CCCCCC")
+    )
+  )
+  ,
   variants=list(
     schemas=list(
       cell21breast=c("C>A"="#4c64ae",
@@ -432,19 +446,8 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
   #Process color
   cols <- NULL
   if(!is.null(colors)) {
-    color.sets <- list(
-      "2grays"=c("#888888", "#444444"),
-      "2blues"=c("#6caeff", "#2b5d9b"),
-      "blackgreen"=c("black", "green"),
-      "greengray"=c("#c6ffb7", "#888888"),
-      "brewer.set1"=c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"),
-      "brewer.set2"=c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"),
-      "brewer.set3"=c("#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F"),
-      "brewer.pastel1"=c("#FBB4AE", "#B3CDE3", "#CCEBC5", "#DECBE4", "#FED9A6", "#FFFFCC", "#E5D8BD", "#FDDAEC", "#F2F2F2"),
-      "brewer.pastel2"=c("#B3E2CD", "#FDCDAC", "#CBD5E8", "#F4CAE4", "#E6F5C9", "#FFF2AE", "#F1E2CC", "#CCCCCC"),
-      "rainbow"=rainbow(n=length(all.chrs))
-    )
-    
+    color.sets <- c(.karyoploter.colors$chromosomes$schemas, "rainbow"=rainbow(n=length(all.chrs)))
+
     if(is.character(colors) && length(colors)==1L && colors %in% names(color.sets)) { #Name of a color set
       colors <- color.sets[[colors]]
     } 
