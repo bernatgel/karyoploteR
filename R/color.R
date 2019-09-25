@@ -563,6 +563,73 @@ colByRegion <- function(data, regions, colors=NULL, default.col="black") {
 }
 
 
+#' colByValue
+#' 
+#' @description 
+#' Given a set of values, return a color for each of them based on their numeric
+#' value.
+#' 
+#' @details 
+#' A color ramp (similar to a gradient) will be built using the colors in the 
+#' `colors` parameter using \link{grDevices::colorRamp}.
+#' Values will be normalized to [0,1] using `min` and `max`
+#' (if NULL, min(value) will be 0 and max(value) will be 1) and these values
+#' will be used to determine the color. It uses 
+#' 
+#' @note Alpha values (transparency) are also used in the color computation
+#' (see examples)
+#' 
+#' @usage colByValue(value, colors, min=NULL, max=NULL) 
+#' 
+#' @param value A vector of numeric values
+#' @param colors (color) The colors to built the color ramp. Refer to \link{grDevices::colorRamp} for more details.
+#' @param min (NULL or numeric) The min value used to normalize the values. If NULL, min(value) will be used. (defaults to NULL)
+#' @param max (NULL or numeric) The max value used to normalize the values. If NULL, max(value) will be used. (defaults to NULL)
+#' 
+#'
+#' @return
+#' A vector of colors
+#'
+#' @seealso \link{kpPoints}, \link{colByChr}
+#' 
+#' @examples
+#' 
+#' colByValue(c(0,0.25,0.5,0.75,1), colors=c("red", "green"))
+#' colByValue(c(0,0.25,0.5,0.75,1), colors=c("#00000000", "#00000011"))
+#' 
+#' data <- toGRanges("chr1", c(1e6*1:245), c(1e6*1:245)+10)
+#' data$y <- rnorm(n = length(data), mean = 0.5, sd = 0.15)
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.3)
+#' kpPoints(kp, data=data, r0=0.35, r1=0.65, col=colByValue(data$y, colors=c("black", "green")) )
+#' kpPoints(kp, data=data, r0=0.7, r1=1, col=colByValue(data$y, colors=c("black", "green"), min=0.4, max=0.6))
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.3, col=colByValue(data$y, colors=c("#00000000", "#000000FF")))
+#' kpPoints(kp, data=data, r0=0.35, r1=0.65, col=colByValue(data$y, colors=c("black", "orange", "green")) )
+#' kpPoints(kp, data=data, r0=0.7, r1=1, col=colByValue(data$y, colors=c("red", "#00000022","#00000022", "green"),min=0.4, max=0.6))
+#
+#' 
+#' @export colByValue
+colByValue <- function(value, colors, min=NULL, max=NULL) {
+  if(!is.numeric(value)) stop("value must be numeric")
+  if(!all(is.color(colors))) stop("colors must be  a vector of valid colors")
+  if(length(colors<2)) stop("at least 2 colors are required")
+  if(is.null(min) && is.null(max) && length(value)<2) stop("if min and max are NULL, at least two values are needed")
+  
+  if(is.null(min)) min <- min(value)
+  if(is.null(max)) max <- max(value)
+  norm.value <- (value - min)/(max-min)
+  norm.value[norm.value<0] <- 0
+  norm.value[norm.value>1] <- 1
+  ramp <- grDevices::colorRamp(colors, alpha=TRUE)
+  cols <- ramp(norm.value)/255
+  cols <- grDevices::rgb(cols, alpha = cols[,4])
+  return(cols)
+}
+
+
 
 
 #' is.color
