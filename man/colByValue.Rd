@@ -9,7 +9,7 @@ colByValue(value, colors, min=NULL, max=NULL)
 \arguments{
 \item{value}{A vector of numeric values}
 
-\item{colors}{(color) The colors to built the color ramp. Refer to \link{grDevices::colorRamp} for more details.}
+\item{colors}{(color) The colors to built the color ramp. Refer to \code{\link[grDevices]{colorRamp}} for more details.}
 
 \item{min}{(NULL or numeric) The min value used to normalize the values. If NULL, min(value) will be used. (defaults to NULL)}
 
@@ -24,7 +24,7 @@ value.
 }
 \details{
 A color ramp (similar to a gradient) will be built using the colors in the 
-`colors` parameter using \link{grDevices::colorRamp}.
+`colors` parameter using \code{\link[grDevices]{colorRamp}}.
 Values will be normalized to [0,1] using `min` and `max`
 (if NULL, min(value) will be 0 and max(value) will be 1) and these values
 will be used to determine the color. It uses
