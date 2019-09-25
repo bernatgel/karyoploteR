@@ -4,7 +4,7 @@
 \alias{colByRegion}
 \title{colByRegion}
 \usage{
-colByRegion(data, regions, colors=NULL, default.col="black")
+colByRegion(data, regions, colors=NULL, original.colors=NULL, default.col="black")
 }
 \arguments{
 \item{data}{Either a vector of characters or a GRanges object}
@@ -13,7 +13,9 @@ colByRegion(data, regions, colors=NULL, default.col="black")
 
 \item{colors}{(color) The colors to be used for each region. The content will be recycled if needed. If NULL, the colors are assumed to be available in the regions object. (defaults to NULL)}
 
-\item{default.col}{The default color to return for data elements not overlapping the regions. (defaults to "black")}
+\item{original.colors}{(color vector) The original colors of the data points. They will be use instead of the default color for data points not overlapping the regions. If NULL, the default color will be used. (defaults to NULL)}
+
+\item{default.col}{The default color to return for data elements not overlapping the regions. Only used if original.colors is NULL (defaults to "black")}
 }
 \value{
 A vector of colors
@@ -29,7 +31,10 @@ Given a set of data elements, return a color for each one based on whether
 they overlap a given set of regions. The colors might be different for each
 region and can be specified either in the regions object itself or in 
 a separate \code{colors} parameter. If specified in \code{colors}, the values
-will be recycled as needed.
+will be recycled as needed. Data points not in the specified region can
+take either a default color or keep their "original.color" if given. This
+is useful when using colByRegion to highlight data points as in 
+kpPlotManhattan.
 }
 \examples{
 

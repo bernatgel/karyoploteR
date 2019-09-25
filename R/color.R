@@ -450,7 +450,6 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
     #And add rainbow, which depends on the number of chromosomes
     color.sets[["rainbow"]] <- rainbow(n=length(all.chrs))
 
-message("color.sets: ", paste0(names(color.sets), collapse = ","))
     if(is.character(colors) && length(colors)==1L && colors %in% names(color.sets)) { #Name of a color set
       colors <- color.sets[[colors]]
     } 
@@ -485,15 +484,19 @@ message("color.sets: ", paste0(names(color.sets), collapse = ","))
 #' they overlap a given set of regions. The colors might be different for each
 #' region and can be specified either in the regions object itself or in 
 #' a separate \code{colors} parameter. If specified in \code{colors}, the values
-#' will be recycled as needed. 
+#' will be recycled as needed. Data points not in the specified region can
+#' take either a default color or keep their "original.color" if given. This
+#' is useful when using colByRegion to highlight data points as in 
+#' kpPlotManhattan.
 #' 
 #' 
-#' @usage colByRegion(data, regions, colors=NULL, default.col="black")
+#' @usage colByRegion(data, regions, colors=NULL, original.colors=NULL, default.col="black")
 #' 
 #' @param data Either a vector of characters or a GRanges object
 #' @param regions (GRanges or equivalent) A set of regions where the color will be modified. Internally it will be converted into a Genomic Ranges object by \code{\link[regioneR]{toGRanges}} (from regioneR package) and so it can be either a GRanges, a data.frame, a character or any other value type accepted by that function. If \code{colors} is NULL (the default) and regions has additional columns in addition to chr, start and end, if any has a name in c("color", "colors", "col", "cols") it will be used. Otherwise the first additional column will be used.
 #' @param colors (color) The colors to be used for each region. The content will be recycled if needed. If NULL, the colors are assumed to be available in the regions object. (defaults to NULL)
-#' @param default.col The default color to return for data elements not overlapping the regions. (defaults to "black")
+#' @param original.colors (color vector) The original colors of the data points. They will be use instead of the default color for data points not overlapping the regions. If NULL, the default color will be used. (defaults to NULL)
+#' @param default.col The default color to return for data elements not overlapping the regions. Only used if original.colors is NULL (defaults to "black")
 #' 
 #'
 #' @return
@@ -528,7 +531,7 @@ message("color.sets: ", paste0(names(color.sets), collapse = ","))
 #'
 #' @importFrom  GenomeInfoDb seqlevelsStyle
 
-colByRegion <- function(data, regions, colors=NULL, default.col="black") {
+colByRegion <- function(data, regions, colors=NULL, original.colors=NULL, default.col="black") {
   data <- toGRanges(data)
   
   regions <- toGRanges(regions)
