@@ -618,7 +618,7 @@ colByRegion <- function(data, regions, colors=NULL, original.colors=NULL, defaul
 colByValue <- function(value, colors, min=NULL, max=NULL) {
   if(!is.numeric(value)) stop("value must be numeric")
   if(!all(is.color(colors))) stop("colors must be  a vector of valid colors")
-  if(length(colors<2)) stop("at least 2 colors are required")
+  if(length(colors)<2) stop("at least 2 colors are required")
   if(is.null(min) && is.null(max) && length(value)<2) stop("if min and max are NULL, at least two values are needed")
   
   if(is.null(min)) min <- min(value)
