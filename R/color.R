@@ -59,6 +59,20 @@
                    gpos100 = "#000000", border = "black")
     )
   ),
+  chromosomes=list(
+    schemas=list(
+      "2grays"=c("#888888", "#444444"),
+      "2blues"=c("#6caeff", "#2b5d9b"),
+      "blackgreen"=c("black", "green"),
+      "greengray"=c("#c6ffb7", "#888888"),
+      "brewer.set1"=c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"),
+      "brewer.set2"=c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"),
+      "brewer.set3"=c("#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F"),
+      "brewer.pastel1"=c("#FBB4AE", "#B3CDE3", "#CCEBC5", "#DECBE4", "#FED9A6", "#FFFFCC", "#E5D8BD", "#FDDAEC", "#F2F2F2"),
+      "brewer.pastel2"=c("#B3E2CD", "#FDCDAC", "#CBD5E8", "#F4CAE4", "#E6F5C9", "#FFF2AE", "#F1E2CC", "#CCCCCC")
+    )
+  )
+  ,
   variants=list(
     schemas=list(
       cell21breast=c("C>A"="#4c64ae",
@@ -432,19 +446,10 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
   #Process color
   cols <- NULL
   if(!is.null(colors)) {
-    color.sets <- list(
-      "2grays"=c("#888888", "#444444"),
-      "2blues"=c("#6caeff", "#2b5d9b"),
-      "blackgreen"=c("black", "green"),
-      "greengray"=c("#c6ffb7", "#888888"),
-      "brewer.set1"=c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3", "#FF7F00", "#FFFF33", "#A65628", "#F781BF", "#999999"),
-      "brewer.set2"=c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"),
-      "brewer.set3"=c("#8DD3C7", "#FFFFB3", "#BEBADA", "#FB8072", "#80B1D3", "#FDB462", "#B3DE69", "#FCCDE5", "#D9D9D9", "#BC80BD", "#CCEBC5", "#FFED6F"),
-      "brewer.pastel1"=c("#FBB4AE", "#B3CDE3", "#CCEBC5", "#DECBE4", "#FED9A6", "#FFFFCC", "#E5D8BD", "#FDDAEC", "#F2F2F2"),
-      "brewer.pastel2"=c("#B3E2CD", "#FDCDAC", "#CBD5E8", "#F4CAE4", "#E6F5C9", "#FFF2AE", "#F1E2CC", "#CCCCCC"),
-      "rainbow"=rainbow(n=length(all.chrs))
-    )
-    
+    color.sets <- .karyoploter.colors$chromosomes$schemas
+    #And add rainbow, which depends on the number of chromosomes
+    color.sets[["rainbow"]] <- rainbow(n=length(all.chrs))
+
     if(is.character(colors) && length(colors)==1L && colors %in% names(color.sets)) { #Name of a color set
       colors <- color.sets[[colors]]
     } 
@@ -479,15 +484,19 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
 #' they overlap a given set of regions. The colors might be different for each
 #' region and can be specified either in the regions object itself or in 
 #' a separate \code{colors} parameter. If specified in \code{colors}, the values
-#' will be recycled as needed. 
+#' will be recycled as needed. Data points not in the specified region can
+#' take either a default color or keep their "original.color" if given. This
+#' is useful when using colByRegion to highlight data points as in 
+#' kpPlotManhattan.
 #' 
 #' 
-#' @usage colByRegion(data, regions, colors=NULL, default.col="black")
+#' @usage colByRegion(data, regions, colors=NULL, original.colors=NULL, default.col="black")
 #' 
 #' @param data Either a vector of characters or a GRanges object
 #' @param regions (GRanges or equivalent) A set of regions where the color will be modified. Internally it will be converted into a Genomic Ranges object by \code{\link[regioneR]{toGRanges}} (from regioneR package) and so it can be either a GRanges, a data.frame, a character or any other value type accepted by that function. If \code{colors} is NULL (the default) and regions has additional columns in addition to chr, start and end, if any has a name in c("color", "colors", "col", "cols") it will be used. Otherwise the first additional column will be used.
 #' @param colors (color) The colors to be used for each region. The content will be recycled if needed. If NULL, the colors are assumed to be available in the regions object. (defaults to NULL)
-#' @param default.col The default color to return for data elements not overlapping the regions. (defaults to "black")
+#' @param original.colors (color vector) The original colors of the data points. They will be use instead of the default color for data points not overlapping the regions. If NULL, the default color will be used. (defaults to NULL)
+#' @param default.col The default color to return for data elements not overlapping the regions. Only used if original.colors is NULL (defaults to "black")
 #' 
 #'
 #' @return
@@ -522,7 +531,7 @@ colByChr <- function(data, colors="2grays", all.chrs=NULL, default.col="black") 
 #'
 #' @importFrom  GenomeInfoDb seqlevelsStyle
 
-colByRegion <- function(data, regions, colors=NULL, default.col="black") {
+colByRegion <- function(data, regions, colors=NULL, original.colors=NULL, default.col="black") {
   data <- toGRanges(data)
   
   regions <- toGRanges(regions)
@@ -553,6 +562,73 @@ colByRegion <- function(data, regions, colors=NULL, default.col="black") {
     cols[overlapsAny(data, regions[num.reg])] <- colors[num.reg]
   }
   
+  return(cols)
+}
+
+
+#' colByValue
+#' 
+#' @description 
+#' Given a set of values, return a color for each of them based on their numeric
+#' value.
+#' 
+#' @details 
+#' A color ramp (similar to a gradient) will be built using the colors in the 
+#' `colors` parameter using \code{\link[grDevices]{colorRamp}}.
+#' Values will be normalized to [0,1] using `min` and `max`
+#' (if NULL, min(value) will be 0 and max(value) will be 1) and these values
+#' will be used to determine the color. It uses 
+#' 
+#' @note Alpha values (transparency) are also used in the color computation
+#' (see examples)
+#' 
+#' @usage colByValue(value, colors, min=NULL, max=NULL) 
+#' 
+#' @param value A vector of numeric values
+#' @param colors (color) The colors to built the color ramp. Refer to \code{\link[grDevices]{colorRamp}} for more details.
+#' @param min (NULL or numeric) The min value used to normalize the values. If NULL, min(value) will be used. (defaults to NULL)
+#' @param max (NULL or numeric) The max value used to normalize the values. If NULL, max(value) will be used. (defaults to NULL)
+#' 
+#'
+#' @return
+#' A vector of colors
+#'
+#' @seealso \link{kpPoints}, \link{colByChr}
+#' 
+#' @examples
+#' 
+#' colByValue(c(0,0.25,0.5,0.75,1), colors=c("red", "green"))
+#' colByValue(c(0,0.25,0.5,0.75,1), colors=c("#00000000", "#00000011"))
+#' 
+#' data <- toGRanges("chr1", c(1e6*1:245), c(1e6*1:245)+10)
+#' data$y <- rnorm(n = length(data), mean = 0.5, sd = 0.15)
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.3)
+#' kpPoints(kp, data=data, r0=0.35, r1=0.65, col=colByValue(data$y, colors=c("black", "green")) )
+#' kpPoints(kp, data=data, r0=0.7, r1=1, col=colByValue(data$y, colors=c("black", "green"), min=0.4, max=0.6))
+#' 
+#' kp <- plotKaryotype(chromosomes="chr1")
+#' kpPoints(kp, data=data, r0=0, r1=0.3, col=colByValue(data$y, colors=c("#00000000", "#000000FF")))
+#' kpPoints(kp, data=data, r0=0.35, r1=0.65, col=colByValue(data$y, colors=c("black", "orange", "green")) )
+#' kpPoints(kp, data=data, r0=0.7, r1=1, col=colByValue(data$y, colors=c("red", "#00000022","#00000022", "green"),min=0.4, max=0.6))
+#
+#' 
+#' @export colByValue
+colByValue <- function(value, colors, min=NULL, max=NULL) {
+  if(!is.numeric(value)) stop("value must be numeric")
+  if(!all(is.color(colors))) stop("colors must be  a vector of valid colors")
+  if(length(colors)<2) stop("at least 2 colors are required")
+  if(is.null(min) && is.null(max) && length(value)<2) stop("if min and max are NULL, at least two values are needed")
+  
+  if(is.null(min)) min <- min(value)
+  if(is.null(max)) max <- max(value)
+  norm.value <- (value - min)/(max-min)
+  norm.value[norm.value<0] <- 0
+  norm.value[norm.value>1] <- 1
+  ramp <- grDevices::colorRamp(colors, alpha=TRUE)
+  cols <- ramp(norm.value)/255
+  cols <- grDevices::rgb(cols, alpha = cols[,4])
   return(cols)
 }
 
