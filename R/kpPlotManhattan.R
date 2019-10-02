@@ -135,18 +135,20 @@ kpPlotManhattan <- function(karyoplot, data=NULL, pval=NULL,
 
   #Transform the pvalues
   if(logp) {
-    data$pval <- -1*log10(data$pval)
-  } 
+    data$y <- -1*log10(data$pval)
+  } else {
+    data$y <- data$pval
+  }
   
   #ymax and ymin
   if(is.null(ymax)) {
-    ymax <- max(max(data$pval), 
+    ymax <- max(max(data$y), 
                 ifelse(!is.null(suggestiveline) && is.numeric(suggestiveline), suggestiveline, NULL),
                 ifelse(!is.null(genomewideline) && is.numeric(genomewideline), genomewideline, NULL)
                 )
   }
   if(is.null(ymin)) {
-    ymin <- min(0, min(data$pval), 
+    ymin <- min(0, min(data$y), 
                 ifelse(!is.null(suggestiveline) && is.numeric(suggestiveline), suggestiveline, NULL),
                 ifelse(!is.null(genomewideline) && is.numeric(genomewideline), genomewideline, NULL)
             )
@@ -184,7 +186,7 @@ kpPlotManhattan <- function(karyoplot, data=NULL, pval=NULL,
   }
   
   #Plot the points
-  kpPoints(karyoplot, data=data, y=data$pval, col=data$color, pch=points.pch, cex=points.cex, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping, ...)
+  kpPoints(karyoplot, data=data, y=data$y, col=data$color, pch=points.pch, cex=points.cex, ymin=ymin, ymax=ymax, r0=r0, r1=r1, data.panel=data.panel, clipping=clipping, ...)
 
   karyoplot$latest.plot <- list(funct="kpPlotManhattan", 
                                 computed.values=list(ymin=ymin, ymax=ymax,
