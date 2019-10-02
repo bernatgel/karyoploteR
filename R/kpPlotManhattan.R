@@ -13,7 +13,7 @@
 #' Highlighted data points can be specified per name, per position in the data 
 #' structure or by their position on the genome (see examples).
 #' 
-#' More information in the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 #'  
 #' @usage kpPlotManhattan(karyoplot, data=NULL, pval=NULL, points.col="2grays", 
 #' points.pch=16, points.cex=1, suggestiveline = -log10(1e-05), 

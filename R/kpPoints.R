@@ -14,6 +14,8 @@
 #' combination of both. A number of parameters can be used to define exactly where 
 #' and how the points are drawn. In addition, via the ellipsis operator (\code{...}), \code{kpPoints}
 #' accepts any parameter valid for \code{points} (e.g. \code{pch}, \code{cex}, \code{col}, ...)
+#' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 #'
 #' @usage kpPoints(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, pch=16, cex=0.5, ...)
 #' 
@@ -33,7 +35,7 @@
 #' @param ...    The ellipsis operator can be used to specify any additional graphical parameters. Any additional parameter will be passed to the internal calls to the R base plotting functions. 
 #' 
 #' 
-#' @note The parameter r0 can be used to specifyu r0 and r1 together. If r1 is 
+#' @note The parameter r0 can be used to specify r0 and r1 together. If r1 is 
 #' NULL and r0 is either a list with two elements called r0 and r1 or a numeric
 #' vector of length 2, this values will be used for r0 and r1. This might be
 #' useful when working with \code{\link{autotrack}} to compute r0 and r1.

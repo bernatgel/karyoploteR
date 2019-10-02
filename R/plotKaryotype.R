@@ -28,7 +28,7 @@
 #'    \item \code{plot.type=7}  Horizontal ideograms with all chromosomes in a single line with NO data panels. Only plotting in the ideograms is possible.
 #'  }
 #'  
-#' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 #'  
 #' 
 #' @usage plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, labels.plotter=kpAddChromosomeNames, chromosomes="auto", zoom=NULL, cytobands=NULL, plot.params=NULL, use.cache=TRUE, main=NULL, ...)
