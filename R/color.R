@@ -186,7 +186,7 @@ plotPalettes <- function(cols, add.color.name=TRUE, border=NA, palette.names.col
          ybottom = (npal-1)*10, ytop = 8+(npal-1)*10, col=pp, border = border, ...)
     if(add.color.name) {
       #if name colors are auto set as: black as default, white for darker colors
-      if(color.names.col=="auto") {
+      if(length(color.names.col)==1 && color.names.col=="auto") {
         names.col <- rep("black", length(pp))
         names.col[colSums(col2rgb(pp))<100] <- "white"
       } else {
