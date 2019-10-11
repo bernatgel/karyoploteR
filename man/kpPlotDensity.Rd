@@ -38,6 +38,8 @@ Plots the density of features along the genome
 \code{GRanges} object along the genome. It creates a non-overlapping tiling 
 of the genome and computes the number of features per window. It's possible 
 to specify the window size.
+
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
 

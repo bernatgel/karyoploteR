@@ -44,6 +44,8 @@ Plots the density of features along the genome
 plot the coverage but the read density as the number of reads overlapping 
 a every window. It uses \code{\link{Rsamtools}} to efficiently access the
 BAM file. The BAM file must be indexed.
+
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
 

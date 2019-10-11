@@ -51,6 +51,8 @@ x0, x1, y0 and y1, or a combination of both.
 A number of parameters can be used to define exactly where and how the rectangles are drawn.
 In addition, via the ellipsis operator (\code{...}), \code{kpRect} accepts any parameter 
 valid for \code{rect} (e.g. \code{border}, \code{col}, ...)
+
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
  

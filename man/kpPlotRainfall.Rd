@@ -39,6 +39,8 @@ Usually used to plot the distance bewteen somatic mutations to idenify kataegis.
 in a log scale along the genome. It is usually used to plot the distance 
 between somatic mutations in order to identify regions with an accumulation 
 of close mutations.
+
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
 

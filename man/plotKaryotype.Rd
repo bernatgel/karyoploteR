@@ -57,6 +57,8 @@ This is the main function of \code{karyoploteR}. It creates the basic empty plot
    \item \code{plot.type=6}  Horizontal ideograms with NO data panels. Only plotting in the ideograms is possible.
    \item \code{plot.type=7}  Horizontal ideograms with all chromosomes in a single line with NO data panels. Only plotting in the ideograms is possible.
  }
+ 
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
  

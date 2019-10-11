@@ -77,6 +77,8 @@ a line with three parts (a vertical, a diagonal and another vertical) is
 plotted to link the label with the original position. It is possible to plot
 labels in horizontal or vertical text and to specify different colors for the
 marker line and label.
+
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \note{
 The iterative algorithm is not guaranteed to suceed and might end up

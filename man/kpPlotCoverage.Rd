@@ -42,6 +42,8 @@ This is one of the high-level, or specialized, plotting functions of karyoploteR
  from computing the coverage with \code{coverage(data)}. In contrast with the low-level 
  functions such as \code{\link{kpRect}}, it is not possible to specify the data using 
  independent numeric vectors and the function only takes in the expected object types.
+ 
+ There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
  

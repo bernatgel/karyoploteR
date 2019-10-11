@@ -15,6 +15,8 @@
 #' A number of parameters can be used to define exactly where and how the rectangles are drawn.
 #' In addition, via the ellipsis operator (\code{...}), \code{kpRect} accepts any parameter 
 #' valid for \code{rect} (e.g. \code{border}, \code{col}, ...)
+#' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 #'
 #' @usage kpRect(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=x0, y0=NULL, y1=NULL, ymax=NULL, ymin=NULL, r0=NULL, r1=NULL, data.panel=1, clipping=TRUE, ...) 
 #' 

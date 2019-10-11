@@ -12,7 +12,8 @@
 #' The BAM file must be indexed. This function is only recommended when 
 #' plotting small parts of the genome. For larger plots consider using 
 #' \code{\link{kpPlotBAMDensity}}.
-#'  
+#' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 #' 
 #' @note Since the plotting the exact coverage for large
 #' regions of the genome may be unfeasable, it includes a safety mechanism

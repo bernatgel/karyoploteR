@@ -14,6 +14,8 @@
 #' labels in horizontal or vertical text and to specify different colors for the
 #' marker line and label.
 #' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
+#' 
 #' @note The iterative algorithm is not guaranteed to suceed and might end up
 #' with overlapping labels if labels are too dense or if too few iterations 
 #' allowed. With many markers, the algorithm might be slow.

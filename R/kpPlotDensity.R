@@ -11,6 +11,8 @@
 #' of the genome and computes the number of features per window. It's possible 
 #' to specify the window size.
 #' 
+#' There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
+#' 
 #' @usage kpPlotDensity(karyoplot, data=NULL, window.size=1e6, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot    (a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.

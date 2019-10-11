@@ -77,7 +77,7 @@ In addition, it can highlight some of the data points in a different color.
 Highlighted data points can be specified per name, per position in the data 
 structure or by their position on the genome (see examples).
 
-More information in the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
+There's more information at the \url{https://bernatgel.github.io/karyoploter_tutorial/}{karyoploteR tutorial}.
 }
 \examples{
 
