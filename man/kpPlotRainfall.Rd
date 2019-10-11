@@ -4,14 +4,18 @@
 \alias{kpPlotRainfall}
 \title{kpPlotRainfall}
 \usage{
-kpPlotRainfall(karyoplot, data=NULL, col=NULL, ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
+kpPlotRainfall(karyoplot, data, ref=NULL, alt=NULL, col="cell21breast", ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(a \code{KaryoPlot} object) This is the first argument to all data plotting functions of \code{karyoploteR}. A KaryoPlot object referring to the currently active plot.}
 
-\item{data}{(a \code{GRanges}) A GRanges object with the features to be plotted.}
+\item{data}{(a \code{GRanges}, a \code{VRanges} or a path to a VCF file) A GRanges or VRanges object with the variants to plot or the path to a VCF file.}
 
-\item{col}{(a color vector) The colors to use to draw the points. If the length of the vector is lower than the length of data, it will be recycled. If NULL, points will be plotted in black. (defaults to NULL)}
+\item{ref}{(character vector or NULL) A character vector of with the reference base of the variants in data. Used to determine the color. If NULL and data is a VRanges or a VCF file, the information in data will be used (defaults to NULL)}
+
+\item{alt}{(character vector or NULL) A character vector of with the alternative base of the variants in data. Used to determine the color. If NULL and data is a VRanges or a VCF file, the information in data will be used (defaults to NULL)}
+
+\item{col}{(a color vector, a color table or a color schema) The colors to use to draw the points. If the length of the vector is lower than the length of data, it will be recycled. Color table and color schema must be compatible with getVariantColors. If NULL, points will be plotted in black. (defaults to NULL)}
 
 \item{ymin}{(numeric) The minimum value to be plotted on the data panel. If NULL, it is set to 0. (deafults to NULL)}
 
