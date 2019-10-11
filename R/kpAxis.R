@@ -89,7 +89,15 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   if(is.null(ymin)) ymin <- karyoplot$plot.params[[paste0("data", data.panel, "min")]]
   if(is.null(ymax)) ymax <- karyoplot$plot.params[[paste0("data", data.panel, "max")]]
   
-  if(is.null(tick.len)) tick.len <- 0.01 * max(width(karyoplot$plot.region))
+  if(is.null(tick.len)) {
+    if(karyoplot$plot.type %in% c(1,2,6)) {
+      tick.len <- 0.01 * max(width(karyoplot$plot.region))
+    } else {
+      tick.len <- 0.01 * sum(width(karyoplot$plot.region))
+    }
+    
+    
+  } 
   if(is.null(tick.pos)) {
     tick.pos <- (((ymax-ymin)/(numticks-1))*(0:(numticks-1)))+ymin
   } else {
@@ -123,36 +131,34 @@ kpAxis <- function(karyoplot, ymin=NULL, ymax=NULL, r0=NULL, r1=NULL, side=1, nu
   
   if(side==1) {
     x <- start(karyoplot$plot.region[as.character(seqnames(karyoplot$plot.region)) %in% chrs])
-  } else {
-    x <- end(karyoplot$plot.region[as.character(seqnames(karyoplot$plot.region)) %in% chrs])
-  }
-  
-  kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
-             y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
-  
- 
-  if(side==1) {
+    kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
+               y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
+    
     kpSegments(karyoplot, chr=rep(chrs, each=numticks), 
                x0=rep(x-tick.len, each=numticks), x1=rep(x, each=numticks), 
-               y0=rep(tick.pos, length(karyoplot$plot.region)),
-               y1=rep(tick.pos, length(karyoplot$plot.region)),
+               y0=rep(tick.pos, length(x)),
+               y1=rep(tick.pos, length(x)),
                ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x-tick.len-label.margin, each=numticks), 
-           y=rep(tick.pos, length(karyoplot$plot.region)),
+           y=rep(tick.pos, length(x)),
            labels = labels, ymin=ymin, ymax=ymax,  r0 = r0, r1=r1,  pos=2, 
            data.panel=data.panel,  clipping=FALSE, col=text.col, ...)  #pos=2 -> left to the given coordinate
   } else {
+    x <- end(karyoplot$plot.region[as.character(seqnames(karyoplot$plot.region)) %in% chrs])
+    kpSegments(karyoplot, chr=chrs, x0=x, x1=x, y0=ymin,
+               y1=ymax, ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
+    
     kpSegments(karyoplot, chr=rep(chrs, each=numticks),
                x0=rep(x, each=numticks), x1=rep(x+tick.len, each=numticks), 
-               y0=rep(tick.pos, length(karyoplot$plot.region)), 
-               y1=rep(tick.pos, length(karyoplot$plot.region)), 
+               y0=rep(tick.pos, length(x)), 
+               y1=rep(tick.pos, length(x)), 
                ymin=ymin, ymax=ymax, r0 = r0, r1=r1, data.panel=data.panel, clipping=FALSE, col=col, ...)
     
     kpText(karyoplot, chr=rep(chrs, each=numticks),
            x=rep(x+tick.len+label.margin, each=numticks), 
-           y=rep(tick.pos, length(karyoplot$plot.region)),
+           y=rep(tick.pos, length(x)),
            labels = labels,  ymin=ymin, ymax=ymax, r0 = r0, r1=r1, pos=4, 
            data.panel=data.panel, clipping=FALSE, col=text.col, ...)  #pos=4 -> right to the given coordinate
   }
