@@ -34,7 +34,8 @@ Imports:
     GenomicFeatures,
     bamsignals,
     AnnotationDbi,
-    grDevices
+    grDevices,
+    VariantAnnotation
 Suggests:
     BiocStyle,
     knitr,

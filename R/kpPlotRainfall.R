@@ -47,6 +47,7 @@
 #' kpAxis(kp, ymax=7, tick.pos=c(0:7))
 #'  
 #' @export kpPlotRainfall
+#' @importFrom VariantAnnotation readVcfAsVRanges
 
 kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breast", ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
 
@@ -59,7 +60,7 @@ kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breas
 
   if(!methods::is(data, "GRanges") && !methods::is(data, "VRanges")) {
     if(is.character(data) && length(data)==1) {
-      data <- tryCatch(readVcfAsVRanges(data), error=function(e) {stop("In kpPlotRainfall: Error when reading the VCF file. Is it a VCF file?")})
+      data <- tryCatch(VariantAnnotation::readVcfAsVRanges(data), error=function(e) {stop("In kpPlotRainfall: Error when reading the VCF file. Is it a VCF file?")})
     } else {
       stop(paste0("In kpPlotRainfall: 'data' must be a valid 'GRanges' object or a VCF file"))     
     }
@@ -85,14 +86,20 @@ kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breas
   if(is.null(col)) col <- "black"
   #If it's a color table
   if(length(names(col))==7 && all(sort(names(col))==sort(names(.karyoploter.colors$variants$schemas[[1]])))) {
-    if(is.null(ref) || is.null(alt)) stop("In kpPlotRainfall: a color.table cannot be used if ref and alt are NULL. Provide ref and alt or make data a VRanges or a VCF file")
-    col <- getVariantsColors(ref=ref, alt=alt, color.table = col)
+    if(is.null(ref) || is.null(alt)) {
+      col <- "black"  #warning("In kpPlotRainfall: a color.table cannot be used if ref and alt are NULL. Provide ref and alt or make data a VRanges or a VCF file")
+    } else {
+      col <- getVariantsColors(ref=ref, alt=alt, color.table = col)
+    }
   } else {
     if(all(is.color(col))) {
-      col <- rep(col, length.out=length(vars))
+      col <- rep(col, length.out=length(data))
     } else { #If it's not a color, assume it's a valid schema name
-      if(is.null(ref) || is.null(alt)) stop("In kpPlotRainfall: a color.schema cannot be used if ref and alt are NULL. Provide ref and alt or make data a VRanges or a VCF file")
-      col <- getVariantsColors(ref=ref, alt=alt, color.schema = col)
+      if(is.null(ref) || is.null(alt)) {
+        col <- "black" #warning("In kpPlotRainfall: a color.schema cannot be used if ref and alt are NULL. Provide ref and alt or make data a VRanges or a VCF file")
+      } else {
+        col <- getVariantsColors(ref=ref, alt=alt, color.schema = col)
+      }
     }
   }
   
