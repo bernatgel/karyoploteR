@@ -179,7 +179,19 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
                           error=function(e) {stop("It was not possible to identify or load the requested genome. ", e)}
     )
   }
+  
+  
+  #Check the genome has no problems (repeated chromosomes, etc...)
+  chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
+  if(any(duplicated(chr.names))) {
+    stop(paste0("There are duplicate chromosome names in the genome. Chromosome names must be unique. Chromosome names are: ", paste0(chr.names, collapse = ", ")))
+  }
+  
+  #Use the chromosome names as the names of the genome GRanges
+  names(gr.genome) <- chr.names
+  
 
+  #Chromosome Filtering
   
   #If zoom is set, change the chromosome parameter to the name of the chomosome
   #we are zooming in, so everything else is automatically filtered out.
@@ -218,7 +230,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
                 "   * Chromosomes in the genome: ", paste0(as.character(seqnames(gr.genome)), collapse = ", ")
         )
       }
-      tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)},
+      tryCatch(expr={gr.genome <- filterChromosomes(gr.genome, keep.chr=chromosomes)[chromosomes]}, #The selection by "[chromsomes]" ensures the order is the one specified and not the canonical in the genome
                error=function(e) {
                  message("WARNING: There was an error when filtering the chromosomes. Falling back to using the unfiltered genome. \n", e)
                }
@@ -227,14 +239,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   }
   
   
-  #Check the genome has no problems (repeated chromosomes, etc...)
-  chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
-  if(any(duplicated(chr.names))) {
-    stop(paste0("There are duplicate chromosome names in the genome. Chromosome names must be unique. Chromosome names are: ", paste0(chr.names, collapse = ", ")))
-  }
-  
-  #Use the chromosome names as the names of the genome GRanges
-  names(gr.genome) <- chr.names
+
   
   #Get the CytoBands if needed
   if(is.null(cytobands)) {
