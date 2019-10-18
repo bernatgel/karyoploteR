@@ -122,3 +122,6 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
 # 
 # data.cache <- list(genomes=genomes.cache, cytobands=cytobands.cache)
 # devtools::use_data(data.cache, internal = TRUE, overwrite=TRUE)
+
+# load("R/sysdata.rda")
+# data.cache
