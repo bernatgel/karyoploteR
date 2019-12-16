@@ -115,7 +115,7 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
       ymax <- max(0, max(data$y))
     }
   
-    #breaks
+    #breaks: The y values to break the positive and gnegative curves
     if(is.null(breaks)) {
       if(is.null(num.parts)) stop("In kpPlotHorizon: If breaks is NULL, num.parts cannot be NULL")
       if(!is.numeric(num.parts) || (round(num.parts)!=num.parts) || num.parts<1) stop("In kpPlotHorizon: If breaks is NULL, num.parts must be a positive integer")
@@ -135,11 +135,11 @@ kpPlotHorizon <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, num.pa
 
   #Find the intersections of the data lines with the breaks and 0 and 
   #inject them into the data
+  data <- sort(data)
   for(thr in c(breaks$neg, 0, breaks$pos)) {
     isecs <- findIntersections(data, thr)
-    data <- c(data, isecs)
+    data <- sort(c(data, isecs)) #It's important to keep data sorted since findIntersections assumes it is sorted
   }
-  data <- sort(data)
   
   if(is.list(col) && c("pos", "neg" %in% names(col))) {
     if(all(is.color(col$neg)) && all(is.color(col$pos))) {
