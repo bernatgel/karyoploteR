@@ -59,11 +59,10 @@ kpPlotDensity <- function(karyoplot, data=NULL, window.size=1e6, ymin=NULL, ymax
   #TODO: Add more checks - window.size numeric...
   
   #create bins all along the genome
-  windows <- tileGenome(
-          stats::setNames(karyoplot$chromosome.lengths, karyoplot$chromosomes),
+  windows <- tileGenome(karyoplot$chromosome.length,
           tilewidth = window.size, cut.last.tile.in.chrom = TRUE)
   
-  dens <- countOverlaps(windows, data)
+  dens <- GenomicRanges::countOverlaps(windows, data)
   
   if(is.null(ymax)) {
     ymax <- max(dens)
