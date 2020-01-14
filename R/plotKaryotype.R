@@ -238,7 +238,10 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     }
   }
   
-  
+  #Check we still have a genome! Explanation: If the filtering step partially fails, we might end up with an empty genome
+  if(length(gr.genome)==0) {
+    stop("The genome has no chromosomes left after filtering. Cannot plot with no chromosomes.")
+  }  
 
   
   #Get the CytoBands if needed
@@ -256,7 +259,6 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     }
   }
 
-  
   #Create the KaryoPlot Object that can be used to plot additional data onto the karyotype
     kp <- list()
     class(kp) <- "KaryoPlot"
