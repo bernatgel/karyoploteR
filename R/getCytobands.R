@@ -97,14 +97,14 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
 # 
 # #Code used to save the predownloaded Cytobands for some common genomes
 # cytobands.cache <- list()
-# cytobands.cache[["hg19"]] <- getCytobands("hg19")
-# cytobands.cache[["hg38"]] <- getCytobands("hg38")
-# cytobands.cache[["mm9"]] <- getCytobands("mm9")
-# cytobands.cache[["mm10"]] <- getCytobands("mm10")
-# cytobands.cache[["rn5"]] <- getCytobands("rn5")
-# cytobands.cache[["rn6"]] <- getCytobands("rn6")
-# cytobands.cache[["danRer10"]] <- getCytobands("danRer10")
-# cytobands.cache[["dm6"]] <- getCytobands("dm6")
+# cytobands.cache[["hg19"]] <- getCytobands("hg19", use.cache=FALSE)
+# cytobands.cache[["hg38"]] <- getCytobands("hg38", use.cache=FALSE)
+# cytobands.cache[["mm9"]] <- getCytobands("mm9", use.cache=FALSE)
+# cytobands.cache[["mm10"]] <- getCytobands("mm10", use.cache=FALSE)
+# cytobands.cache[["rn5"]] <- getCytobands("rn5", use.cache=FALSE)
+# cytobands.cache[["rn6"]] <- getCytobands("rn6", use.cache=FALSE)
+# cytobands.cache[["danRer10"]] <- getCytobands("danRer10", use.cache=FALSE)
+# cytobands.cache[["dm6"]] <- getCytobands("dm6", use.cache=FALSE)
 # cytobands.cache[["ce6"]] <- GRanges()
 # cytobands.cache[["sacCer3"]] <- GRanges()
 # 
@@ -121,7 +121,8 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
 # genomes.cache[["sacCer3"]] <- GRangesForUCSCGenome(genome="sacCer3")
 # 
 # data.cache <- list(genomes=genomes.cache, cytobands=cytobands.cache)
-# devtools::use_data(data.cache, internal = TRUE, overwrite=TRUE)
-
+# library(devtools)
+# use_data(data.cache, internal = TRUE, overwrite=TRUE)
+# 
 # load("R/sysdata.rda")
 # data.cache
