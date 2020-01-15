@@ -44,8 +44,6 @@ cyto <- getCytobands("hg19", use.cache=FALSE)
 #get the cytobands for Drosophila Melanogaster
 cyto <- getCytobands("dm6")
 
-#get the cytobands for Chimpanzee (not included in the package)
-cyto <- getCytobands("panTro4")
  
 }
 \seealso{
