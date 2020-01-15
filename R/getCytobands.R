@@ -45,8 +45,6 @@
 #' #get the cytobands for Drosophila Melanogaster
 #' cyto <- getCytobands("dm6")
 #' 
-#' #get the cytobands for Chimpanzee (not included in the package)
-#' cyto <- getCytobands("panTro4")
 #'  
 #' @export getCytobands
 #' 
@@ -74,7 +72,7 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
   }
     
   cytobands <- tryCatch(expr={
-    biovizBase::getIdeogram(genome, cytobands=TRUE)
+    biovizBase::getIdeogram(genome, cytobands=TRUE, )
     #Old version. Changed to a dependency on boivizBase as requested by package reviewer.    
     # ucsc.session <- browserSession()
     # genome(ucsc.session) <- genome
@@ -88,13 +86,15 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
       return(GRanges())
     }
   )
+  cytobands$name <- as.character(cytobands$name)
+  cytobands$gieStain <- as.character(cytobands$gieStain)
   
   return(cytobands)
   
 }
 
 
-# 
+
 # #Code used to save the predownloaded Cytobands for some common genomes
 # cytobands.cache <- list()
 # cytobands.cache[["hg19"]] <- getCytobands("hg19", use.cache=FALSE)
