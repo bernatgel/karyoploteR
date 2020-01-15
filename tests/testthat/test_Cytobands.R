@@ -15,11 +15,7 @@ test_that("getCytobands returns the expected cytobands", {
                c('p13.3','p13.2','p13.1','p12','p11.2','p11.1','q11.1','q11.2','q12','q21.1','q21.2','q21.31','q21.32','q21.33','q22','q23.1','q23.2','q23.3','q24.1','q24.2','q24.3','q25.1','q25.2','q25.3')
   )
 
-  #Test with other valid genomes
-  expect_equal(length(getCytobands("mm10")), 448)
-  expect_equal(length(getCytobands("rn6")), 953)
-  expect_equal(length(getCytobands("dm6")), 6917)
-  
+ 
   
   #Check null values  
   expect_equal(length(getCytobands(NULL)), 0)
