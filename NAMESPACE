@@ -2,6 +2,7 @@
 
 export(addGeneNames)
 export(autotrack)
+export(colByCategory)
 export(colByChr)
 export(colByRegion)
 export(colByValue)

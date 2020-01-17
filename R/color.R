@@ -633,6 +633,61 @@ colByValue <- function(value, colors, min=NULL, max=NULL) {
 }
 
 
+#' colByCategory
+#' 
+#' @description 
+#' Given a vector of categorical values, assign a color to each one bases on 
+#' its category
+#' 
+#' @details 
+#' The vector of values will be first transformed into a factor (if it's not
+#' already a factor) and then colors will be selected from the palette in the
+#' order defined by the factor levels. If more colors than the ones available in
+#' the palette are needed, they will be reused. If the color vector is named 
+#' using the factor levels and all levels are included, the link bewteen
+#' levels and colors will be honored.
+#' If the color palette is set to "auto", it will create a palette using 
+#' "rainbow".
+#' 
+#' @usage colByCategory(categories, colors) 
+#' 
+#' @param categories A vector of categories. Will be transformed into a factor if it's not one (if characters, integers, etc...)
+#' @param colors (color vector, possibly named) The colors to to use for the different categories. If "auto", a rainbow palette will be used. (defaults to "auto")
+#' 
+#'
+#' @return
+#' A vector of colors of the same length as value
+#'
+#' @seealso \link{kpAddColorRect}, \link{colByValue}
+#' 
+#' @examples
+#' 
+#' colByCategory(c("A", "A", "C", "A", "C", "B"))
+#' #The order of the colors is defined by the order of the factor, not the "natural order" of the elements
+#' colByCategory(c("A", "A", "C", "A", "C", "B"), colors=c("red", "green", "blue"))
+#' #integer categories plus reuse of colors
+#' colByCategory(categories=c(3,3,1,2,1,4,2,3,2,1), colors=c("red", "green", "blue"))
+#' 
+#' @export colByCategory
+
+colByCategory <- function(categories, colors="auto") {
+  if(!is.factor(categories)) {
+    categories <- tryCatch(as.factor(categories), error=function(e) {stop("Could not transform categories into a factor. ", e)})
+  }
+  
+  if(length(colors)==1 && colors=="auto") {
+    colors <- rainbow(length(levels(categories)))  
+  }
+  if(!all(is.color(colors))) stop('colors must be  a vector of valid colors or "auto"')
+  
+  if(length(colors)<length(levels(categories))) colors <- recycle.first(colors, levels(categories))
+  if(is.null(names(colors)) || !all(levels(categories) %in% names(colors))) {
+    names(colors) <- levels(categories)
+  }
+  return(colors[categories])
+}
+
+
 
 
 #' is.color
