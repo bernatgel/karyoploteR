@@ -60,7 +60,7 @@ kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breas
 
   if(!methods::is(data, "GRanges") && !methods::is(data, "VRanges")) {
     if(is.character(data) && length(data)==1) {
-      data <- tryCatch(VariantAnnotation::readVcfAsVRanges(data), error=function(e) {stop("In kpPlotRainfall: Error when reading the VCF file. Is it a VCF file?")})
+      data <- tryCatch(VariantAnnotation::readVcfAsVRanges(data), error=function(e) {stop("In kpPlotRainfall: Error when reading the VCF file. Is it a VCF file? ", e)})
     } else {
       stop(paste0("In kpPlotRainfall: 'data' must be a valid 'GRanges' object or a VCF file"))     
     }
