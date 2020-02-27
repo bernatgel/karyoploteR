@@ -47,7 +47,7 @@
 #' kpAxis(kp, ymax=7, tick.pos=c(0:7))
 #'  
 #' @export kpPlotRainfall
-#' @importFrom VariantAnnotation readVcfAsVRanges
+#' @importFrom VariantAnnotation readVcfAsVRanges ref alt
 
 kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breast", ymin=NULL, ymax=7, data.panel=1, r0=NULL, r1=NULL, clipping=TRUE, ...) {
 
@@ -67,13 +67,13 @@ kpPlotRainfall <- function(karyoplot, data, ref=NULL, alt=NULL, col="cell21breas
   }
   
   if(methods::is(data, "VRanges")) {
-    if(is.null(ref)) ref <- ref(data)
-    if(is.null(alt)) alt <- alt(data)
+    if(is.null(ref)) ref <- VariantAnnotation::ref(data)
+    if(is.null(alt)) alt <- VariantAnnotation::alt(data)
     #And convert into a standard GRanges
     data <- GRanges(data)
     mcols(data) <- NULL
   }
-
+  
   #Remove the indels (if possible)
   if(!is.null(ref) && !is.null(alt)) {
     indels <- nchar(ref)!=1 | nchar(alt)!=1
