@@ -2,6 +2,20 @@ Changes in version 1.10.0
 -------------------------
 
 NEW FEATURES
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+    
+BUG-FIXES
+    o kpPlotGenes and kpPlotTranscripts no longer flip strands when plotting on
+    data.panel=2
+
+
+
+
+Changes in version 1.10.0
+-------------------------
+
+NEW FEATURES
     o Added new color managements functions including is.color and transparent
     and improved the existing ones.
     o Added new functions to color data elements based on different features:
