@@ -6,7 +6,7 @@
 #getCoordChangeFunctions <- function(plot.type, genome, plot.params)
 getCoordChangeFunctions <- function(karyoplot)
 {
- 
+ message("NEW")
   plot.params <- karyoplot$plot.params
   genome <- karyoplot$plot.region
   genome <- keepSeqlevels(genome, seqnames(genome)) #we need the seqlevels in genome to be the visible chromsomes only
@@ -81,7 +81,7 @@ getCoordChangeFunctions <- function(karyoplot)
       return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
     }
   }
-  if(plot.type == 5) { #All chromosomes in a line with 1 data panel below
+  if(plot.type == 5) { #All chromosomes in a line with 1 data panel below (Implemented as a special case of 3)
     genomic2plot <- genomic2plot_3HorizAllChromosomesInOneLine
     ideoMid <- getIdeogramMidY_3HorizAllChromosomesInOneLine
     chrHeight <- getChrHeight_3HorizAllChromosomesInOneLine
@@ -95,7 +95,8 @@ getCoordChangeFunctions <- function(karyoplot)
         }
       }
       if(is.null(data.panel) || data.panel==1) data.panel <- 2 #data.panel 1 is not visible in this plot.type
-      return(genomic2plot(chr=chr, x=x, y=y, data.panel=data.panel, genome=genome, plot.params=plot.params))
+      inv.y <- plot.params$data2max - (y - plot.params$data2min) #Invert the y so we get "standard" positioning in panel 2
+      return(genomic2plot(chr=chr, x=x, y=inv.y, data.panel=data.panel, genome=genome, plot.params=plot.params))
     }
   }
   if(plot.type == 6) { #Plot only on the ideograms
