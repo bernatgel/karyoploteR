@@ -9,6 +9,7 @@ BUG-FIXES
     o kpPlotGenes and kpPlotTranscripts no longer flip strands when plotting on
     data.panel=2
     o kpPlotRainfall does not error when a chromosome has no data
+    o Fixed inversion bug in plot.type=5
 
 
 
