@@ -6,7 +6,6 @@
 #getCoordChangeFunctions <- function(plot.type, genome, plot.params)
 getCoordChangeFunctions <- function(karyoplot)
 {
- message("NEW")
   plot.params <- karyoplot$plot.params
   genome <- karyoplot$plot.region
   genome <- keepSeqlevels(genome, seqnames(genome)) #we need the seqlevels in genome to be the visible chromsomes only
