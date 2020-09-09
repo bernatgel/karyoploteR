@@ -87,7 +87,7 @@ kpPlotRegions <- function(karyoplot, data, data.panel=1, r0=NULL, r1=NULL,
   
   #if there's nothing to plot, return
   if(length(data)==0) {
-    invisible(karyoplot)
+    return(invisible(karyoplot))
   }
   
   
