@@ -9,7 +9,7 @@ colByCategory(categories, colors)
 \arguments{
 \item{categories}{A vector of categories. Will be transformed into a factor if it's not one (if characters, integers, etc...)}
 
-\item{colors}{(color) The colors to to use for the different categories. If "auto", a rainbow palette will be used. (defaults to "auto")}
+\item{colors}{(color vector, possibly named) The colors to to use for the different categories. If "auto", a rainbow palette will be used. (defaults to "auto")}
 }
 \value{
 A vector of colors of the same length as value
@@ -22,7 +22,9 @@ its category
 The vector of values will be first transformed into a factor (if it's not
 already a factor) and then colors will be selected from the palette in the
 order defined by the factor levels. If more colors than the ones available in
-the palette are needed, they will be reused.
+the palette are needed, they will be reused. If the color vector is named 
+using the factor levels and all levels are included, the link bewteen
+levels and colors will be honored.
 If the color palette is set to "auto", it will create a palette using 
 "rainbow".
 }
