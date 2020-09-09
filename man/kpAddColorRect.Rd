@@ -42,7 +42,26 @@ Given a KaryoPlot object, plot colored rectangles on the side of the data panels
 }
 \examples{
 
- 
+ num.samples <- 10
+samples.metadata <- data.frame(stage=c("I", "I", "I", "III", "IV", "III", "II", "IV", "IV", "IV"),
+                                metastasis=c(0,0,0,0,1,0,0,0,1,0),
+                                subtype=c("A", "A", "B", "B", "A", "B", "B", "B", "A", "B"))
+
+kp <- plotKaryotype(plot.type=4)
+for(i in 1:num.samples) {
+  #metastasis
+  kpAddColorRect(kp, col = colByCategory(samples.metadata$metastasis, color=c("white", "black"))[i],
+                 rect.margin = 0.01, rect.width = 0.01, r0=autotrack(i, num.samples))
+  #stage
+  kpAddColorRect(kp, 
+    col = colByCategory(samples.metadata$stage, colors=c("I"="plum1", "II"="hotpink", "III"="orange", "IV"="red2"))[i],
+    rect.margin = 0.021, rect.width = 0.01, r0=autotrack(i, num.samples))
+  #subtype
+  kpAddColorRect(kp, 
+                 col = colByCategory(samples.metadata$subtype, colors=c("dodgerblue", "gold"))[i],
+                 rect.margin = 0.032, rect.width = 0.01, r0=autotrack(i, num.samples))
+}
+
 }
 \seealso{
 \code{\link{plotKaryotype}}, \code{\link{autotrack}}
