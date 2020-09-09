@@ -10,10 +10,10 @@
 #' function is usually automatically called by plotKaryotype unless 
 #' \code{labels.plotter} is NULL.
 #' 
-#' @usage kpAddChromosomeNames(karyoplot, names=NULL, xoffset=0, yoffset=0, ...)
+#' @usage kpAddChromosomeNames(karyoplot, chr.names=NULL, xoffset=0, yoffset=0, ...)
 #' 
 #' @param karyoplot    a \code{karyoplot} object returned by a call to \code{plotKaryotype}
-#' @param names      (character vector) the names to use for the chromosomes. If NULL, the chromosome names in the original genome will be used. (defaults to NULL)
+#' @param chr.names      (character vector) the names to use for the chromosomes. If NULL, the chromosome names in the original genome will be used. (defaults to NULL)
 #' @param xoffset    (numeric) a number of units to move the the chromosome names on the x axis with respect to their standard position (defaults to 0)
 #' @param yoffset    (numeric) a number of units to move the the chromosome names on the y axis with respect to their standard position (defaults to 0)
 #' @param ...  any additional parameter to be passed to the text plotting. All R base graphics params are passed along.
