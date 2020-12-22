@@ -2,7 +2,7 @@
 % Please edit documentation in R/kpPlotCoverage.R
 \name{kpPlotCoverage}
 \alias{kpPlotCoverage}
-\title{kpCoverage}
+\title{kpPlotCoverage}
 \usage{
 kpPlotCoverage(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NULL, r1=NULL, col="#0e87eb", border=NULL, ymax=NULL, clipping=TRUE, ...)
 }
