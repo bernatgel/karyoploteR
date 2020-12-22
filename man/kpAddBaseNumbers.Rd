@@ -13,6 +13,8 @@ kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, dig
 
 \item{tick.len}{(numeric) The length of the major tick marks in plot coordinates (defaults to 5)}
 
+\item{units}{(character) the units for the numbers to be represented. Must be one of "auto", "b", "kb" or "Mb". If auto, it will utomatically choose the most suitable unit. (Defaults to "auto")}
+
 \item{add.units}{(boolean) Add the units (Mb, Kb...) to the tick labels. (Defaults to FALSE)}
 
 \item{digits}{(integer) The maximum number of digits after the decimal point in labels. (defaults to 2)}
@@ -41,7 +43,7 @@ Plots the base numbers along the chromosome ideograms
 }
 \details{
 This function can be used to add the base numbers scale to the chromosome ideograms.
-The base numbers and ticks witll be drawn next to the ideograms and not on a separate
+The base numbers and ticks will be drawn next to the ideograms and not on a separate
 independent x axis. It is possible to control the number and position of the tick
 marks and labels
 }

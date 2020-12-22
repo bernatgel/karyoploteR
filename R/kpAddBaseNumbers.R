@@ -7,7 +7,7 @@
 #' @details 
 #'  
 #' This function can be used to add the base numbers scale to the chromosome ideograms.
-#' The base numbers and ticks witll be drawn next to the ideograms and not on a separate
+#' The base numbers and ticks will be drawn next to the ideograms and not on a separate
 #' independent x axis. It is possible to control the number and position of the tick
 #' marks and labels
 #' 
@@ -16,6 +16,7 @@
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases (defaults to 20 milions, one major tick every 20Mb)
 #' @param tick.len  (numeric) The length of the major tick marks in plot coordinates (defaults to 5)
+#' @param units (character) the units for the numbers to be represented. Must be one of "auto", "b", "kb" or "Mb". If auto, it will utomatically choose the most suitable unit. (Defaults to "auto")
 #' @param add.units (boolean) Add the units (Mb, Kb...) to the tick labels. (Defaults to FALSE)
 #' @param digits   (integer) The maximum number of digits after the decimal point in labels. (defaults to 2)
 #' @param minor.ticks (boolean) Whether to add unlabeled minor ticks between the major ticks (defaults to TRUE)
@@ -48,12 +49,14 @@
 #' 
 
 
-kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE,
+kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, 
+                             units="auto", add.units=FALSE,
                              digits=2, minor.ticks=TRUE, 
                             minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, 
                             tick.col=NULL, minor.tick.col=NULL, clipping=TRUE,  ...) {
   
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
+  if(!(units %in% c("auto", "b", "kb", "Kb", "mb", "Mb"))) stop("invalid units. Must be one of: 'auto', 'b', 'Kb' or 'Mb'")
   
   karyoplot$beginKpPlot()
   on.exit(karyoplot$endKpPlot())
@@ -63,15 +66,21 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
   mids <- karyoplot$ideogram.mid
   
   
-  toLabel <- function(n, add.units, digits) {
+  toLabel <- function(n, units, add.units, digits) {
     if(add.units==TRUE) {
-      units <- c("b", "Kb", "Mb")
+      unit.labels <- c("b", "Kb", "Mb")
     } else {
-      units <- c("", "", "")
+      unit.labels <- c("", "", "")
     }
-    if(abs(n) < 1000) return(paste0(as.character(n), units[1]))
-    if(abs(n) < 1000000) return(paste0(as.character(round(n/1000, digits=digits)), units[2])) #Kb
-    return(paste0(as.character(round(n/1000000, digits=digits)), units[3])) #Mb
+    message("units: ", units)
+    if(units == "auto") {
+      if(abs(n)<1000) { units <- "b"}
+      else if(abs(n)<1000000) {units <- "Kb"}
+      else {units <- "Mb"}
+    }
+    if(tolower(units) == "b") {message("b"); return(paste0(as.character(n), unit.labels[1]))}
+    if(tolower(units) == "kb") return(paste0(as.character(round(n/1000, digits=digits)), unit.labels[2])) #Kb
+    return(paste0(as.character(round(n/1000000, digits=digits)), unit.labels[3])) #Mb
   }
   
   old.scipen <- options("scipen")
@@ -97,7 +106,10 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5, add.unit
     }
     
     if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
-      tick.labels <- sapply(tick.pos, toLabel, add.units=add.units, digits=digits)
+      message("2: ", units)
+      tick.labels <- sapply(tick.pos, toLabel, units=units, add.units=add.units, digits=digits)
+        #
+      #function(x){return(toLabel(x, units=units, add.units=add.units, digits=digits))}
       
       
       xplot <- ccf(chr=rep(chr.name, length(tick.pos)), x=tick.pos, data.panel="ideogram")$x
