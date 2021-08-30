@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.19.1
+Version: 1.19.2
 Date: 2017-05-03
 Author: Bernat Gel <bgel@igtp.cat>
 Maintainer: Bernat Gel <bgel@igtp.cat>
@@ -40,6 +40,7 @@ Suggests:
     BiocStyle,
     knitr,
     rmarkdown,
+    markdown,
     testthat,
     magrittr,
     BSgenome.Hsapiens.UCSC.hg19,
