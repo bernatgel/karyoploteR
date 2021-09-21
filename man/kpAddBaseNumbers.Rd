@@ -4,7 +4,7 @@
 \alias{kpAddBaseNumbers}
 \title{kpAddBaseNumbers}
 \usage{
-kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
+kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, units="auto", add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
 }
 \arguments{
 \item{karyoplot}{(karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}}

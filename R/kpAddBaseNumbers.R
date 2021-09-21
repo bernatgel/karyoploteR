@@ -11,7 +11,7 @@
 #' independent x axis. It is possible to control the number and position of the tick
 #' marks and labels
 #' 
-#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
+#' @usage kpAddBaseNumbers(karyoplot, tick.dist=20000000, tick.len=5, units="auto", add.units=FALSE, digits=2, minor.ticks=TRUE, minor.tick.dist=5000000, minor.tick.len=2,  cex=0.5, tick.col=NULL, minor.tick.col=NULL, clipping=TRUE, ...)
 #' 
 #' @param karyoplot  (karyoplot object) A valid karyoplot object created by a call to \code{\link{plotKaryotype}}
 #' @param tick.dist  (numeric) The distance between the major numbered tick marks in bases (defaults to 20 milions, one major tick every 20Mb)
