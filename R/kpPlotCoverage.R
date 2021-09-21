@@ -41,23 +41,23 @@
 #'  
 #'  set.seed(1000)
 #'  
-#'  #Example 1: create 20 sets of non-overlapping random regions and plot them all. Add a coverage plot on top.
-#'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
-#'  
-#'  all.regs <- GRanges()
-#' 
-#'  nreps <- 20
-#'  for(i in 1:nreps) {
-#'    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
-#'                                non.overlapping = TRUE, genome = "hg19", mask=NA)
-#'    all.regs <- c(all.regs, regs)
-#'    kpPlotRegions(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
-#'  }
-#' 
-#'  kpPlotCoverage(kp, all.regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
-#'  kpAxis(kp, ymin = 0, ymax= 20, numticks = 2, r0 = 0.8, r1=1)
-#' 
-#'   
+#  #Example 1: create 20 sets of non-overlapping random regions and plot them all. Add a coverage plot on top.
+#  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
+#  
+#  all.regs <- GRanges()
+# 
+#  nreps <- 20
+#  for(i in 1:nreps) {
+#    regs <- createRandomRegions(nregions = 100, length.mean = 10000000, length.sd = 1000000,
+#                                non.overlapping = TRUE, genome = "hg19", mask=NA)
+#    all.regs <- c(all.regs, regs)
+#    kpPlotRegions(kp, regs, r0 = (i-1)*(0.8/nreps), r1 = (i)*(0.8/nreps), col="#AAAAAA")
+#  }
+# 
+#  kpPlotCoverage(kp, all.regs, ymax = 20, r0=0.8,  r1=1, col="#CCCCFF")
+#  kpAxis(kp, ymin = 0, ymax= 20, numticks = 2, r0 = 0.8, r1=1)
+# 
+#   
 #'  #Example 2: Do the same with a single bigger set of possibly overlapping regions
 #'  
 #'  kp <- plotKaryotype("hg19", plot.type=1, chromosomes=c("chr1", "chr2"))
