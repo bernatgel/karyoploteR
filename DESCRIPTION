@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.19.3
+Version: 1.19.4
 Date: 2017-05-03
 Author: Bernat Gel <bgel@igtp.cat>
 Maintainer: Bernat Gel <bgel@igtp.cat>
@@ -55,4 +55,4 @@ BugReports: https://github.com/bernatgel/karyoploteR/issues
 VignetteBuilder: knitr
 biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport, OneChannel
 NeedsCompilation: no
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
