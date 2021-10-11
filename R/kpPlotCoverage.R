@@ -83,23 +83,21 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   #data
   if(missing(data)) stop("The parameter 'data' is required")
   #TODO: If data is not a SimpleRleList, try to convert it to a GRanges before testing with is so other Region Set formats can be used
-  
   if(!methods::is(data, "GRanges") && !methods::is(data, "SimpleRleList")) {
     data <- tryCatch(toGRanges(data), error=function(e) {stop("'data' must be a GRanges object or a SimpleRleList")})
   }  
-  
   #Compute (if needed) the coverage
   #If its not a coverage object,  it's a GRanges. Compute the coverage
   if(!methods::is(data, "SimpleRleList")) { 
     #remove any region not in the currently used genome
-    data <- data[seqnames(data) %in% karyoplot$chromosomes,]
-      #Old version, problems when data had no seqinfo - data <- GenomeInfoDb::keepSeqlevels(data, karyoplot$chromosomes, pruning.mode="coarse")
+    data <- data[as.character(GenomeInfoDb::seqnames(data)) %in% karyoplot$chromosomes,]
+       #Old version, problems when data had no seqinfo - data <- GenomeInfoDb::keepSeqlevels(data, karyoplot$chromosomes, pruning.mode="coarse")
     #Remove any unused seq level from the GRanges to fix problems with coverage and witdh
-    seqlevels(data) <- karyoplot$chromosomes
+    GenomeInfoDb::seqlevels(data) <- karyoplot$chromosomes
+ 
     #the width parameter is needed so the coverage extends to the end of the chromosomes
-    data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths[seqlevels(data)]) 
+    data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths[GenomeInfoDb::seqlevels(data)]) 
   }
-  
   coverage.gr <- toGRanges(data)
  
   if(show.0.cov==FALSE) {
@@ -126,11 +124,12 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   cov.end <- coverage.gr
   start(cov.end) <- end(cov.end)
   cov.to.plot <- sort(c(cov.start, cov.end))
+  
   kpArea(karyoplot=karyoplot, data=cov.to.plot, y=cov.to.plot$coverage, 
          base.y = 0, ymin=0, ymax=ymax,
          r0=r0, r1=r1, data.panel=data.panel,
          col=col, border=border, clipping=clipping, ...)
-   
+  
   karyoplot$latest.plot <- list(funct="kpPlotCoverage", computed.values=list(max.coverage=max(max(coverage.gr$coverage)),
                                                                             coverage=coverage.gr,
                                                                             ymax=ymax))
