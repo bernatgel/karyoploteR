@@ -38,8 +38,6 @@ cache, use \code{\link{forget}(getCytobands)}
 #get the cytobands for hg19 (using the data included in the package)
 cyto <- getCytobands("hg19")
 
-#do not use the included data and force the download from UCSC
-cyto <- getCytobands("hg19", use.cache=FALSE)
 
 #get the cytobands for Drosophila Melanogaster
 cyto <- getCytobands("dm6")
