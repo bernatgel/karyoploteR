@@ -72,13 +72,12 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5,
     } else {
       unit.labels <- c("", "", "")
     }
-    message("units: ", units)
     if(units == "auto") {
       if(abs(n)<1000) { units <- "b"}
       else if(abs(n)<1000000) {units <- "Kb"}
       else {units <- "Mb"}
     }
-    if(tolower(units) == "b") {message("b"); return(paste0(as.character(n), unit.labels[1]))}
+    if(tolower(units) == "b") return(paste0(as.character(n), unit.labels[1])) #b
     if(tolower(units) == "kb") return(paste0(as.character(round(n/1000, digits=digits)), unit.labels[2])) #Kb
     return(paste0(as.character(round(n/1000000, digits=digits)), unit.labels[3])) #Mb
   }
@@ -106,7 +105,6 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5,
     }
     
     if(length(tick.pos)>0) {#We have to test here and cannot test on num.ticks to take the zooming into account
-      message("2: ", units)
       tick.labels <- sapply(tick.pos, toLabel, units=units, add.units=add.units, digits=digits)
         #
       #function(x){return(toLabel(x, units=units, add.units=add.units, digits=digits))}
