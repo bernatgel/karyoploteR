@@ -268,8 +268,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     } else {
       kp$genome.name <- "custom"
     }
-    kp$chromosomes <- as.character(GenomeInfoDb::seqlevels(gr.genome))
-    kp$chromosome.lengths <- stats::setNames(end(gr.genome), seqnames(gr.genome))
+    
     kp$genome <- gr.genome
     kp$cytobands <- cytobands
     kp$plot.type <- plot.type
@@ -285,7 +284,11 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
       kp$zoom <- TRUE
     }
     
-    
+    #Get the chromosome names from the plot.region object so they are in the order specified by the user
+    #Older version used seqlevels(gr.genome) which were naturally ordered.
+    kp$chromosomes <- as.character(seqnames(kp$plot.region))
+    #WARNING: Should we get the lengths with "width"? This would help for chromosomes not starting at 1. Do we want to support that? Is teher any valid use case?
+    kp$chromosome.lengths <- stats::setNames(end(gr.genome), seqnames(gr.genome))
     
     #Get the Coordinates Change Function to be used in this plot
     #coordChangeFunctions <- getCoordChangeFunctions(plot.type = plot.type, genome = gr.genome, plot.params = plot.params)
