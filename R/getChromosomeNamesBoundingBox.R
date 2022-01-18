@@ -46,9 +46,7 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
   }
   if(karyoplot$plot.type %in% c(3, 5,7)) {
     #position the labels centered in the chromosome and in the top margin
-    chr.labels <- karyoplot$chromosomes
-    
-    chr.lens <- stats::setNames(as.numeric(end(karyoplot$plot.region) - start(karyoplot$plot.region)), chr.labels)
+    chr.labels <- as.character(seqnames(karyoplot$plot.region))
     
     y1 <- stats::setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin/2, length(chr.labels)), chr.labels) #the top half of the top margin is reserved for the main title
     y0 <- stats::setNames(rep(karyoplot$plot$ymax - karyoplot$plot.params$topmargin, length(chr.labels)), chr.labels)
@@ -62,9 +60,7 @@ getChromosomeNamesBoundingBox <- function(karyoplot) {
   }
   if(karyoplot$plot.type %in% c(4)) {
     #position the labels centered in the chromosome and in the bottom margin
-    chr.labels <- karyoplot$chromosomes
-    
-    chr.lens <- stats::setNames(as.numeric(end(karyoplot$plot.region) - start(karyoplot$plot.region)), chr.labels)
+    chr.labels <- as.character(seqnames(karyoplot$plot.region))
     
     y1 <- stats::setNames(rep(karyoplot$plot.params$bottommargin, length(chr.labels)), chr.labels)
     y0 <- stats::setNames(rep(0, length(chr.labels)), chr.labels)
