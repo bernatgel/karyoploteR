@@ -41,6 +41,9 @@ Given a KaryoPlot object, plot labels on the side of the data panels to help ide
 plot.params <- getDefaultPlotParams(plot.type=2)
 plot.params$leftmargin <- 0.2
 plot.params$rightmargin <- 0.2
+
+#In standard whole karyotypes, labels are drawn for all chromosomes
+
 kp <- plotKaryotype("hg19", chromosomes=c("chr1", "chr2"), plot.type=2, plot.params = plot.params)
 #data panel 1
 kpDataBackground(kp, r0=0, r1=0.5, col="#FFDDDD")
@@ -58,6 +61,52 @@ kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=1, cex=0.8, side=
 kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6, side="right")
 kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6, side="right")
  
+ 
+ 
+#In karyotypes with all chromosomes in a single line, 
+#labels are added on the first (side="left") or last (side="right") chromosome
+
+kp <- plotKaryotype("hg19", chromosomes=c("chr1", "chr2", "chr3"), plot.type=3, plot.params = plot.params)
+#data panel 1
+kpDataBackground(kp, r0=0, r1=0.5, col="#FFDDDD")
+kpDataBackground(kp, r0=0.5, r1=1, col="#DDFFDD")
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=3, cex=0.8)
+kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6)
+kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6)
+#data panel 2
+kpDataBackground(kp, col="#DDDDFF", data.panel = 2)
+kpAddLabels(kp, "BLUE", data.panel=2)
+
+#Plot on the right
+#data panel 1
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=1, cex=0.8, side="right")
+kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6, side="right")
+kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6, side="right")
+
+
+
+#In Zoomed regions, they are placed at the correct position too
+kp <- plotKaryotype("hg19", zoom="chr1:20000000-40000000", plot.type=2, plot.params = plot.params)
+kpAddBaseNumbers(kp, tick.dist=5000000, add.units=TRUE)
+#data panel 1
+kpDataBackground(kp, r0=0, r1=0.5, col="#FFDDDD")
+kpDataBackground(kp, r0=0.5, r1=1, col="#DDFFDD")
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=3, cex=0.8)
+kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6)
+kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6)
+#data panel 2
+kpDataBackground(kp, col="#DDDDFF", data.panel = 2)
+kpAddLabels(kp, "BLUE", data.panel=2)
+
+#Plot on the right
+#data panel 1
+kpAddLabels(kp, "Everything", label.margin = 0.12, srt=90, pos=1, cex=0.8, side="right")
+kpAddLabels(kp, "Red", r0=0, r1=0.5, cex=0.6, side="right")
+kpAddLabels(kp, "Green", r0=0.5, r1=1, cex=0.6, side="right")
+
+
+
+
 }
 \seealso{
 \code{\link{plotKaryotype}}
