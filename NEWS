@@ -1,3 +1,16 @@
+Changes in version 1.21.0
+-------------------------
+
+NEW FEATURES
+    
+SIGNIFICANT USER-VISIBLE CHANGES
+    
+BUG-FIXES
+    o Fixed wrong positioning of chromosome names in some edge cases (github issue 114)
+    o kpAddLabels now work on zoomed in regions (github issue 112)
+
+
+
 Changes in version 1.10.0
 -------------------------
 
