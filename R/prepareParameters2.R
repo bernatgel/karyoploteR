@@ -122,6 +122,9 @@ prepareParameters2 <- function(function.name, karyoplot, data=NULL, chr=NULL, x=
   #scale y to fit in the [r0, r1] range
   y <- (y*(rs$r1-rs$r0))+rs$r0
   
+  #Test if there's a problem with the chromosome names
+  checkChromosomeStyle(data.chr = chr, genome.chr = karyoplot$chromosomes)
+  
   if(filter.data) {
     in.visible.chrs <- chr %in% karyoplot$chromosomes
     chr <- chr[in.visible.chrs]
