@@ -277,3 +277,13 @@ findIntersections <- function(data, thr) {
 #shiftl: Utility function to shift logical vectors one position to the left
 shiftl <- function(l) {return(c(l[2:length(l)], FALSE))}
 
+
+#Internal function. Check if the chromosome name styles match between data and genome
+checkChromosomeStyle <- function(data.chr, genome.chr) {
+  if(length(data.chr)>0 & length(genome.chr)>0 &
+     !any(data.chr %in% genome.chr) & 
+     any(gsub(pattern = "chr", replacement = "", x = data.chr, ignore.case = TRUE) %in% gsub(pattern = "chr", replacement = "", x = genome.chr, ignore.case = TRUE))) {
+    message("Chromosome name styles in data (\"", data.chr[1], "\") and genome (\"", genome.chr[1], "\") do not match.
+They must match exactly for karyoploteR to plot anything. It seems it may be a problem with 'chr' in the names?")
+  }
+}
