@@ -73,14 +73,20 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
   }
     
   cytobands <- tryCatch(expr={
-    biovizBase::getIdeogram(genome, cytobands=TRUE, )
+    #TEMP FIX: 2023-08-28 I deactivate the call to biovizBase due to an error: 
+    #   Error in .normarg_seqlengths(value, seqnames(x)) : 
+    #   the names on the supplied 'seqlengths' vector must be identical to the seqnames
+    #and activate the old code directly calling rtracklayer to access UCSC.
+    #TODO: Fall back to bioviz base once this is fixed.
+    
+    #biovizBase::getIdeogram(genome, cytobands=TRUE, )
     #Old version. Changed to a dependency on boivizBase as requested by package reviewer.    
-    # ucsc.session <- browserSession()
-    # genome(ucsc.session) <- genome
-    # cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
-    # cytobands$name <- as.character(cytobands$name)
-    # cytobands$gieStain <- as.character(cytobands$gieStain)
-    # toGRanges(cytobands)    
+    ucsc.session <- browserSession()
+    genome(ucsc.session) <- genome
+    cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
+    cytobands$name <- as.character(cytobands$name)
+    cytobands$gieStain <- as.character(cytobands$gieStain)
+    toGRanges(cytobands)
     },
     error = function(e) {
       message("Message: Failed to retrieve cytobands for ", genome, " from UCSC. Returning no cytobands.", e)
