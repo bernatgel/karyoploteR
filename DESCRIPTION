@@ -55,4 +55,5 @@ BugReports: https://github.com/bernatgel/karyoploteR/issues
 VignetteBuilder: knitr
 biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport, OneChannel
 NeedsCompilation: no
-RoxygenNote: 7.1.2
+Encoding: UTF-8
+RoxygenNote: 7.2.3
