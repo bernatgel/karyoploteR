@@ -14,9 +14,13 @@
 #' object. Setting the parameter \code{use.cache} to \code{FALSE}, the data included in the 
 #' package will be ignored and the cytobands will be downloaded from UCSC.
 #' 
-#' The genomes (and versions) with pre-downloaded cytobands are: hg19, hg38, mm9, mm10, rn5, rn6,
-#' danRer10, dm6, ce6 and sacCer3.
+#' The genomes (and versions) with pre-downloaded cytobands are: hg18, hg19, hg38, mm9, mm10, mm39, 
+#'      rn5, rn6, rn7, susScr11, 
+#'      bosTau9, bosTau8, equCab3, equCab2, panTro6, panTro5, rheMac10,
+#'      danRer10, danRer11, xenTro10, dm3, dm6, 
+#'      ce6, ce10, ce11, sacCer2, sacCer3
 #'    
+#' 
 #' 
 #' @usage getCytobands(genome="hg19", use.cache=TRUE)
 #' 
@@ -81,9 +85,9 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
     
     #biovizBase::getIdeogram(genome, cytobands=TRUE, )
     #Old version. Changed to a dependency on boivizBase as requested by package reviewer.    
-    ucsc.session <- browserSession()
-    genome(ucsc.session) <- genome
-    cytobands <- getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
+    ucsc.session <- rtracklayer::browserSession()
+    rtracklayer::genome(ucsc.session) <- genome
+    cytobands <- rtracklayer::getTable(rtracklayer::ucscTableQuery(ucsc.session,"cytoBandIdeo"))
     cytobands$name <- as.character(cytobands$name)
     cytobands$gieStain <- as.character(cytobands$gieStain)
     toGRanges(cytobands)
@@ -102,7 +106,31 @@ getCytobands <- NULL #Neede so roxygen writes the documentation file
 
 
 
-# #Code used to save the predownloaded Cytobands for some common genomes
+# # #Code used to save the predownloaded Cytobands for some common genomes
+# genomes <- c("hg18", "hg19", "hg38", "mm9", "mm10", "mm39", "rn5", "rn6", "rn7", "susScr11", 
+#              "bosTau9", "bosTau8", "equCab3", "equCab2", "panTro6", "panTro5", "rheMac10",
+#              "danRer10", "danRer11", "xenTro10", "dm3", "dm6", 
+#              "ce6", "ce10", "ce11", "sacCer2", "sacCer3")
+# 
+# cytobands.cache <- list()
+# genomes.cache <- list()
+# 
+# for(g in genomes) {
+#   message("Downloading data for ", g)
+#   cytobands.cache[[g]] <- getCytobands(g, use.cache=FALSE)
+#   genomes.cache[[g]] <- GRangesForUCSCGenome(genome=g)
+#   Sys.sleep(200)  #To ensure no blocking from UCSC due to too many requests
+# }
+# 
+# data.cache <- list(genomes=genomes.cache, cytobands=cytobands.cache)
+# 
+# library(devtools)
+# use_data(data.cache, internal = TRUE, overwrite=TRUE)
+#  
+# load("R/sysdata.rda")
+# data.cache
+
+#OLD CODE
 # cytobands.cache <- list()
 # cytobands.cache[["hg19"]] <- getCytobands("hg19", use.cache=FALSE)
 # cytobands.cache[["hg38"]] <- getCytobands("hg38", use.cache=FALSE)

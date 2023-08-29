@@ -26,8 +26,11 @@ some reason it is not possible to retrieve the cytobands, it will return an empt
 object. Setting the parameter \code{use.cache} to \code{FALSE}, the data included in the 
 package will be ignored and the cytobands will be downloaded from UCSC.
 
-The genomes (and versions) with pre-downloaded cytobands are: hg19, hg38, mm9, mm10, rn5, rn6,
-danRer10, dm6, ce6 and sacCer3.
+The genomes (and versions) with pre-downloaded cytobands are: hg18, hg19, hg38, mm9, mm10, mm39, 
+     rn5, rn6, rn7, susScr11, 
+     bosTau9, bosTau8, equCab3, equCab2, panTro6, panTro5, rheMac10,
+     danRer10, danRer11, xenTro10, dm3, dm6, 
+     ce6, ce10, ce11, sacCer2, sacCer3
 }
 \note{
 This function is memoised (cached) using the \code{\link{memoise}} package. To empty the 
