@@ -231,7 +231,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
           gr.genome <- keepSeqlevels(gr.genome, valid.chrs, pruning.mode="coarse")
           
         } else {
-          if(chromosomes != "autosomal") { #It should not be anything else
+          if(chromosomes == "autosomal") { #It should not be anything else
             message("WARNING: It is only possible to filter chromosomes using the ",
                     " 'autosomal' option when the genome ",
                     "is specified by name (i.e. 'hg19', 'mm10') and just for a selection",
