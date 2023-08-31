@@ -37,7 +37,7 @@
 #' @param plot.type    The orientation of the ideogram and placing of the data panels. Values explained above.. (defaults to 1)
 #' @param ideogram.plotter    The function to be used to plot the ideograms. Only one function is included with the package, \code{kpAddCytobands}, but it is possible to create custom ones. If NULL, no ideograms are plotted. (defaults to \code{kpAddCytobands})
 #' @param labels.plotter    The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})
-#' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical for named genomes and no filtering for custom genomes. (defaults to "auto")
+#' @param chromosomes    The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical. If no predefined filtering data is available, a heuristic filtering  will be used. To deactivate filtering set chromosomes="all". (defaults to "auto")
 #' @param zoom   A GRanges object specifiyng a single region to zoom in or any format accepted by \code{regioneR::toGRanges}. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})
 #' @param cytobands    A GRanges object (or anything accepted by \code{\link[regioneR]{toGRanges}} function: bed file, data.frame...) specifying the positions and types of the cytobands. The type of the cytobands MUST be in a column named "gieStain" (as used by UCSC) with values such as 'gneg', 'gpos50', 'stalk', 'acen'... If NULL, the cytobands are recovered from the package cache or downloaded from UCSC if possible (it's not possible for custom genomes). If empty, no cytobands will be plotted. (defaults to NULL)
 #' @param plot.params    An object obtained from \code{\link{getDefaultPlotParams}} and possibly modified, containing the basic plotting parameters. If NULL, the defaults parameters will be used. (defaults to NULL)
@@ -214,13 +214,31 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
                    message("WARNING: There was an error when filtering the chromosomes and selecting only ", chromosomes, " chromosomes.  Falling back to using the unfiltered genome. \n", e)
                  })
       } else {
-        if(chromosomes != "auto") { #If set to 'auto', say nothing about the filtering. The user has actually not requested any filtering on their GRanges.
-          message("NOTE: It is only possible to filter chromosomes using named ",
-                  "chromosome classes (i.e. 'canonical', 'autosomal') when the genome ",
-                  "is specified by name (i.e. 'hg19', 'mm10'). Please, either ",
-                  "use a genome specified by name or explicitly select the ",
-                  "chromosomes to plot (i.e. chromosomes=c('chr1', 'chr2') ). ",
-                  " Falling back to using the unfiltered genome.")
+        #If filtering gave an error and chromosomes is "canonical" or "auto", then try to use a heuristic filtering
+        if(chromosomes %in% c("auto", "canonical")) {
+          message("No predefined canonical chromosomes found for the requested genome. Applying a heuristic chromosome filtering.")
+          message("To get the unfiltered genome, please set chromosomes=\"all\" in the plotKaryotype call")
+        
+          valid.chrs <- seqlevels(gr.genome)
+          valid.chrs <- valid.chrs[!grepl("chrUn", valid.chrs, ignore.case = TRUE)]
+          valid.chrs <- valid.chrs[!grepl("_random", valid.chrs, ignore.case = TRUE)]
+          valid.chrs <- valid.chrs[!grepl("_alt", valid.chrs, ignore.case = TRUE)]
+          valid.chrs <- valid.chrs[!grepl("_fix", valid.chrs, ignore.case = TRUE)]
+          
+          #Remove the mitocondrial chromosome.
+          valid.chrs <- valid.chrs[!(valid.chrs == "chrM")]
+          
+          gr.genome <- keepSeqlevels(gr.genome, valid.chrs, pruning.mode="coarse")
+          
+        } else {
+          if(chromosomes != "autosomal") { #It should not be anything else
+            message("WARNING: It is only possible to filter chromosomes using the ",
+                    " 'autosomal' option when the genome ",
+                    "is specified by name (i.e. 'hg19', 'mm10') and just for a selection",
+                    " of genomes. Please, specify the names of the desired chromosomes",
+                    " using the 'chromosomes' parameter (i.e. chromosomes=c('chr1', 'chr2') ). ",
+                    " Falling back to using the unfiltered genome.")
+          }
         }
       }
     } else {

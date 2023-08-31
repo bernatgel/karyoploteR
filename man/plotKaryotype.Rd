@@ -15,7 +15,7 @@ plotKaryotype(genome="hg19", plot.type=1, ideogram.plotter=kpAddCytobands, label
 
 \item{labels.plotter}{The function to be used to plot the labels identifying the chromosomes. Only one function is included with the package, \code{kpAddChromosomeNames}, but it is possible to create custom ones. If NULL, no labels are plotted. (defaults to \code{kpAddChromosomeNames})}
 
-\item{chromosomes}{The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical for named genomes and no filtering for custom genomes. (defaults to "auto")}
+\item{chromosomes}{The chromosomes to plot. Can be either a vector of chromosome names or a chromosome group name ("canonical", "autosomal", "all"). Setting it yo "auto" will select canonical. If no predefined filtering data is available, a heuristic filtering  will be used. To deactivate filtering set chromosomes="all". (defaults to "auto")}
 
 \item{zoom}{A GRanges object specifiyng a single region to zoom in or any format accepted by \code{regioneR::toGRanges}. If not NULL, it takes precedence over \code{chromosome} and only the zoomed in region is represented. If more than one region is present in the GRanges, only the first one is used. (defaults to NULL, do not zoom in and show the whole plot as specified by \code{genome} and \code{chromosomes})}
 
