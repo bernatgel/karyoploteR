@@ -97,6 +97,13 @@
       purplegreen=c("darkorchid1", "white", "chartreuse3"),
       purpleblackgreen=c("darkorchid1", "black", "chartreuse3")
     )
+  ),
+  sequences=list(
+    schemas=list( #https://www.biostars.org/p/171056/
+      "IGV"=c("A"="#009600", "C"="#0000FF", "T"="#FF0000", "G"="#D17105", default="#000000"),
+      "Jalview"=c("A"="#64F73F", "C"="#FFB340", "T"="#3C88EE", "G"="#EB413C", "U"="#3C88EE", default="#000000") #view-source:https://www.jalview.org/help/html/colourSchemes/
+      
+    )
   )
 )
 
