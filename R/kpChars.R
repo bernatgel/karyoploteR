@@ -26,8 +26,9 @@
 #'
 #' @export kpChars
 
-#Plot single characters from a nucleic acid sequence expanding the full rectangle defined by x0-x1 and y0-y1
-#Can plot multiple chars if any of the arguments is a vector and everything else will be recycled. Right? Quite low level. Allows for logos and SNPs
+#Plot characters (or rectangles, or both) expanding the full rectangle defined by x0-x1 and y0-y1
+#Can plot multiple chars if any of the arguments is a vector and everything else will be recycled.
+#Quite a low level function to be used by other higher level functions.
 
 kpChars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y1=NULL,
                    chars=NULL, plot.letters=TRUE, plot.rectangles=FALSE,
@@ -110,24 +111,44 @@ kpChars <- function(karyoplot, data=NULL, chr=NULL, x0=NULL, x1=NULL, y0=NULL, y
     #TODO: border colors
   }
   if(plot.letters==TRUE) {
+    letter.schema <- NULL #Used as a flag and to cotain teh actual schema. Simplifies logic.
+    letter.cols <- NULL #Used as a flag and to contain the color for each char
     #If letter.colors is an array of colors, use them to plot the letters
     if(all(is.color(letter.colors) | is.na(letter.colors))) {
-      letter.cols <- letter.colors
-      #TODO: Check if it's only a color vector or a named color vector we can use as a schema
-    } else {
-      #Is it the name of a schema?
-      if(!(letter.colors %in% names(getColorSchemas()$sequences$schemas))) {
-        warning("No valid colors or color schema found for letters. Using black as default. You can provide it with 'letter.colors'.")
-        letter.cols <- "black"
+      #Check if it's a schema
+      #If it's a named vector, assume it's a schema. 
+      #We can not check for concordance, since we can plot a single char that
+      #is not in the schema (needs default) and we would want it to work
+      if(!is.null(names(letter.colors))) { 
+        #if default is missing, set it to black
+        if(!("default" %in% names(letter.colors))) {
+          letter.colors <- c(letter.colors, c(default="black"))
+        }
+        letter.schema <- letter.colors
       } else {
-        letter.col.schema <- getColorSchemas()$sequences$schemas[[letter.colors]]
-        letter.cols <- letter.col.schema[chars]
-        #If the color schema has a default color, change all NAs to the default color
-        if("default" %in% names(letter.col.schema)) {
-          letter.cols[is.na(letter.cols)] <- letter.col.schema["default"]
+        #It's a color vector. Recycle to the length of the chars list
+        letter.cols <- recycle.first(letter.colors, seq_along(chars)) #TODO: falta reciclar!
+      }
+    } 
+    if(is.null(letter.cols)) { #We still don't have a color for each letter
+      if(is.null(letter.schema)) { #If we do not have a schema defined
+        #Is it the name of a schema?
+        if(letter.colors %in% names(getColorSchemas()$sequences$schemas)) {
+          letter.schema <- getColorSchemas()$sequences$schemas[[letter.colors]]
+        } else {
+          warning("No valid colors or color schema found for letters. Using black as default. You can provide it with 'letter.colors'.")
+          letter.cols <- recycle.first("black", seq_along(chars))
         }
       }
-      message(letter.cols)
+      #Here we have either colors for each letter or a schema
+      if(!is.null(letter.schema)) { #if we have a schema, use it
+        #letter.cols <- rep(NA, length(chars))
+        letter.cols <- letter.schema[chars]
+        not.in.schema <- !(chars %in% names(letter.schema))
+        letter.cols[not.in.schema] <- letter.schema["default"]
+      }
+      #Here, letter cols is defined 
+        message(paste(letter.cols, collapse=","))
     }
     #TODO: repeat the same for borders
 
