@@ -59,14 +59,25 @@ kpArea <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymi
   if(!methods::is(karyoplot, "KaryoPlot")) stop("'karyoplot' must be a valid 'KaryoPlot' object")
  
   #COLORS
-    #Specify the missing colors if possible
+    #Check the length of the color parameters. it does not make sense to specify more than one in this function
+    if(length(col)>1) {
+      col <- col[1]
+      warning("kpArea: more than one color provided in 'col'. Using only the first element ('", col, "') and ignoring the rest") 
+    }
+    if(length(border)>1) {
+      border <- border[1]
+      warning("kpArea: more than one color provided in 'border'. Using only the first element ('", border, "') and ignoring the rest") 
+    }
+  
+    #Specify the missing colors with defaults if needed
     if(is.null(col) && (is.null(border) || is.na(border))) {
       col <- "gray70"
     }
     if(is.na(col) && is.null(border)) {
       border <- "black"
     }
-   
+    
+    #And derive the missing from the other ones, if needed
     if(is.null(border) && !is.null(col) && !is.na(col)) {
       border=darker(col, amount = 100)
     }
@@ -75,6 +86,7 @@ kpArea <- function(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymi
     }
     
   
+  #Prepare the rest of the parameters
   pp <- prepareParameters2("kpArea", karyoplot=karyoplot, data=data, chr=chr, x=x, y=y, 
                            ymin=0, ymax=1, r0=0, r1=1, data.panel=data.panel, ...)
   
