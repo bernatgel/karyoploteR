@@ -21,9 +21,9 @@
 #' @usage kpArea(karyoplot, data=NULL, chr=NULL, x=NULL, y=NULL, base.y=0, ymin=NULL, ymax=NULL, data.panel=1, r0=NULL, r1=NULL, col=NULL, border=NULL, clipping=TRUE, ...)
 #' 
 #' @inheritParams kpPoints 
-#' @param base.y  (numeric) The y value at wich the polygon will be closed. (defaults to 0)
-#' @param col  (color) The fill color of the area. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no area will be drawn. (defaults to NULL)
-#' @param border  (color) The color of the line enclosing the area. If NULL the color will be assigned automatically, either a darker version of the color used for the area or black if col=NA. If NA no border will be drawn. (Defaults to NULL)
+#' @param base.y  (numeric) The y value at which the polygon will be closed. (defaults to 0)
+#' @param col  (color) The fill color of the area. A single color. If NULL the color will be assigned automatically, either a lighter version of the color used for the outer line or gray if the line color is not defined. If NA no area will be drawn. (defaults to NULL)
+#' @param border  (color) The color of the line enclosing the area. A single color. If NULL the color will be assigned automatically, either a darker version of the color used for the area or black if col=NA. If NA no border will be drawn. (Defaults to NULL)
 #' 
 #' @return
 #' 
