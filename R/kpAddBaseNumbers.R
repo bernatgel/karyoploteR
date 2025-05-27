@@ -82,7 +82,7 @@ kpAddBaseNumbers <- function(karyoplot, tick.dist=20000000, tick.len=5,
     return(paste0(as.character(round(n/1000000, digits=digits)), unit.labels[3])) #Mb
   }
   
-  old.scipen <- options("scipen")
+  old.scipen <- options("scipen")$scipen
   options(scipen=999)
   on.exit(options(scipen=old.scipen), add=TRUE)
 
