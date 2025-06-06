@@ -302,6 +302,9 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
       kp$zoom <- TRUE
     }
     
+    #Remove the strand of plot.region, since it can mess with some libraries (bamsignals::bamCoverage, for example)
+    strand(kp$plot.region) <- "*"
+    
     #Get the chromosome names from the plot.region object so they are in the order specified by the user
     #Older version used seqlevels(gr.genome) which were naturally ordered.
     kp$chromosomes <- as.character(seqnames(kp$plot.region))
