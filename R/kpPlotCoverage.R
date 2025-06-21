@@ -90,13 +90,13 @@ kpPlotCoverage <- function(karyoplot, data, show.0.cov=TRUE, data.panel=1, r0=NU
   #If its not a coverage object,  it's a GRanges. Compute the coverage
   if(!methods::is(data, "SimpleRleList")) { 
     #remove any region not in the currently used genome
-    data <- data[as.character(GenomeInfoDb::seqnames(data)) %in% karyoplot$chromosomes,]
+    data <- data[as.character(Seqinfo::seqnames(data)) %in% karyoplot$chromosomes,]
        #Old version, problems when data had no seqinfo - data <- GenomeInfoDb::keepSeqlevels(data, karyoplot$chromosomes, pruning.mode="coarse")
     #Remove any unused seq level from the GRanges to fix problems with coverage and witdh
-    GenomeInfoDb::seqlevels(data) <- karyoplot$chromosomes
+    Seqinfo::seqlevels(data) <- karyoplot$chromosomes
  
     #the width parameter is needed so the coverage extends to the end of the chromosomes
-    data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths[GenomeInfoDb::seqlevels(data)]) 
+    data <- GenomicRanges::coverage(data, width=karyoplot$chromosome.lengths[Seqinfo::seqlevels(data)]) 
   }
   coverage.gr <- toGRanges(data)
  

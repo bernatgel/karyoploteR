@@ -75,7 +75,7 @@
 #' @importFrom GenomicFeatures genes exons transcriptsBy cds organism
 #' @importFrom IRanges subsetByOverlaps
 #' @importFrom AnnotationDbi taxonomyId select
-#' @importFrom GenomeInfoDb genome
+#' @importFrom Seqinfo genome
 #'
 
 makeGenesDataFromTxDb <- function(txdb, karyoplot=NULL, plot.transcripts=TRUE, plot.transcripts.structure=TRUE) {
@@ -85,7 +85,7 @@ makeGenesDataFromTxDb <- function(txdb, karyoplot=NULL, plot.transcripts=TRUE, p
   res$metadata <- list()
   res$metadata$organism <- GenomicFeatures::organism(txdb)
   res$metadata$taxonomyId <- AnnotationDbi::taxonomyId(txdb)
-  res$metadata$genome <- setNames(GenomeInfoDb::genome(txdb)[1], NULL)
+  res$metadata$genome <- setNames(Seqinfo::genome(txdb)[1], NULL)
   
   
   #get the genes

@@ -1,8 +1,8 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.35.2
-Date: 2017-05-03
+Version: 1.35.3
+Date: 2025-06-20
 Authors@R: 
   c(person(given = "Bernat",
            family = "Gel",
@@ -30,6 +30,7 @@ Imports:
     graphics,
     memoise,
     rtracklayer,
+    Seqinfo,
     GenomeInfoDb,
     S4Vectors,
     biovizBase,
@@ -60,4 +61,4 @@ VignetteBuilder: knitr
 biocViews: Visualization, CopyNumberVariation, Sequencing, Coverage, DNASeq, ChIPSeq, MethylSeq, DataImport, OneChannel
 NeedsCompilation: no
 Encoding: UTF-8
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2

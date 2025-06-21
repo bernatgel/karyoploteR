@@ -157,7 +157,7 @@ getCoordChangeFunctions <- function(karyoplot)
 # getIdeogramMidY_1HorizDataAboveIdeogram <- function(chr, genome, plot.params) {
 #   pp <- plot.params
 #   chr.height <- getChrHeight_1HorizDataAboveIdeogram(pp)
-#   chr.names <- GenomeInfoDb::seqlevels(genome)
+#   chr.names <- Seqinfo::seqlevels(genome)
 #   chrs <- c(length(chr.names):1)
 #   names(chrs) <- chr.names
 #   chr.num <- chrs[chr]
@@ -227,7 +227,7 @@ getCoordChangeFunctions <- function(karyoplot)
 getIdeogramMidY_2HorizDataAboveAndBelowIdeogram <- function(chr, genome, plot.params) {
   pp <- plot.params
   chr.height <- getChrHeight_2HorizDataAboveAndBelowIdeogram(pp)
-  chr.names <- GenomeInfoDb::seqlevels(genome)
+  chr.names <- Seqinfo::seqlevels(genome)
   chrs <- c(length(chr.names):1)
   names(chrs) <- chr.names
   chr.num <- chrs[chr]
@@ -333,7 +333,7 @@ genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL,
 
   pp <- plot.params
   
-  chr.names <- GenomeInfoDb::seqlevels(genome)
+  chr.names <- Seqinfo::seqlevels(genome)
   chrs <- stats::setNames(seq_along(chr.names), chr.names)
   chr.starts <- stats::setNames(start(genome), chr.names)
   chr.lens <- stats::setNames(as.numeric(end(genome) - start(genome)), chr.names)
@@ -412,7 +412,7 @@ genomic2plot_3HorizAllChromosomesInOneLine <- function(chr=NULL, x=NULL, y=NULL,
 # getIdeogramMidY_4VerticalDataAboveAndBelowIdeogram <- function(chr, genome, plot.params) {
 #   pp <- plot.params
 #   chr.height <- getChrHeight_4VerticalDataAboveAndBelowIdeogram(pp)
-#   chr.names <- GenomeInfoDb::seqlevels(genome)
+#   chr.names <- Seqinfo::seqlevels(genome)
 #   chrs <- c(length(chr.names):1)
 #   names(chrs) <- chr.names
 #   chr.num <- chrs[chr]

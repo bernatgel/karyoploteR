@@ -266,12 +266,12 @@ preprocess_r0_r1 <- function(karyoplot, r0, r1, data.panel) {
 findIntersections <- function(data, thr) {
   #we nee IRanges which because the logical query return an Rle encoded logical
   isec <- IRanges::which((data$y>thr & shiftl(data$y<thr) | data$y<thr & shiftl(data$y>thr))
-                & (GenomeInfoDb::seqnames(data)==GenomeInfoDb::seqnames(data+1)))
+                & (Seqinfo::seqnames(data)==Seqinfo::seqnames(data+1)))
   if(length(isec)==0) return(GRanges())
   ydist <- data$y[isec+1] - data$y[isec]
   xdist <- GenomicRanges::start(data)[isec+1] - GenomicRanges::start(data)[isec]
   pos.isec <- GenomicRanges::start(data)[isec] + (thr-data$y[isec])/ydist*xdist
-  return(regioneR::toGRanges(data.frame(as.character(GenomeInfoDb::seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
+  return(regioneR::toGRanges(data.frame(as.character(Seqinfo::seqnames(data[isec])), pos.isec, pos.isec, y=thr)))
 }
 
 #shiftl: Utility function to shift logical vectors one position to the left

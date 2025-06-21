@@ -103,7 +103,8 @@
 #' 
 #' @import regioneR
 #' @import GenomicRanges
-#' @importFrom GenomeInfoDb seqlevels keepSeqlevels
+#' @importFrom Seqinfo seqlevels
+#' @importFrom GenomeInfoDb keepSeqlevels
 #' @importFrom S4Vectors runLength runValue
 #' @importFrom memoise memoise
 #' @importFrom rtracklayer ucscTableQuery
@@ -182,7 +183,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
   
   
   #Check the genome has no problems (repeated chromosomes, etc...)
-  chr.names <- as.character(GenomeInfoDb::seqnames(gr.genome))
+  chr.names <- as.character(Seqinfo::seqnames(gr.genome))
   if(any(duplicated(chr.names))) {
     stop(paste0("There are duplicate chromosome names in the genome. Chromosome names must be unique. Chromosome names are: ", paste0(chr.names, collapse = ", ")))
   }
@@ -199,7 +200,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     if(!IRanges::overlapsAny(zoom, gr.genome)) {
       stop("You are trying to set the zoom to a region not part of the current genome.")
     } else {
-      chromosomes <- as.character(GenomeInfoDb::seqnames(zoom))
+      chromosomes <- as.character(Seqinfo::seqnames(zoom))
     }
   }
   
@@ -273,7 +274,7 @@ plotKaryotype <- function(genome="hg19", plot.type=1, ideogram.plotter=kpAddCyto
     }
     #if there are cytobands, filter the cytobands using the current genome
     if(!is.null(cytobands) && length(cytobands)>0) {
-      cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=GenomeInfoDb::seqlevels(gr.genome), pruning.mode="coarse")
+      cytobands <- GenomeInfoDb::keepSeqlevels(cytobands, value=Seqinfo::seqlevels(gr.genome), pruning.mode="coarse")
     }
   }
 

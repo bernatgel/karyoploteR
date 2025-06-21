@@ -50,6 +50,7 @@
 #'   bigwig.file <- system.file("extdata", "BRCA.genes.hg19.bw", package = "karyoploteR")
 #'   brca.genes.file <- system.file("extdata", "BRCA.genes.hg19.txt", package = "karyoploteR")
 #'   brca.genes <- toGRanges(brca.genes.file)
+#'   library(GenomeInfoDb)  # for seqlevelsStyle()
 #'   seqlevelsStyle(brca.genes) <- "UCSC"
 #' 
 #'   kp <- plotKaryotype(zoom = brca.genes[1])
