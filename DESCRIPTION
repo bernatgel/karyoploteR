@@ -1,7 +1,7 @@
 Package: karyoploteR
 Type: Package
 Title: Plot customizable linear genomes displaying arbitrary data
-Version: 1.38.0
+Version: 1.39.0
 Date: 2025-06-20
 Authors@R: 
   c(person(given = "Bernat",
